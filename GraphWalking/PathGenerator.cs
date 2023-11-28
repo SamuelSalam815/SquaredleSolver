@@ -1,4 +1,6 @@
-﻿namespace GraphWalking;
+﻿using GraphWalking.Graphs;
+
+namespace GraphWalking;
 
 /// <summary>
 ///     Generates paths from <see cref="AdjacencyList{TNodeId}"/>s.

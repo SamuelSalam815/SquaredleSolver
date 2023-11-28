@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using GraphWalking;
+using GraphWalking.Graphs;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GraphWalkingTests;

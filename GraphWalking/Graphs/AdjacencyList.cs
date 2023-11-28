@@ -1,4 +1,4 @@
-﻿namespace GraphWalking;
+﻿namespace GraphWalking.Graphs;
 
 /// <summary>
 ///     Represents a graph.
