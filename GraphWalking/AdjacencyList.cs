@@ -32,10 +32,16 @@ public class AdjacencyList<TNodeId> : Dictionary<TNodeId, List<TNodeId>> where T
 
     public override string ToString()
     {
-        return
-            "{" +
-            string.Join(", ",
-                this.Select(entry => $"{entry.Key} : [{string.Join(", ", entry.Value)}]")) +
-            "}";
+        static string StringifyAdjacencies(List<TNodeId> adjacencies)
+        {
+            return $"[{string.Join(", ", adjacencies)}]";
+        }
+
+        static string StringifyEntry(KeyValuePair<TNodeId, List<TNodeId>> entry)
+        {
+            return $"{entry.Key}: {StringifyAdjacencies(entry.Value)}";
+        }
+
+        return "{" + string.Join(", ", this.Select(StringifyEntry)) + "}";
     }
 }

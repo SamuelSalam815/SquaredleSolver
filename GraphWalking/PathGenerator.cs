@@ -65,6 +65,6 @@ public class PathGenerator<TNodeId> where TNodeId : notnull
 
     public override string ToString()
     {
-        return $"AdjacencyList : {adjacencyList}";
+        return $"AdjacencyList: {adjacencyList}";
     }
 }

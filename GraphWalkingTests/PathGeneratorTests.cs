@@ -5,10 +5,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace GraphWalkingTests;
 
 [TestClass]
-public class TrailGeneratorTests
+public class PathGeneratorTests
 {
     [TestMethod]
-    public void When_GeneratingAllTrails_Then_CorrectNumberOfTrailsAreReturned()
+    public void When_GeneratingAllPaths_Then_CorrectPathsAreReturned()
     {
         AdjacencyList<int> graph = new()
         {
