@@ -6,16 +6,12 @@
 /// <typeparam name="TNodeId">The type of the unique identifier for a node.</typeparam>
 public class AdjacencyList<TNodeId> : Dictionary<TNodeId, List<TNodeId>> where TNodeId : notnull
 {
-    /// <summary>
-    ///     Gets all nodes referred to in this <see cref="AdjacencyList{TNodeId}"/>.
-    /// </summary>
-    public List<TNodeId> AllNodes
-    {
-        get
-        {
-            return this.Aggregate(new HashSet<TNodeId>(), CollectUniqueNodes).ToList();
-        }
-    }
+
+    public List<TNodeId> GetAllNodes() => this.Aggregate(new HashSet<TNodeId>(), CollectUniqueNodes).ToList();
+
+    public List<TNodeId> GetBranchNodes() => Keys.Where(key => this[key].Count > 0).ToList();
+
+    public List<TNodeId> GetLeafNodes() => GetAllNodes().Where(node => !ContainsKey(node)).ToList();
 
     /// <summary>
     ///     Aggregates a collection of unique nodes.
@@ -34,4 +30,12 @@ public class AdjacencyList<TNodeId> : Dictionary<TNodeId, List<TNodeId>> where T
         return uniqueNodes;
     }
 
+    public override string ToString()
+    {
+        return
+            "{" +
+            string.Join(", ",
+                this.Select(entry => $"{entry.Key} : [{string.Join(", ", entry.Value)}]")) +
+            "}";
+    }
 }
