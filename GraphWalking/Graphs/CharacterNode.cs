@@ -1,3 +1,3 @@
 ﻿namespace GraphWalking.Graphs;
 
-public record struct CharacterNode(int Id, char Character);
+public record struct CharacterNode(int Row, int Column, char Character);
