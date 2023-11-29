@@ -19,9 +19,9 @@ public class PathGeneratorTests
         };
         PathGenerator<int> systemUnderTest = new(graph);
 
-        List<Path<int>> paths = systemUnderTest.Generate();
+        List<List<int>> paths = systemUnderTest.Generate();
 
-        paths.Should().BeEquivalentTo(new List<Path<int>>()
+        paths.Should().BeEquivalentTo(new List<List<int>>()
         {
             new() { 1 },
             new() { 1, 2 },

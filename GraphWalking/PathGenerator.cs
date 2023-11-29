@@ -15,9 +15,9 @@ public class PathGenerator<TNodeId> where TNodeId : notnull
         this.adjacencyList = adjacencyList;
     }
 
-    public List<Path<TNodeId>> Generate()
+    public List<List<TNodeId>> Generate()
     {
-        List<Path<TNodeId>> allPaths = new();
+        List<List<TNodeId>> allPaths = new();
 
         foreach (var node in adjacencyList.GetAllNodes())
         {
@@ -27,15 +27,15 @@ public class PathGenerator<TNodeId> where TNodeId : notnull
         return allPaths;
     }
 
-    private List<Path<TNodeId>> GenerateStartingFrom(TNodeId node)
+    private List<List<TNodeId>> GenerateStartingFrom(TNodeId node)
     {
-        List<Path<TNodeId>> pathsGenerated = new();
-        Queue<Path<TNodeId>> expandingPaths = new();
-        expandingPaths.Enqueue(new Path<TNodeId>() { node });
+        List<List<TNodeId>> pathsGenerated = new();
+        Queue<List<TNodeId>> expandingPaths = new();
+        expandingPaths.Enqueue(new List<TNodeId>() { node });
 
         while (expandingPaths.Count > 0)
         {
-            Path<TNodeId> currentPath = expandingPaths.Dequeue();
+            List<TNodeId> currentPath = expandingPaths.Dequeue();
             pathsGenerated.Add(currentPath);
             expandingPaths.EnqueueAll(GetExtendedPaths(currentPath));
         }
@@ -43,25 +43,15 @@ public class PathGenerator<TNodeId> where TNodeId : notnull
         return pathsGenerated;
     }
 
-    private IEnumerable<Path<TNodeId>> GetExtendedPaths(Path<TNodeId> path)
+    private IEnumerable<List<TNodeId>> GetExtendedPaths(List<TNodeId> path)
     {
         TNodeId lastNode = path.Last();
         if (!adjacencyList.ContainsKey(lastNode))
         {
-            return new List<Path<TNodeId>>();
+            return new List<List<TNodeId>>();
         }
 
-        List<Path<TNodeId>> extendedPaths = new();
         var candidateNodes = adjacencyList[lastNode].Where(node => !path.Contains(node));
-        foreach (var node in candidateNodes)
-        {
-            Path<TNodeId> nextPath = new(path)
-            {
-                node
-            };
-            extendedPaths.Add(nextPath);
-        }
-
-        return extendedPaths;
+        return candidateNodes.Select(node => new List<TNodeId>(path) { node });
     }
 }
