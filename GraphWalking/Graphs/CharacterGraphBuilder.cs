@@ -1,20 +1,10 @@
 ﻿namespace GraphWalking.Graphs;
 
-/// <summary>
-///     Represents a graph of <see cref="CharacterNode"/>s
-/// </summary>
-public class CharacterGraph
+public class CharacterGraphBuilder
 {
-    private readonly AdjacencyList<CharacterNode> adjacencyList;
-
-    private CharacterGraph()
+    public static AdjacencyList<CharacterNode> FromLetterGrid(string letterGrid)
     {
-        adjacencyList = new AdjacencyList<CharacterNode>();
-    }
-
-    public static CharacterGraph FromLetterGrid(string letterGrid)
-    {
-        CharacterGraph result = new();
+        AdjacencyList<CharacterNode> adjacencyList = new();
         string[] lines = letterGrid.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
         if (lines.Any(line => line.Length != lines[0].Length))
         {
@@ -25,7 +15,7 @@ public class CharacterGraph
         IEnumerable<CharacterNode> allNodes = lines.SelectMany(CreateNodesFromLine);
         foreach (var node in allNodes)
         {
-            result.adjacencyList[node] = new List<CharacterNode>();
+            adjacencyList[node] = new List<CharacterNode>();
         }
 
         // discover all node adjacencies and add them to the adjacency list
@@ -36,10 +26,10 @@ public class CharacterGraph
                 .Where(nodesByPosition.ContainsKey)
                 .Select(position => nodesByPosition[position]);
 
-            result.adjacencyList[node].AddRange(adjacentNodes);
+            adjacencyList[node].AddRange(adjacentNodes);
         }
 
-        return result;
+        return adjacencyList;
     }
 
     private static IEnumerable<CharacterNode> CreateNodesFromLine(string line, int rowIndex)
@@ -57,15 +47,5 @@ public class CharacterGraph
     private static IEnumerable<(int, int)> GetAdjacentPositions((int row, int column) position)
     {
         return adjacencyMask.Select(((int row, int column) translation) => (position.row + translation.row, position.column + translation.column));
-    }
-
-
-    // Currently only used for testing the construction of the character graph
-    public List<char> GetAdjacentCharacters(char character)
-    {
-        IEnumerable<CharacterNode> matchingNodes = adjacencyList.GetAllNodes().Where(node => node.Character == character);
-        IEnumerable<CharacterNode> adjacentNodes = matchingNodes.SelectMany(node => adjacencyList[node]);
-        HashSet<char> adjacentCharacters = adjacentNodes.Select(node => node.Character).ToHashSet();
-        return adjacentCharacters.ToList();
     }
 }
