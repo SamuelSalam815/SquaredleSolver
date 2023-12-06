@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphWalkingTests", "GraphW
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{2445C9D4-5335-4055-A570-A7955C654E75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp", "WindowsFormsApp\WindowsFormsApp.csproj", "{D6E49239-8C3D-4402-82C2-A681B88FBFEB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{2445C9D4-5335-4055-A570-A7955C654E75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2445C9D4-5335-4055-A570-A7955C654E75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2445C9D4-5335-4055-A570-A7955C654E75}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D6E49239-8C3D-4402-82C2-A681B88FBFEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D6E49239-8C3D-4402-82C2-A681B88FBFEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D6E49239-8C3D-4402-82C2-A681B88FBFEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D6E49239-8C3D-4402-82C2-A681B88FBFEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
