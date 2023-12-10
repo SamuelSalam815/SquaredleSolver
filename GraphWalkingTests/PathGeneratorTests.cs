@@ -19,7 +19,7 @@ public class PathGeneratorTests
         };
         PathGenerator<int> systemUnderTest = new(graph);
 
-        List<List<int>> paths = systemUnderTest.Generate();
+        IEnumerable<List<int>> paths = systemUnderTest.Generate();
 
         paths.Should().BeEquivalentTo(new List<List<int>>()
         {
@@ -35,5 +35,9 @@ public class PathGeneratorTests
             new() { 3, 4 },
             new() { 4 },
         });
+
+        IEnumerable<List<int>> alternatePath = systemUnderTest.FastGenerate();
+        alternatePath.Should().BeEquivalentTo(paths);
     }
+
 }

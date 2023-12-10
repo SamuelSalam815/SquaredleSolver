@@ -6,7 +6,7 @@ namespace GraphWalking;
 ///     Generates paths from <see cref="AdjacencyList{TNodeId}"/>s.
 ///     In a path a node may never be visited more than once.
 /// </summary>
-public class PathGenerator<TNodeId> where TNodeId : notnull
+public class PathGenerator<TNodeId> where TNodeId : notnull, IEquatable<TNodeId>
 {
     private readonly AdjacencyList<TNodeId> adjacencyList;
 
@@ -15,32 +15,28 @@ public class PathGenerator<TNodeId> where TNodeId : notnull
         this.adjacencyList = adjacencyList;
     }
 
-    public List<List<TNodeId>> Generate()
+    public IEnumerable<List<TNodeId>> Generate()
     {
-        List<List<TNodeId>> allPaths = new();
-
         foreach (var node in adjacencyList.GetAllNodes())
         {
-            allPaths.AddRange(GenerateStartingFrom(node));
+            foreach (var path in GenerateStartingFrom(node))
+            {
+                yield return path;
+            }
         }
-
-        return allPaths;
     }
 
-    private List<List<TNodeId>> GenerateStartingFrom(TNodeId node)
+    private IEnumerable<List<TNodeId>> GenerateStartingFrom(TNodeId node)
     {
-        List<List<TNodeId>> pathsGenerated = new();
         Queue<List<TNodeId>> expandingPaths = new();
         expandingPaths.Enqueue(new List<TNodeId>() { node });
 
         while (expandingPaths.Count > 0)
         {
             List<TNodeId> currentPath = expandingPaths.Dequeue();
-            pathsGenerated.Add(currentPath);
+            yield return currentPath;
             expandingPaths.EnqueueAll(GetExtendedPaths(currentPath));
         }
-
-        return pathsGenerated;
     }
 
     private IEnumerable<List<TNodeId>> GetExtendedPaths(List<TNodeId> path)
@@ -54,4 +50,45 @@ public class PathGenerator<TNodeId> where TNodeId : notnull
         var candidateNodes = adjacencyList[lastNode].Where(node => !path.Contains(node));
         return candidateNodes.Select(node => new List<TNodeId>(path) { node });
     }
+
+    public IEnumerable<List<TNodeId>> FastGenerate()
+    {
+        // Perform a depth-first traversal, starting at each node in the graph
+        List<TNodeId> emptyList = new();
+        foreach (var startingNode in adjacencyList.GetAllNodes())
+        {
+            List<TNodeId> currentPath = new();
+            Stack<CheckPoint> stack = new();
+            stack.Push(new CheckPoint(startingNode, default));
+
+            while (stack.Count > 0)
+            {
+                // revert the current path to the top most checkpoint
+                (TNodeId currentNode, TNodeId? previousNode) = stack.Pop();
+                while (currentPath.Count > 0 && !currentPath.Last().Equals(previousNode))
+                {
+                    currentPath.RemoveAt(currentPath.Count - 1);
+                }
+
+                currentPath.Add(currentNode);
+                bool pathAtMaximumLength = true;
+                foreach (var nextNode in adjacencyList.GetValueOrDefault(currentNode, emptyList))
+                {
+                    if (!currentPath.Contains(nextNode))
+                    {
+                        pathAtMaximumLength = false;
+                        stack.Push(new CheckPoint(nextNode, currentNode));
+                    }
+                }
+
+                yield return new List<TNodeId>(currentPath);
+                if (pathAtMaximumLength)
+                {
+                    currentPath.RemoveAt(currentPath.Count - 1);
+                }
+            }
+        }
+    }
+
+    private record struct CheckPoint(TNodeId node, TNodeId? previousNode);
 }

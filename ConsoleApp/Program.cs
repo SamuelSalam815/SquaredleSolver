@@ -30,7 +30,7 @@ PathGenerator<CharacterNode> pathFinder = new(graph);
 
 Console.WriteLine("Generating words...");
 HashSet<string> wordsToAttempt = pathFinder
-    .Generate()
+    .FastGenerate()
     .Where(path => path.Count > 3)
     .Select(path => string.Join("", path.Select(node => node.Character)))
     .Where(words.Contains)
