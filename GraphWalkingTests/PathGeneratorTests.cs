@@ -38,6 +38,9 @@ public class PathGeneratorTests
 
         IEnumerable<List<int>> alternatePath = systemUnderTest.FastGenerate();
         alternatePath.Should().BeEquivalentTo(paths);
+
+        alternatePath = systemUnderTest.RecursiveGenerate();
+        alternatePath.Should().BeEquivalentTo(paths);
     }
 
 }

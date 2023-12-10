@@ -54,7 +54,6 @@ public class PathGenerator<TNodeId> where TNodeId : notnull, IEquatable<TNodeId>
     public IEnumerable<List<TNodeId>> FastGenerate()
     {
         // Perform a depth-first traversal, starting at each node in the graph
-        List<TNodeId> emptyList = new();
         foreach (var startingNode in adjacencyList.GetAllNodes())
         {
             List<TNodeId> currentPath = new();
@@ -72,7 +71,7 @@ public class PathGenerator<TNodeId> where TNodeId : notnull, IEquatable<TNodeId>
 
                 currentPath.Add(currentNode);
                 bool pathAtMaximumLength = true;
-                foreach (var nextNode in adjacencyList.GetValueOrDefault(currentNode, emptyList))
+                foreach (TNodeId? nextNode in adjacencyList.GetValueOrDefault(currentNode, EmptyList))
                 {
                     if (!currentPath.Contains(nextNode))
                     {
@@ -90,5 +89,39 @@ public class PathGenerator<TNodeId> where TNodeId : notnull, IEquatable<TNodeId>
         }
     }
 
+    private static readonly List<TNodeId> EmptyList = new();
     private record struct CheckPoint(TNodeId node, TNodeId? previousNode);
+
+    public IEnumerable<List<TNodeId>> RecursiveGenerate()
+    {
+        var allNodes = adjacencyList.GetAllNodes();
+        TNodeId[] pathBuffer = new TNodeId[allNodes.Count];
+        foreach (TNodeId node in allNodes)
+        {
+            pathBuffer[0] = node;
+            foreach (List<TNodeId> path in InnerRecursiveGenerate(pathBuffer, 0))
+            {
+                yield return path;
+            }
+        }
+    }
+
+    private IEnumerable<List<TNodeId>> InnerRecursiveGenerate(TNodeId[] currentPath, int index)
+    {
+        List<TNodeId> yieldPath = currentPath[..(index + 1)].ToList();
+        yield return yieldPath;
+        TNodeId currentNode = currentPath[index];
+        foreach (TNodeId nextNode in adjacencyList.GetValueOrDefault(currentNode, EmptyList))
+        {
+            if (!yieldPath.Contains(nextNode))
+            {
+                currentPath[index + 1] = nextNode;
+                foreach (List<TNodeId> path in InnerRecursiveGenerate(currentPath, index + 1))
+                {
+                    yield return path;
+                }
+            }
+        }
+
+    }
 }
