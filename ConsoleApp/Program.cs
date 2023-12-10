@@ -2,11 +2,12 @@
 
 using GraphWalking;
 using GraphWalking.Graphs;
+using System.Text;
 
-HashSet<string> LoadWords()
+static HashSet<string> LoadWords()
 {
     HashSet<string> words = new();
-    using var reader = new StreamReader("words_alpha.txt");
+    using StreamReader reader = new("words_alpha.txt");
     string? line = reader.ReadLine();
     while (line is not null)
     {
@@ -18,8 +19,9 @@ HashSet<string> LoadWords()
 }
 
 Console.WriteLine("Loading words...");
-HashSet<string> words = LoadWords();
+HashSet<string> validWords = LoadWords();
 Console.WriteLine("Building graph...");
+
 AdjacencyList<CharacterNode> graph = CharacterGraphBuilder.FromLetterGrid("""
     pnoc
     rahe
@@ -27,16 +29,25 @@ AdjacencyList<CharacterNode> graph = CharacterGraphBuilder.FromLetterGrid("""
     iihu
     """);
 PathGenerator<CharacterNode> pathFinder = new(graph);
-
 Console.WriteLine("Generating words...");
-HashSet<string> wordsToAttempt = pathFinder
-    .RecursiveGenerate()
-    .Where(path => path.Count > 3)
-    .Select(path => string.Join("", path.Select(node => node.Character)))
-    .Where(words.Contains)
-    .ToHashSet();
-
-foreach (string word in wordsToAttempt)
+StringBuilder stringBuilder = new();
+HashSet<string> wordsToAttempt = new();
+foreach (List<CharacterNode> path in pathFinder.Generate())
 {
-    Console.WriteLine(word);
+    if (path.Count <= 3)
+    {
+        continue;
+    }
+
+    stringBuilder.Clear();
+    foreach (CharacterNode node in path)
+    {
+        stringBuilder.Append(node.Character);
+    }
+
+    string word = stringBuilder.ToString();
+    if (validWords.Contains(word))
+    {
+        wordsToAttempt.Add(stringBuilder.ToString());
+    }
 }

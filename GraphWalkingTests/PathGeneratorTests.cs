@@ -35,12 +35,22 @@ public class PathGeneratorTests
             new() { 3, 4 },
             new() { 4 },
         });
-
-        IEnumerable<List<int>> alternatePath = systemUnderTest.FastGenerate();
-        alternatePath.Should().BeEquivalentTo(paths);
-
-        alternatePath = systemUnderTest.RecursiveGenerate();
-        alternatePath.Should().BeEquivalentTo(paths);
     }
 
+    [TestMethod]
+    public void When_PathsGeneratedInParallel_Then_AnswerIsConsistentWithSingleThreadMethod()
+    {
+        AdjacencyList<int> graph = new()
+        {
+            [1] = new() { 2, 3, 4 },
+            [2] = new() { 4 },
+            [3] = new() { 4 },
+        };
+        PathGenerator<int> systemUnderTest = new(graph);
+
+        IEnumerable<List<int>> expectedPaths = systemUnderTest.Generate();
+        IEnumerable<List<int>> actualPaths = systemUnderTest.ParallelGenerate();
+
+        actualPaths.Should().BeEquivalentTo(expectedPaths);
+    }
 }
