@@ -7,4 +7,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GraphWalking\GraphWalking.csproj" />
+  </ItemGroup>
+
 </Project>

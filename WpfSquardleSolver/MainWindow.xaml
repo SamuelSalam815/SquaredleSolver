@@ -10,20 +10,18 @@
         <TextBox 
             HorizontalAlignment="Left" 
             PreviewKeyDown="TextBox_PreviewKeyDown"
+            TextChanged="TextBox_TextChanged"
             CharacterCasing="Upper"
             VerticalScrollBarVisibility="Auto"
-            Margin="48,57,0,0" 
+            Margin="41,43,0,0" 
             AcceptsReturn="True" 
             TextWrapping="NoWrap"
             Text="AAAA&#10;BBBB&#10;AAAA&#10;BBBB" 
             VerticalAlignment="Top" 
-            Width="127" 
-            Height="128" 
+            Width="90" 
+            Height="116" 
             FontFamily="Courier New" 
             FontSize="20"/>
-        <Grid Margin="279,121,250,131">
-            <Label Content="Label" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" />
-            <Label Content="Label" HorizontalAlignment="Left" Margin="53,10,0,0" VerticalAlignment="Top" />
-        </Grid>
+        <local:CharacterNodeGrid x:Name="NodeDisplay" Height="50" Width="50" FontSize="8" Margin="225,51,475,283"/>
     </Grid>
 </Window>

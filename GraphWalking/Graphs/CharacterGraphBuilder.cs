@@ -5,18 +5,19 @@ public class CharacterGraphBuilder
     public static AdjacencyList<CharacterNode> FromLetterGrid(string letterGrid)
     {
         AdjacencyList<CharacterNode> adjacencyList = new();
-        string[] lines = letterGrid.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+        string[] lines = letterGrid.Split(new string[] { Environment.NewLine, "\n" }, StringSplitOptions.None);
 
         for (int lineIndex = 0; lineIndex < lines.Length; lineIndex++)
         {
-            if (lines[lineIndex].Length != lines[0].Length)
-            {
-                throw new ArgumentException("All lines in the input string do not have equal length");
-            }
-
             for (int characterIndex = 0; characterIndex < lines[lineIndex].Length; characterIndex++)
             {
-                CharacterNode node = new(lineIndex, characterIndex, lines[lineIndex][characterIndex]);
+                char character = lines[lineIndex][characterIndex];
+                if (char.IsWhiteSpace(character))
+                {
+                    continue;
+                }
+
+                CharacterNode node = new(lineIndex, characterIndex, character);
                 adjacencyList[node] = new List<CharacterNode>();
             }
         }

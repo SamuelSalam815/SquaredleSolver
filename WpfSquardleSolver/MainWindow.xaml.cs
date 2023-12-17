@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using GraphWalking.Graphs;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace WpfSquardleSolver;
@@ -30,5 +32,15 @@ public partial class MainWindow : Window
         }
 
         e.Handled = true;
+    }
+
+    private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (NodeDisplay is not null && sender is TextBox textBox)
+        {
+            AdjacencyList<CharacterNode> nodeGraph = CharacterGraphBuilder.FromLetterGrid(textBox.Text);
+            System.Collections.Generic.List<CharacterNode> nodes = nodeGraph.GetAllNodes();
+            NodeDisplay.DisplayNodes(nodes);
+        }
     }
 }
