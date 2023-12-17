@@ -1,5 +1,4 @@
 ﻿using GraphWalking.Graphs;
-using System.Collections.Concurrent;
 
 namespace GraphWalking;
 
@@ -7,52 +6,26 @@ namespace GraphWalking;
 ///     Generates paths from <see cref="AdjacencyList{TNodeId}"/>s.
 ///     In a path a node may never be visited more than once.
 /// </summary>
-public class PathGenerator<TNodeId> where TNodeId : notnull, IEquatable<TNodeId>
+public static class PathGenerator<TNode> where TNode : IEquatable<TNode>
 {
-    private readonly AdjacencyList<TNodeId> adjacencyList;
-    private static readonly List<TNodeId> EmptyList = new();
-    private record struct CheckPoint(TNodeId Node, TNodeId PreviousNode);
+    private record struct CheckPoint(TNode Node, TNode PreviousNode);
 
-    public PathGenerator(AdjacencyList<TNodeId> adjacencyList)
+    /// <summary>
+    ///     Finds all paths from the starting node to every node in the adjacency list.
+    /// </summary>
+    public static IEnumerable<List<TNode>> EnumerateAllPaths(
+        TNode startingNode,
+        AdjacencyList<TNode> adjacencyList)
     {
-        this.adjacencyList = adjacencyList;
-    }
-
-    public IEnumerable<List<TNodeId>> Generate()
-    {
-        // Perform a depth-first traversal, starting at each node in the graph
-        foreach (TNodeId startingNode in adjacencyList.GetAllNodes())
-        {
-            foreach (List<TNodeId> path in GeneratePathsStartingWith(startingNode))
-            {
-                yield return path;
-            }
-        }
-    }
-
-    public IEnumerable<List<TNodeId>> ParallelGenerate()
-    {
-        ConcurrentBag<IEnumerable<List<TNodeId>>> resultSynchronizer = new();
-        Parallel.ForEach(adjacencyList.GetAllNodes(), startingNode => resultSynchronizer.Add(GeneratePathsStartingWith(startingNode)));
-        foreach (IEnumerable<List<TNodeId>> pathCollection in resultSynchronizer)
-        {
-            foreach (List<TNodeId> path in pathCollection)
-            {
-                yield return path;
-            }
-        }
-    }
-
-    private IEnumerable<List<TNodeId>> GeneratePathsStartingWith(TNodeId startingNode)
-    {
-        List<TNodeId> currentPath = new();
+        List<TNode> emptyList = new();
+        List<TNode> currentPath = new();
         Stack<CheckPoint> stack = new();
         stack.Push(new CheckPoint(startingNode, startingNode));
 
         while (stack.Count > 0)
         {
             // revert the current path to the top most checkpoint
-            (TNodeId currentNode, TNodeId previousNode) = stack.Pop();
+            (TNode currentNode, TNode previousNode) = stack.Pop();
             while (currentPath.Count > 0 && !currentPath.Last().Equals(previousNode))
             {
                 currentPath.RemoveAt(currentPath.Count - 1);
@@ -60,7 +33,7 @@ public class PathGenerator<TNodeId> where TNodeId : notnull, IEquatable<TNodeId>
 
             currentPath.Add(currentNode);
             bool pathAtMaximumLength = true;
-            foreach (TNodeId nextNode in adjacencyList.GetValueOrDefault(currentNode, EmptyList))
+            foreach (TNode nextNode in adjacencyList.GetValueOrDefault(currentNode, emptyList))
             {
                 if (!currentPath.Contains(nextNode))
                 {
@@ -69,10 +42,24 @@ public class PathGenerator<TNodeId> where TNodeId : notnull, IEquatable<TNodeId>
                 }
             }
 
-            yield return new List<TNodeId>(currentPath);
+            yield return new List<TNode>(currentPath);
             if (pathAtMaximumLength)
             {
                 currentPath.RemoveAt(currentPath.Count - 1);
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Finds all paths between all pairs of nodes in the adjacency list.
+    /// </summary>
+    public static IEnumerable<List<TNode>> EnumerateAllPaths(AdjacencyList<TNode> adjacencyList)
+    {
+        foreach (TNode node in adjacencyList.GetAllNodes())
+        {
+            foreach (List<TNode> path in EnumerateAllPaths(node, adjacencyList))
+            {
+                yield return path;
             }
         }
     }
