@@ -5,23 +5,48 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfSquardleSolver"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" Background="#ecf0f1">
     <Grid>
         <TextBox 
+            x:Name="InputField"
             HorizontalAlignment="Left" 
             PreviewKeyDown="TextBox_PreviewKeyDown"
-            TextChanged="TextBox_TextChanged"
+            TextAlignment="Center"
+            VerticalContentAlignment="Center"
             CharacterCasing="Upper"
             VerticalScrollBarVisibility="Auto"
-            Margin="41,43,0,0" 
+            Margin="148,56,0,0" 
             AcceptsReturn="True" 
             TextWrapping="NoWrap"
-            Text="AAAA&#10;BBBB&#10;AAAA&#10;BBBB" 
+            Text="PNOC&#10;RAHE&#10;GNGT&#10;IIHU" 
             VerticalAlignment="Top" 
-            Width="90" 
-            Height="116" 
+            Width="93" 
+            Height="110" 
             FontFamily="Courier New" 
-            FontSize="20"/>
-        <local:CharacterNodeGrid x:Name="NodeDisplay" Height="50" Width="50" FontSize="8" Margin="225,51,475,283"/>
+            FontSize="20" Background="#bdc3c7">
+            <TextBox.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="2"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+        <ListView
+            x:Name="ResultsListView"
+            d:ItemsSource="{d:SampleData ItemCount=5}"
+            Margin="379,36,230,217"
+            VirtualizingPanel.IsVirtualizing="True"/>
+        <Button x:Name="ToggleSolverButton"
+                Content="Start Solving Puzzle"
+                Click="Button_Click"
+                Background="#2ecc71"
+                HorizontalAlignment="Left"
+                Margin="128,184,0,0"
+                VerticalAlignment="Top"
+                Width="133">
+            <Button.Style>
+                <Style TargetType="Button">
+                </Style> 
+            </Button.Style>
+        </Button>
     </Grid>
 </Window>

@@ -11,4 +11,10 @@
     <ProjectReference Include="..\GraphWalking\GraphWalking.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="words_alpha.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

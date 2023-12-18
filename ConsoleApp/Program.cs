@@ -62,25 +62,36 @@ internal class Program
         iihu
         """);
         Console.WriteLine("Generating words...");
-        HashSet<string> wordsGeneratedInParallel = new();
+        HashSet<string> wordsGenerated = new();
         Stopwatch stopwatch = Stopwatch.StartNew();
-        Parallel.ForEach(graph.GetAllNodes(), startingNode =>
+        StringBuilder stringBuilder = new();
+        foreach (List<CharacterNode> path in PathGenerator<CharacterNode>.EnumerateAllPaths(graph))
         {
-            List<string> generatedWords = GenerateWordsStartingWith(startingNode, graph, validWords);
-
-            lock (wordsGeneratedInParallel)
+            if (path.Count <= 3)
             {
-                foreach (string word in generatedWords)
-                {
-                    wordsGeneratedInParallel.Add(word);
-                }
+                continue;
             }
-        });
 
+            stringBuilder.Clear();
+            foreach (CharacterNode node in path)
+            {
+                stringBuilder.Append(node.Character);
+            }
+
+            string word = stringBuilder.ToString();
+            if (validWords.Contains(word))
+            {
+                wordsGenerated.Add(word);
+            }
+        }
         stopwatch.Stop();
-        TimeSpan timeInParallel = stopwatch.Elapsed;
-        Console.WriteLine("Time taken to generate words: " + timeInParallel);
-
+        Console.WriteLine("Time taken to generate words: " + stopwatch.Elapsed);
+        Console.WriteLine("Press any key to print generated words . . . ");
+        Console.ReadKey();
+        foreach (string word in wordsGenerated)
+        {
+            Console.WriteLine(word);
+        }
     }
 }
 
