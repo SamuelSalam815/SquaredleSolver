@@ -7,38 +7,6 @@ using System.Text;
 
 internal class Program
 {
-    static List<string> GenerateWordsStartingWith(
-        CharacterNode firstCharacter,
-        AdjacencyList<CharacterNode> adjacencyList,
-        HashSet<string> validWords)
-    {
-        List<string> generatedWords = new();
-        StringBuilder stringBuilder = new();
-        IEnumerable<List<CharacterNode>> allPaths =
-            PathGenerator<CharacterNode>
-            .EnumerateAllPaths(firstCharacter, adjacencyList);
-        foreach (List<CharacterNode> path in allPaths)
-        {
-            if (path.Count <= 3)
-            {
-                continue;
-            }
-
-            stringBuilder.Clear();
-            foreach (CharacterNode node in path)
-            {
-                stringBuilder.Append(node.Character);
-            }
-
-            string word = stringBuilder.ToString();
-            if (validWords.Contains(word))
-            {
-                generatedWords.Add(word);
-            }
-        }
-
-        return generatedWords;
-    }
 
     private static void Main(string[] args)
     {
