@@ -4,6 +4,6 @@ namespace WpfSquardleSolver.Model;
 
 class SquaredlePuzzle
 {
-    public List<string> ValidWords { get; set; }
-    public string PuzzleAsText { get; set; }
+    public HashSet<string> ValidWords { get; } = new();
+    public string PuzzleAsText { get; set; } = "";
 }

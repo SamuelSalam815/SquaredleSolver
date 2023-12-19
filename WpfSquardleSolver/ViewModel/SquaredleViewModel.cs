@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.IO;
 using WpfSquardleSolver.Model;
 
 namespace WpfSquardleSolver.ViewModel;
@@ -7,11 +8,11 @@ class SquaredleViewModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
     private bool isPuzzleBeingSolved;
-    private readonly SquaredlePuzzle puzzleModel;
+    private readonly SquaredlePuzzle squaredlePuzzle;
 
     public SquaredleViewModel()
     {
-        this.puzzleModel = new();
+        squaredlePuzzle = new();
     }
 
     public bool IsPuzzleBeingSolved
@@ -50,5 +51,13 @@ class SquaredleViewModel : INotifyPropertyChanged
 
     public void LoadValidWords(string path)
     {
+        squaredlePuzzle.ValidWords.Clear();
+        using StreamReader reader = new(path);
+        string? line = reader.ReadLine();
+        while (line is not null)
+        {
+            squaredlePuzzle.ValidWords.Add(line.ToUpper());
+            line = reader.ReadLine();
+        }
     }
 }
