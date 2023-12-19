@@ -1,19 +1,16 @@
 ﻿using System.ComponentModel;
 using System.IO;
+using System.Windows.Input;
 using WpfSquardleSolver.Model;
 
 namespace WpfSquardleSolver.ViewModel;
 
-class SquaredleViewModel : INotifyPropertyChanged
+public class SquaredleViewModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
     private bool isPuzzleBeingSolved;
     private readonly SquaredlePuzzle squaredlePuzzle;
-
-    public SquaredleViewModel()
-    {
-        squaredlePuzzle = new();
-    }
+    private readonly PuzzleSolver puzzleSolver;
 
     public bool IsPuzzleBeingSolved
     {
@@ -23,6 +20,14 @@ class SquaredleViewModel : INotifyPropertyChanged
             isPuzzleBeingSolved = value;
             OnPropertyChanged(nameof(IsPuzzleBeingSolved));
         }
+    }
+
+    public ICommand TogglePuzzleSolverOnOffCommand { get; }
+    public SquaredleViewModel()
+    {
+        squaredlePuzzle = new SquaredlePuzzle();
+        puzzleSolver = new PuzzleSolver(new System.Collections.Generic.HashSet<string>());
+        TogglePuzzleSolverOnOffCommand = new TogglePuzzleSolverOnOff(puzzleSolver);
     }
 
     private void OnPropertyChanged(string propertyName)
@@ -41,12 +46,14 @@ class SquaredleViewModel : INotifyPropertyChanged
         return true;
     }
 
-    public void SetPuzzleText()
+    public void SetPuzzleText(string puzzleAsText)
     {
         if (IsPuzzleBeingSolved)
         {
             TogglePuzzleSolverOnOff(null);
         }
+
+        squaredlePuzzle.PuzzleAsText = puzzleAsText;
     }
 
     public void LoadValidWords(string path)
