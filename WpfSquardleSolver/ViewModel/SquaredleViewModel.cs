@@ -21,13 +21,13 @@ public class SquaredleViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(IsPuzzleBeingSolved));
         }
     }
-
-    public ICommand TogglePuzzleSolverOnOffCommand { get; }
+    public BindingList<string> WordsFoundInPuzzle { get; } = new();
+    public ICommand TogglePuzzleSolverOnOff { get; }
     public SquaredleViewModel()
     {
         squaredlePuzzle = new SquaredlePuzzle();
         puzzleSolver = new PuzzleSolver(new System.Collections.Generic.HashSet<string>());
-        TogglePuzzleSolverOnOffCommand = new TogglePuzzleSolverOnOff(puzzleSolver);
+        TogglePuzzleSolverOnOff = new TogglePuzzleSolverOnOff(puzzleSolver);
     }
 
     private void OnPropertyChanged(string propertyName)
@@ -35,22 +35,16 @@ public class SquaredleViewModel : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    public BindingList<string> WordsFoundInPuzzle { get; } = new();
-
-    private void TogglePuzzleSolverOnOff(object? parameter)
-    {
-    }
-
-    private bool CanTogglePuzzleSolverOnOff(object? parameter)
-    {
-        return true;
-    }
-
     public void SetPuzzleText(string puzzleAsText)
     {
         if (IsPuzzleBeingSolved)
         {
-            TogglePuzzleSolverOnOff(null);
+            if (!TogglePuzzleSolverOnOff.CanExecute(null))
+            {
+                throw new System.Exception("Unexpectedly could not execute command");
+            }
+
+            TogglePuzzleSolverOnOff.Execute(null);
         }
 
         squaredlePuzzle.PuzzleAsText = puzzleAsText;
