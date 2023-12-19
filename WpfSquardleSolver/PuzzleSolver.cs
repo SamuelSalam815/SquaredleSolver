@@ -1,6 +1,5 @@
 ﻿using GraphWalking;
 using GraphWalking.Graphs;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -33,8 +32,6 @@ public class PuzzleSolver : INotifyPropertyChanged
 
     public void UpdatePuzzle(string puzzleAsText)
     {
-        string[] puzzleLines = puzzleAsText.Split(new string[] { Environment.NewLine, "\n" }, StringSplitOptions.None);
-
         lock (this)
         {
             PuzzleAsCharacterGraph = CharacterGraphBuilder.FromLetterGrid(puzzleAsText);
