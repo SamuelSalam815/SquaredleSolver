@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
-using WpfSquardleSolver.Command;
 using WpfSquardleSolver.Model;
+using WpfSquardleSolver.ViewModel;
 
 namespace WpfSquardleSolver;
 /// <summary>
@@ -9,17 +9,23 @@ namespace WpfSquardleSolver;
 /// </summary>
 public partial class MainWindow : Window
 {
-    private readonly SolverModel solver;
-    private readonly PuzzleModel puzzle;
-    public ICommand ToggleSolverOnOff;
-
     public MainWindow()
     {
-        puzzle = new PuzzleModel();
-        puzzle.LoadValidWords("words_alpha.txt");
-        solver = new SolverModel(puzzle);
-        ToggleSolverOnOff = new ToggleSolverOnOff(solver);
         InitializeComponent();
+
+        PuzzleModel puzzle = new();
+        puzzle.LoadValidWords("words_alpha.txt");
+        puzzle.PuzzleAsText = """
+            PNOC
+            RAHE
+            GNGT
+            IIHU
+            """;
+        InputField.DataContext = puzzle;
+
+        SolverModel solver = new(puzzle);
+        SolverViewModel solverViewModel = new(solver);
+        ToggleSolverButton.DataContext = solverViewModel;
     }
 
     private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)

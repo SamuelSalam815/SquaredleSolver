@@ -1,5 +1,6 @@
 ﻿using GraphWalking;
 using GraphWalking.Graphs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -8,32 +9,29 @@ using System.Threading.Tasks;
 using System.Windows;
 
 namespace WpfSquardleSolver.Model;
-class SolverModel : INotifyPropertyChanged
+class SolverModel
 {
-    public event PropertyChangedEventHandler? PropertyChanged;
-    public bool IsSolverRunning { get; private set; }
+    public event Action? SolverStarted;
+    public event Action? SolverStopped;
     public BindingList<string> ValidWordsFoundInPuzzle;
 
     private readonly PuzzleModel puzzleModel;
-    private AdjacencyList<CharacterNode> puzzleAsAdjacencyList;
     private CancellationTokenSource cancellationTokenSource;
     private Task puzzleSolvingBackgroundTask;
 
-    public SolverModel(PuzzleModel puzzle)
+    public SolverModel(PuzzleModel puzzleModel)
     {
-        puzzleModel = puzzle;
-
+        ValidWordsFoundInPuzzle = new BindingList<string>();
+        this.puzzleModel = puzzleModel;
         cancellationTokenSource = new CancellationTokenSource();
         puzzleSolvingBackgroundTask = Task.CompletedTask;
+
+        puzzleModel.PropertyChanged += OnPuzzleModelChanged;
     }
 
     private void OnPuzzleModelChanged(object? sender, PropertyChangedEventArgs args)
     {
         StopSolvingPuzzle();
-        if (args.PropertyName == nameof(puzzleModel.PuzzleAsText))
-        {
-            puzzleAsAdjacencyList = CharacterGraphBuilder.FromLetterGrid(puzzleModel.PuzzleAsText);
-        }
     }
 
     public void StartSolvingPuzzle()
@@ -47,8 +45,7 @@ class SolverModel : INotifyPropertyChanged
         cancellationTokenSource = new CancellationTokenSource();
         ValidWordsFoundInPuzzle.Clear();
         puzzleSolvingBackgroundTask = Task.Run(() => SolvePuzzle(cancellationTokenSource.Token));
-        IsSolverRunning = true;
-        OnPropertyChanged(nameof(IsSolverRunning));
+        SolverStarted?.Invoke();
     }
 
     public void StopSolvingPuzzle()
@@ -59,8 +56,7 @@ class SolverModel : INotifyPropertyChanged
             puzzleSolvingBackgroundTask.Wait();
         }
 
-        IsSolverRunning = false;
-        OnPropertyChanged(nameof(IsSolverRunning));
+        SolverStopped?.Invoke();
     }
 
     private void SolvePuzzle(CancellationToken token)
@@ -71,7 +67,7 @@ class SolverModel : INotifyPropertyChanged
         }
 
         StringBuilder stringBuilder = new();
-        foreach (List<CharacterNode> path in PathGenerator<CharacterNode>.EnumerateAllPaths(puzzleAsAdjacencyList))
+        foreach (List<CharacterNode> path in PathGenerator<CharacterNode>.EnumerateAllPaths(puzzleModel.PuzzleAsAdjacencyList))
         {
             if (token.IsCancellationRequested)
             {
@@ -96,12 +92,6 @@ class SolverModel : INotifyPropertyChanged
             }
         }
 
-        IsSolverRunning = false;
-        OnPropertyChanged(nameof(IsSolverRunning));
-    }
-
-    private void OnPropertyChanged(string nameOfProperty)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameOfProperty));
+        SolverStopped?.Invoke();
     }
 }

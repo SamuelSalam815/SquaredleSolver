@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using GraphWalking.Graphs;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 
@@ -16,6 +17,17 @@ class PuzzleModel : INotifyPropertyChanged
         {
             puzzleAsTextBackingField = value;
             OnPropertyChanged(nameof(PuzzleAsText));
+        }
+    }
+
+    private AdjacencyList<CharacterNode> puzzleAsAdjacencyListBackingField = new();
+    public AdjacencyList<CharacterNode> PuzzleAsAdjacencyList
+    {
+        get { return puzzleAsAdjacencyListBackingField; }
+        set
+        {
+            puzzleAsAdjacencyListBackingField = value;
+            OnPropertyChanged(nameof(PuzzleAsAdjacencyList));
         }
     }
 

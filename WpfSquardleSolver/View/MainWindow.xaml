@@ -18,7 +18,8 @@
             Margin="148,56,0,0" 
             AcceptsReturn="True" 
             TextWrapping="NoWrap"
-            Text="PNOC&#10;RAHE&#10;GNGT&#10;IIHU" 
+            d:Text="HELL&#10;OWOR&#10;LDFO&#10;OBAR"
+            Text="{Binding PuzzleAsText, UpdateSourceTrigger=PropertyChanged}"
             VerticalAlignment="Top" 
             Width="93" 
             Height="110" 
@@ -37,7 +38,7 @@
             VirtualizingPanel.IsVirtualizing="True"/>
         <Button x:Name="ToggleSolverButton"
                 Content="Start Solving Puzzle"
-                Command="{Binding }"
+                Command="{Binding ToggleSolverOnOff}"
                 Background="#2ecc71"
                 HorizontalAlignment="Left"
                 Margin="128,184,0,0"

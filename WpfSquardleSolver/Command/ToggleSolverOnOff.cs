@@ -1,30 +1,35 @@
 ﻿using System;
 using System.Windows.Input;
 using WpfSquardleSolver.Model;
+using WpfSquardleSolver.ViewModel;
 
 namespace WpfSquardleSolver.Command;
 
 class ToggleSolverOnOff : ICommand
 {
     public event EventHandler? CanExecuteChanged;
-    private readonly SolverModel solver;
+    private readonly SolverModel solverModel;
+    private readonly SolverViewModel solverViewModel;
 
-    public ToggleSolverOnOff(SolverModel solver)
+    public ToggleSolverOnOff(
+        SolverModel solverModel,
+        SolverViewModel solverViewModel)
     {
-        this.solver = solver;
+        this.solverModel = solverModel;
+        this.solverViewModel = solverViewModel;
     }
 
     public bool CanExecute(object? parameter) => true;
 
     public void Execute(object? parameter)
     {
-        if (solver.IsSolverRunning)
+        if (solverViewModel.IsSolverRunning)
         {
-            solver.StopSolvingPuzzle();
+            solverModel.StopSolvingPuzzle();
         }
         else
         {
-            solver.StartSolvingPuzzle();
+            solverModel.StartSolvingPuzzle();
         }
     }
 }
