@@ -36,8 +36,9 @@ internal class MainWindowViewModel : INotifyPropertyChanged
     private readonly SolverModel solverModel;
     private readonly PuzzleModel puzzleModel;
 
-    public MainWindowViewModel(SolverModel solverModel)
+    public MainWindowViewModel(PuzzleModel puzzleModel, SolverModel solverModel)
     {
+        this.puzzleModel = puzzleModel;
         this.solverModel = solverModel;
         solverModel.SolverStarted += () => IsSolverRunning = true;
         solverModel.SolverStopped += () => IsSolverRunning = false;

@@ -21,11 +21,7 @@ public partial class MainWindow : Window
             GNGT
             IIHU
             """;
-        InputField.DataContext = puzzle;
-
-        SolverModel solver = new(puzzle);
-        MainWindowViewModel solverViewModel = new(solver);
-        ToggleSolverButton.DataContext = solverViewModel;
+        DataContext = new MainWindowViewModel(puzzle, new SolverModel(puzzle));
     }
 
     private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)

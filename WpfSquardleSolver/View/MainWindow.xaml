@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfSquardleSolver"
+        xmlns:viewmodel="clr-namespace:WpfSquardleSolver.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Background="#ecf0f1">
     <Grid>
@@ -34,6 +34,7 @@
         <ListView
             x:Name="ResultsListView"
             d:ItemsSource="{d:SampleData ItemCount=5}"
+            ItemsSource="{Binding ValidWordsFoundInPuzzle}"
             Margin="379,36,230,217"
             VirtualizingPanel.IsVirtualizing="True"/>
         <Button x:Name="ToggleSolverButton"
@@ -46,6 +47,9 @@
                 Width="133">
             <Button.Style>
                 <Style TargetType="Button">
+                    <Style.Triggers>
+                        
+                    </Style.Triggers>
                 </Style> 
             </Button.Style>
         </Button>

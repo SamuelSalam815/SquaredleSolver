@@ -17,6 +17,7 @@ class PuzzleModel : INotifyPropertyChanged
         {
             puzzleAsTextBackingField = value;
             OnPropertyChanged(nameof(PuzzleAsText));
+            PuzzleAsAdjacencyList = CharacterGraphBuilder.FromLetterGrid(PuzzleAsText);
         }
     }
 
