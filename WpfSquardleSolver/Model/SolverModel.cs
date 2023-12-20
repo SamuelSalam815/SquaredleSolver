@@ -5,48 +5,50 @@ using System.ComponentModel;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace WpfSquardleSolver.Model;
 class SolverModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
     public bool IsSolverRunning { get; private set; }
+    public BindingList<string> ValidWordsFoundInPuzzle;
 
     private readonly PuzzleModel puzzleModel;
-    private readonly SolverModel model;
+    private AdjacencyList<CharacterNode> puzzleAsAdjacencyList;
     private CancellationTokenSource cancellationTokenSource;
     private Task puzzleSolvingBackgroundTask;
 
     public SolverModel(PuzzleModel puzzle)
     {
         puzzleModel = puzzle;
-        model = new SolverModel();
 
         cancellationTokenSource = new CancellationTokenSource();
         puzzleSolvingBackgroundTask = Task.CompletedTask;
     }
 
-    public void UpdatePuzzle(string puzzleAsText)
+    private void OnPuzzleModelChanged(object? sender, PropertyChangedEventArgs args)
     {
-        lock (this)
+        StopSolvingPuzzle();
+        if (args.PropertyName == nameof(puzzleModel.PuzzleAsText))
         {
-            PuzzleAsCharacterGraph = CharacterGraphBuilder.FromLetterGrid(puzzleAsText);
+            puzzleAsAdjacencyList = CharacterGraphBuilder.FromLetterGrid(puzzleModel.PuzzleAsText);
         }
     }
 
     public void StartSolvingPuzzle()
     {
         StopSolvingPuzzle();
-        if (PuzzleAsCharacterGraph is null)
+        if (puzzleModel.PuzzleAsText.Equals(string.Empty))
         {
             return;
         }
 
         cancellationTokenSource = new CancellationTokenSource();
-        Answers.Clear();
+        ValidWordsFoundInPuzzle.Clear();
         puzzleSolvingBackgroundTask = Task.Run(() => SolvePuzzle(cancellationTokenSource.Token));
         IsSolverRunning = true;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSolverRunning)));
+        OnPropertyChanged(nameof(IsSolverRunning));
     }
 
     public void StopSolvingPuzzle()
@@ -58,7 +60,7 @@ class SolverModel : INotifyPropertyChanged
         }
 
         IsSolverRunning = false;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSolverRunning)));
+        OnPropertyChanged(nameof(IsSolverRunning));
     }
 
     private void SolvePuzzle(CancellationToken token)
@@ -69,7 +71,7 @@ class SolverModel : INotifyPropertyChanged
         }
 
         StringBuilder stringBuilder = new();
-        foreach (List<CharacterNode> path in PathGenerator<CharacterNode>.EnumerateAllPaths(PuzzleAsCharacterGraph))
+        foreach (List<CharacterNode> path in PathGenerator<CharacterNode>.EnumerateAllPaths(puzzleAsAdjacencyList))
         {
             if (token.IsCancellationRequested)
             {
@@ -88,14 +90,18 @@ class SolverModel : INotifyPropertyChanged
             }
 
             string word = stringBuilder.ToString();
-            if (puzzleModel.Contains(word))
+            if (puzzleModel.ValidWords.Contains(word))
             {
-                Application.Current.Dispatcher.Invoke(() => Answers.Add(word));
+                Application.Current.Dispatcher.Invoke(() => ValidWordsFoundInPuzzle.Add(word));
             }
         }
 
         IsSolverRunning = false;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSolverRunning)));
+        OnPropertyChanged(nameof(IsSolverRunning));
     }
 
+    private void OnPropertyChanged(string nameOfProperty)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameOfProperty));
+    }
 }

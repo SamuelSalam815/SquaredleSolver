@@ -7,29 +7,19 @@ namespace WpfSquardleSolver.Model;
 class PuzzleModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
-    private readonly PuzzleModel puzzleModel;
 
-    public BindingList<string> WordsFoundInPuzzle { get; } = new();
-
+    private string puzzleAsTextBackingField = string.Empty;
     public string PuzzleAsText
     {
-        get { return puzzleModel.PuzzleAsText; }
+        get { return puzzleAsTextBackingField; }
         set
         {
-            puzzleModel.PuzzleAsText = value;
+            puzzleAsTextBackingField = value;
             OnPropertyChanged(nameof(PuzzleAsText));
         }
     }
 
-    public HashSet<string> ValidWords
-    {
-        get { return puzzleModel.ValidWords; }
-    }
-
-    public PuzzleModel()
-    {
-        puzzleModel = new PuzzleModel();
-    }
+    public HashSet<string> ValidWords { get; private set; } = new();
 
     private void OnPropertyChanged(string propertyName)
     {
@@ -47,7 +37,7 @@ class PuzzleModel : INotifyPropertyChanged
             line = reader.ReadLine();
         }
 
-        puzzleModel.ValidWords = newValidWords;
+        ValidWords = newValidWords;
         OnPropertyChanged(nameof(ValidWords));
     }
 }
