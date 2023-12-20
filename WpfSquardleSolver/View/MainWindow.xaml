@@ -3,9 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewmodel="clr-namespace:WpfSquardleSolver.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
+        xmlns:viewmodel="clr-namespace:WpfSquardleSolver.ViewModel"
+        xmlns:local="clr-namespace:WpfSquardleSolver.ValueConverters"
+        d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Background="#ecf0f1">
+    <Window.Resources>
+        <local:InverseBooleanToColorConverter x:Key="InverseBooleanToColorConverter"/>
+    </Window.Resources>
     <Grid>
         <TextBox 
             x:Name="InputField"
@@ -40,18 +45,11 @@
         <Button x:Name="ToggleSolverButton"
                 Content="Start Solving Puzzle"
                 Command="{Binding ToggleSolverOnOff}"
-                Background="#2ecc71"
+                d:Background="Green"
+                Background="{Binding IsSolverRunning, Converter={StaticResource InverseBooleanToColorConverter}}"
                 HorizontalAlignment="Left"
                 Margin="128,184,0,0"
                 VerticalAlignment="Top"
-                Width="133">
-            <Button.Style>
-                <Style TargetType="Button">
-                    <Style.Triggers>
-                        
-                    </Style.Triggers>
-                </Style> 
-            </Button.Style>
-        </Button>
+                Width="133"/>
     </Grid>
 </Window>
