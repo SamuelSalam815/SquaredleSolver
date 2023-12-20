@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using WpfSquardleSolver.Model;
 
-namespace WpfSquardleSolver.ViewModel;
+namespace WpfSquardleSolver.Model;
 
-class PuzzleViewModel : INotifyPropertyChanged
+class PuzzleModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
     private readonly PuzzleModel puzzleModel;
@@ -27,7 +26,7 @@ class PuzzleViewModel : INotifyPropertyChanged
         get { return puzzleModel.ValidWords; }
     }
 
-    public PuzzleViewModel()
+    public PuzzleModel()
     {
         puzzleModel = new PuzzleModel();
     }

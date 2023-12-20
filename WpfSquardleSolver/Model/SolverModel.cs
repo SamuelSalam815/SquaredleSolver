@@ -5,22 +5,21 @@ using System.ComponentModel;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using WpfSquardleSolver.Model;
 
-namespace WpfSquardleSolver.ViewModel;
-class SolverViewModel : INotifyPropertyChanged
+namespace WpfSquardleSolver.Model;
+class SolverModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
     public bool IsSolverRunning { get; private set; }
 
-    private readonly PuzzleViewModel puzzleModel;
+    private readonly PuzzleModel puzzleModel;
     private readonly SolverModel model;
     private CancellationTokenSource cancellationTokenSource;
     private Task puzzleSolvingBackgroundTask;
 
-    public SolverViewModel(PuzzleViewModel puzzle)
+    public SolverModel(PuzzleModel puzzle)
     {
-        this.puzzleModel = puzzle;
+        puzzleModel = puzzle;
         model = new SolverModel();
 
         cancellationTokenSource = new CancellationTokenSource();
