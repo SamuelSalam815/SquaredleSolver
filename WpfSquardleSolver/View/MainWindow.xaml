@@ -37,7 +37,7 @@
             VirtualizingPanel.IsVirtualizing="True"/>
         <Button x:Name="ToggleSolverButton"
                 Content="Start Solving Puzzle"
-                Click="Button_Click"
+                Command="{Binding }"
                 Background="#2ecc71"
                 HorizontalAlignment="Left"
                 Margin="128,184,0,0"
