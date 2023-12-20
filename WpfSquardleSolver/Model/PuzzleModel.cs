@@ -2,8 +2,8 @@
 
 namespace WpfSquardleSolver.Model;
 
-class SquaredlePuzzle
+class PuzzleModel
 {
-    public HashSet<string> ValidWords { get; } = new();
+    public HashSet<string> ValidWords { get; set; } = new();
     public string PuzzleAsText { get; set; } = "";
 }
