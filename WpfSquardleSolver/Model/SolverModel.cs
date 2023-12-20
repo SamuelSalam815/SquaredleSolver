@@ -67,6 +67,7 @@ class SolverModel
         }
 
         StringBuilder stringBuilder = new();
+        HashSet<string> wordsAlreadyFound = new();
         foreach (List<CharacterNode> path in PathGenerator<CharacterNode>.EnumerateAllPaths(puzzleModel.PuzzleAsAdjacencyList))
         {
             if (token.IsCancellationRequested)
@@ -86,8 +87,10 @@ class SolverModel
             }
 
             string word = stringBuilder.ToString();
-            if (puzzleModel.ValidWords.Contains(word))
+
+            if (!wordsAlreadyFound.Contains(word) && puzzleModel.ValidWords.Contains(word))
             {
+                wordsAlreadyFound.Add(word);
                 Application.Current.Dispatcher.Invoke(() => ValidWordsFoundInPuzzle.Add(word));
             }
         }
