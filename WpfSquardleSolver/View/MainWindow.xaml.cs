@@ -24,7 +24,7 @@ public partial class MainWindow : Window
         InputField.DataContext = puzzle;
 
         SolverModel solver = new(puzzle);
-        SolverViewModel solverViewModel = new(solver);
+        MainWindowViewModel solverViewModel = new(solver);
         ToggleSolverButton.DataContext = solverViewModel;
     }
 

@@ -9,11 +9,11 @@ class ToggleSolverOnOff : ICommand
 {
     public event EventHandler? CanExecuteChanged;
     private readonly SolverModel solverModel;
-    private readonly SolverViewModel solverViewModel;
+    private readonly MainWindowViewModel solverViewModel;
 
     public ToggleSolverOnOff(
         SolverModel solverModel,
-        SolverViewModel solverViewModel)
+        MainWindowViewModel solverViewModel)
     {
         this.solverModel = solverModel;
         this.solverViewModel = solverViewModel;
