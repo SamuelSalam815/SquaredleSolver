@@ -1,11 +1,14 @@
-﻿using System.ComponentModel;
+﻿using GraphWalking.Graphs;
+using System.ComponentModel;
 using System.Windows.Input;
 using WpfSquardleSolver.Command;
 using WpfSquardleSolver.Model;
 
 namespace WpfSquardleSolver.ViewModel;
+
 internal class MainWindowViewModel : INotifyPropertyChanged
 {
+
     public event PropertyChangedEventHandler? PropertyChanged;
     public ICommand ToggleSolverOnOff { get; }
 
@@ -30,6 +33,11 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         }
     }
 
+    private System.Collections.Generic.List<CharacterNode> PuzzleAsCharacterNodes
+    {
+        get { return puzzleModel.PuzzleAsAdjacencyList.GetAllNodes(); }
+    }
+
     public BindingList<string> ValidWordsFoundInPuzzle
         => solverModel.ValidWordsFoundInPuzzle;
 
@@ -39,6 +47,8 @@ internal class MainWindowViewModel : INotifyPropertyChanged
     public MainWindowViewModel(PuzzleModel puzzleModel, SolverModel solverModel)
     {
         this.puzzleModel = puzzleModel;
+        puzzleModel.PropertyChanged += OnPuzzleModelChanged;
+
         this.solverModel = solverModel;
         solverModel.SolverStarted += () => IsSolverRunning = true;
         solverModel.SolverStopped += () => IsSolverRunning = false;
@@ -50,6 +60,14 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         PropertyChanged?.Invoke(
             this,
             new PropertyChangedEventArgs(nameOfProperty));
+    }
+
+    private void OnPuzzleModelChanged(object? sender, PropertyChangedEventArgs args)
+    {
+        if (args.PropertyName == nameof(puzzleModel.PuzzleAsAdjacencyList))
+        {
+            OnPropertyChanged(nameof(PuzzleAsCharacterNodes));
+        }
     }
 
 }
