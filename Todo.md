@@ -1,0 +1,2 @@
+- [ ] ui element that allows easy exclusion of certain characters from the puzzle
+- [ ] each answer should display a small graphic which shows how to construct the given word on the grid
