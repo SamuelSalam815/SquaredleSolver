@@ -7,9 +7,9 @@ using System.Windows.Media;
 namespace WpfSquardleSolver.ValueConverters;
 
 /// <summary>
-///     Converts true values to red and false values to green 
+///     Determines the color for the button that toggles the puzzle solver on or off 
 /// </summary>
-internal class InverseBooleanToColorConverter : IValueConverter
+internal class IsSolverRunningColorConverter : IValueConverter
 {
     public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {

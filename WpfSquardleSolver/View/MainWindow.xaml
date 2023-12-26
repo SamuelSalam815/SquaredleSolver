@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Background="#ecf0f1">
     <Window.Resources>
-        <local:InverseBooleanToColorConverter x:Key="InverseBooleanToColorConverter"/>
+        <local:IsSolverRunningColorConverter x:Key="IsSolverRunningColorConverter"/>
     </Window.Resources>
     <Grid>
         <TextBox 
@@ -46,7 +46,7 @@
                 Content="Start Solving Puzzle"
                 Command="{Binding ToggleSolverOnOff}"
                 d:Background="Green"
-                Background="{Binding IsSolverRunning, Converter={StaticResource InverseBooleanToColorConverter}}"
+                Background="{Binding IsSolverRunning, Converter={StaticResource IsSolverRunningColorConverter}}"
                 HorizontalAlignment="Left"
                 Margin="128,184,0,0"
                 VerticalAlignment="Top"
