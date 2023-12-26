@@ -38,8 +38,8 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         get { return puzzleModel.PuzzleAsAdjacencyList.GetAllNodes(); }
     }
 
-    public BindingList<string> ValidWordsFoundInPuzzle
-        => solverModel.ValidWordsFoundInPuzzle;
+    public BindingList<AnswerModel> AnswersFoundInPuzzle =>
+        solverModel.AnswersFoundInPuzzle;
 
     private readonly SolverModel solverModel;
     private readonly PuzzleModel puzzleModel;

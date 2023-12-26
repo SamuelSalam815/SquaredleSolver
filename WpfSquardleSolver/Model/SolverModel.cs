@@ -3,7 +3,6 @@ using GraphWalking.Graphs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,7 +12,7 @@ class SolverModel
 {
     public event Action? SolverStarted;
     public event Action? SolverStopped;
-    public BindingList<string> ValidWordsFoundInPuzzle;
+    public BindingList<AnswerModel> AnswersFoundInPuzzle;
 
     private readonly PuzzleModel puzzleModel;
     private CancellationTokenSource cancellationTokenSource;
@@ -21,7 +20,7 @@ class SolverModel
 
     public SolverModel(PuzzleModel puzzleModel)
     {
-        ValidWordsFoundInPuzzle = new BindingList<string>();
+        AnswersFoundInPuzzle = new BindingList<AnswerModel>();
         this.puzzleModel = puzzleModel;
         cancellationTokenSource = new CancellationTokenSource();
         puzzleSolvingBackgroundTask = Task.CompletedTask;
@@ -43,7 +42,7 @@ class SolverModel
         }
 
         cancellationTokenSource = new CancellationTokenSource();
-        ValidWordsFoundInPuzzle.Clear();
+        AnswersFoundInPuzzle.Clear();
         puzzleSolvingBackgroundTask = Task.Run(() => SolvePuzzle(cancellationTokenSource.Token));
         SolverStarted?.Invoke();
     }
@@ -66,7 +65,6 @@ class SolverModel
             return;
         }
 
-        StringBuilder stringBuilder = new();
         HashSet<string> wordsAlreadyFound = new();
         foreach (List<CharacterNode> path in PathGenerator<CharacterNode>.EnumerateAllPaths(puzzleModel.PuzzleAsAdjacencyList))
         {
@@ -80,18 +78,11 @@ class SolverModel
                 continue;
             }
 
-            stringBuilder.Clear();
-            foreach (CharacterNode node in path)
+            AnswerModel answer = new(path);
+            if (!wordsAlreadyFound.Contains(answer.Word) && puzzleModel.ValidWords.Contains(answer.Word))
             {
-                stringBuilder.Append(node.Character);
-            }
-
-            string word = stringBuilder.ToString();
-
-            if (!wordsAlreadyFound.Contains(word) && puzzleModel.ValidWords.Contains(word))
-            {
-                wordsAlreadyFound.Add(word);
-                Application.Current.Dispatcher.Invoke(() => ValidWordsFoundInPuzzle.Add(word));
+                wordsAlreadyFound.Add(answer.Word);
+                Application.Current.Dispatcher.Invoke(() => AnswersFoundInPuzzle.Add(answer));
             }
         }
 

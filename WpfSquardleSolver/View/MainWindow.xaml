@@ -40,9 +40,15 @@
         <ListView
             x:Name="ResultsListView"
             d:ItemsSource="{d:SampleData ItemCount=5}"
-            ItemsSource="{Binding ValidWordsFoundInPuzzle}"
+            ItemsSource="{Binding AnswersFoundInPuzzle}"
             Margin="379,36,230,217"
-            VirtualizingPanel.IsVirtualizing="True"/>
+            VirtualizingPanel.IsVirtualizing="True">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Word}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
         <Button x:Name="ToggleSolverButton"
                 Content="{Binding IsSolverRunning, Converter={StaticResource IsSolverRunningTextConverter}}"
                 d:Content="PlaceHolder"
