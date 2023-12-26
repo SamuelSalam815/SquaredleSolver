@@ -42,14 +42,34 @@
             x:Name="ResultsListView"
             d:ItemsSource="{d:SampleData ItemCount=5}"
             ItemsSource="{Binding AnswersFoundInPuzzle}"
-            Margin="379,36,230,217"
-            VirtualizingPanel.IsVirtualizing="True">
+            Margin="379,36,102,39"
+            VirtualizingPanel.IsVirtualizing="True"
+            HorizontalContentAlignment="Stretch"
+            >
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Word}"/>
-                        <view:CharacterGrid/>
-                    </StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBlock
+                            Text="{Binding Word}"
+                            Grid.Column="0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            />
+                        <view:CharacterGrid
+                            NumberOfRows="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.NumberOfRowsInPuzzle}"
+                            NumberOfColumns="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.NumberOfColumnsInPuzzle}"
+                            NodesToDisplay="{Binding CharacterNodes}"
+                            Grid.Column="1"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            />
+                    
+                    </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

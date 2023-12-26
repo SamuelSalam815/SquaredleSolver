@@ -1,5 +1,6 @@
 ﻿using GraphWalking.Graphs;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -15,7 +16,7 @@ namespace WpfSquaredleSolver.View
                 nameof(NodesToDisplay),
                 typeof(List<CharacterNode>),
                 typeof(CharacterGrid),
-                new FrameworkPropertyMetadata());
+                new FrameworkPropertyMetadata(defaultValue: null));
         public List<CharacterNode> NodesToDisplay
         {
             get => (List<CharacterNode>)GetValue(DisplayedNodesProperty);
@@ -49,11 +50,21 @@ namespace WpfSquaredleSolver.View
         public CharacterGrid()
         {
             InitializeComponent();
-            //DisplayNodes();
+            DependencyPropertyDescriptor numberOfColumnsDescriptor =
+                DependencyPropertyDescriptor.FromProperty(
+                    NumberOfColumnsProperty,
+                    typeof(CharacterGrid));
+
+            numberOfColumnsDescriptor.AddValueChanged(this, (sender, e) => DisplayNodes());
         }
 
         public void DisplayNodes()
         {
+            if (NodesToDisplay is null || NumberOfRows == 0 || NumberOfColumns == 0)
+            {
+                return;
+            }
+
             grid.Children.Clear();
             grid.ColumnDefinitions.Clear();
             grid.RowDefinitions.Clear();
@@ -70,18 +81,29 @@ namespace WpfSquaredleSolver.View
                 grid.ColumnDefinitions.Add(rowDefinition);
             }
 
+            TextBlock[,] textBlocks = new TextBlock[NumberOfRows, NumberOfColumns];
+
+            for (int row = 0; row < NumberOfRows; row++)
+            {
+                for (int column = 0; column < NumberOfColumns; column++)
+                {
+                    TextBlock newTextBlock = new()
+                    {
+                        Text = "-",
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        TextAlignment = TextAlignment.Center,
+                    };
+                    textBlocks[row, column] = newTextBlock;
+                    Grid.SetRow(newTextBlock, row);
+                    Grid.SetColumn(newTextBlock, column);
+                    grid.Children.Add(newTextBlock);
+                }
+            }
+
             foreach (CharacterNode node in NodesToDisplay)
             {
-                TextBlock textBlock = new()
-                {
-                    Text = node.Character.ToString(),
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center,
-                    TextAlignment = TextAlignment.Center,
-                };
-                Grid.SetRow(textBlock, node.Row);
-                Grid.SetColumn(textBlock, node.Column);
-                grid.Children.Add(textBlock);
+                textBlocks[node.Row, node.Column].Text = node.Character.ToString();
             }
 
             grid.UpdateLayout();
