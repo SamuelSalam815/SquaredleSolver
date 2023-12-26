@@ -22,6 +22,9 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         }
     }
 
+    public uint NumberOfRowsInPuzzle => puzzleModel.NumberOfRows;
+    public uint NumberOfColumnsInPuzzle => puzzleModel.NumberOfColumns;
+
     private bool isSolverRunningBackingField = false;
     public bool IsSolverRunning
     {
@@ -64,9 +67,17 @@ internal class MainWindowViewModel : INotifyPropertyChanged
 
     private void OnPuzzleModelChanged(object? sender, PropertyChangedEventArgs args)
     {
-        if (args.PropertyName == nameof(puzzleModel.PuzzleAsAdjacencyList))
+        switch (args.PropertyName)
         {
-            OnPropertyChanged(nameof(PuzzleAsCharacterNodes));
+            case nameof(puzzleModel.PuzzleAsAdjacencyList):
+                OnPropertyChanged(nameof(PuzzleAsCharacterNodes));
+                break;
+            case nameof(puzzleModel.NumberOfRows):
+                OnPropertyChanged(nameof(NumberOfRowsInPuzzle));
+                break;
+            case nameof(puzzleModel.NumberOfColumns):
+                OnPropertyChanged(nameof(NumberOfColumnsInPuzzle));
+                break;
         }
     }
 

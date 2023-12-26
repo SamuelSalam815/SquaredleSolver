@@ -1,4 +1,5 @@
 ﻿using GraphWalking.Graphs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -18,6 +19,37 @@ class PuzzleModel : INotifyPropertyChanged
             puzzleAsTextBackingField = value;
             OnPropertyChanged(nameof(PuzzleAsText));
             PuzzleAsAdjacencyList = CharacterGraphBuilder.FromLetterGrid(PuzzleAsText);
+
+            string[] lines = PuzzleAsText.Split(new string[] { Environment.NewLine, "\n" }, StringSplitOptions.None);
+            NumberOfRows = (uint)lines.Length;
+            int longestLineLength = 0;
+            foreach (string line in lines)
+            {
+                longestLineLength = Math.Max(line.Length, longestLineLength);
+            }
+            NumberOfColumns = (uint)longestLineLength;
+        }
+    }
+
+    private uint numberOfRowsBackingField;
+    public uint NumberOfRows
+    {
+        get { return numberOfRowsBackingField; }
+        private set
+        {
+            numberOfRowsBackingField = value;
+            OnPropertyChanged(nameof(NumberOfRows));
+        }
+    }
+
+    private uint numberOfColumnsBackingField;
+    public uint NumberOfColumns
+    {
+        get { return numberOfColumnsBackingField; }
+        private set
+        {
+            numberOfColumnsBackingField = value;
+            OnPropertyChanged(nameof(NumberOfColumns));
         }
     }
 
