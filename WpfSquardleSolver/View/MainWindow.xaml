@@ -10,6 +10,7 @@
         Title="MainWindow" Height="450" Width="800" Background="#ecf0f1">
     <Window.Resources>
         <local:IsSolverRunningColorConverter x:Key="IsSolverRunningColorConverter"/>
+        <local:IsSolverRunningTextConverter x:Key="IsSolverRunningTextConverter"/>
     </Window.Resources>
     <Grid>
         <TextBox 
@@ -43,7 +44,8 @@
             Margin="379,36,230,217"
             VirtualizingPanel.IsVirtualizing="True"/>
         <Button x:Name="ToggleSolverButton"
-                Content="Start Solving Puzzle"
+                Content="{Binding IsSolverRunning, Converter={StaticResource IsSolverRunningTextConverter}}"
+                d:Content="PlaceHolder"
                 Command="{Binding ToggleSolverOnOff}"
                 d:Background="Green"
                 Background="{Binding IsSolverRunning, Converter={StaticResource IsSolverRunningColorConverter}}"
