@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace WpfSquardleSolver.Model;
+namespace WpfSquaredleSolver.Model;
 class SolverModel
 {
     public event Action? SolverStarted;

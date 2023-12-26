@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 
-namespace WpfSquardleSolver.Model;
+namespace WpfSquaredleSolver.Model;
 
 class PuzzleModel : INotifyPropertyChanged
 {

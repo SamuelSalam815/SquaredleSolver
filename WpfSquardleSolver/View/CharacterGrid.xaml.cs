@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace WpfSquardleSolver.View
+namespace WpfSquaredleSolver.View
 {
     /// <summary>
     /// Interaction logic for UserControl1.xaml
@@ -49,7 +49,7 @@ namespace WpfSquardleSolver.View
         public CharacterGrid()
         {
             InitializeComponent();
-            DisplayNodes();
+            //DisplayNodes();
         }
 
         public void DisplayNodes()

@@ -1,17 +1,17 @@
-﻿<Window x:Class="WpfSquardleSolver.MainWindow"
+﻿<Window x:Class="WpfSquaredleSolver.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewmodel="clr-namespace:WpfSquardleSolver.ViewModel"
-        xmlns:local="clr-namespace:WpfSquardleSolver.ValueConverters"
-        xmlns:view="clr-namespace:WpfSquardleSolver."
+        xmlns:viewmodel="clr-namespace:WpfSquaredleSolver.ViewModel"
+        xmlns:converters="clr-namespace:WpfSquaredleSolver.ValueConverters"
+        xmlns:view="clr-namespace:WpfSquaredleSolver.View" 
         d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Background="#ecf0f1">
     <Window.Resources>
-        <local:IsSolverRunningColorConverter x:Key="IsSolverRunningColorConverter"/>
-        <local:IsSolverRunningTextConverter x:Key="IsSolverRunningTextConverter"/>
+        <converters:IsSolverRunningColorConverter x:Key="IsSolverRunningColorConverter"/>
+        <converters:IsSolverRunningTextConverter x:Key="IsSolverRunningTextConverter"/>
     </Window.Resources>
     <Grid>
         <TextBox 
@@ -48,7 +48,7 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Word}"/>
-                        <controls:CharacterButtonGrid/>
+                        <view:CharacterGrid/>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>

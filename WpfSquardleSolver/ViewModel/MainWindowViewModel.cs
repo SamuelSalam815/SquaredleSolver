@@ -1,10 +1,10 @@
 ﻿using GraphWalking.Graphs;
 using System.ComponentModel;
 using System.Windows.Input;
-using WpfSquardleSolver.Command;
-using WpfSquardleSolver.Model;
+using WpfSquaredleSolver.Command;
+using WpfSquaredleSolver.Model;
 
-namespace WpfSquardleSolver.ViewModel;
+namespace WpfSquaredleSolver.ViewModel;
 
 internal class MainWindowViewModel : INotifyPropertyChanged
 {

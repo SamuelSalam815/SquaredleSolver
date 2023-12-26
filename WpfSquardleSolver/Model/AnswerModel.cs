@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WpfSquardleSolver.Model;
+namespace WpfSquaredleSolver.Model;
 public class AnswerModel
 {
     public List<CharacterNode> Path { get; }

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Input;
-using WpfSquardleSolver.Model;
-using WpfSquardleSolver.ViewModel;
+using WpfSquaredleSolver.Model;
+using WpfSquaredleSolver.ViewModel;
 
-namespace WpfSquardleSolver.Command;
+namespace WpfSquaredleSolver.Command;
 
 class ToggleSolverOnOff : ICommand
 {

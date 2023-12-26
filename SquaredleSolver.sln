@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphWalkingTests", "GraphW
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{2445C9D4-5335-4055-A570-A7955C654E75}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfSquardleSolver", "WpfSquardleSolver\WpfSquardleSolver.csproj", "{0EE5C6E0-797C-46FC-8B8B-4C5914566C3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfSquaredleSolver", "WpfSquardleSolver\WpfSquaredleSolver.csproj", "{0EE5C6E0-797C-46FC-8B8B-4C5914566C3C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace WpfSquardleSolver.ValueConverters;
+namespace WpfSquaredleSolver.ValueConverters;
 
 /// <summary>
 ///     Determines the text for the button that toggles the puzzle solver on or off

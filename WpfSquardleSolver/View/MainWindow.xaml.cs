@@ -1,9 +1,10 @@
 ﻿using System.Windows;
 using System.Windows.Input;
-using WpfSquardleSolver.Model;
-using WpfSquardleSolver.ViewModel;
+using WpfSquaredleSolver.Model;
+using WpfSquaredleSolver.ViewModel;
 
-namespace WpfSquardleSolver.View;
+namespace WpfSquaredleSolver.View;
+
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
