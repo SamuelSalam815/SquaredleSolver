@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodel="clr-namespace:WpfSquardleSolver.ViewModel"
         xmlns:local="clr-namespace:WpfSquardleSolver.ValueConverters"
+        xmlns:view="clr-namespace:WpfSquardleSolver."
         d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Background="#ecf0f1">
@@ -45,7 +46,10 @@
             VirtualizingPanel.IsVirtualizing="True">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Word}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Word}"/>
+                        <controls:CharacterButtonGrid/>
+                    </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

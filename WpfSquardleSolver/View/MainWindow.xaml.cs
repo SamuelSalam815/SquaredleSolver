@@ -3,7 +3,7 @@ using System.Windows.Input;
 using WpfSquardleSolver.Model;
 using WpfSquardleSolver.ViewModel;
 
-namespace WpfSquardleSolver;
+namespace WpfSquardleSolver.View;
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>

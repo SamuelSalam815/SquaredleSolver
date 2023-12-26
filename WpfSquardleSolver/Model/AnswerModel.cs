@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace WpfSquardleSolver.Model;
-internal class AnswerModel
+public class AnswerModel
 {
     public List<CharacterNode> Path { get; }
     public string Word { get; }
