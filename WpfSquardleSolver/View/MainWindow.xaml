@@ -38,41 +38,55 @@
                 </Style>
             </TextBox.Resources>
         </TextBox>
-        <ListView
-            x:Name="ResultsListView"
-            d:ItemsSource="{d:SampleData ItemCount=5}"
-            ItemsSource="{Binding AnswersFoundInPuzzle}"
-            Margin="379,36,102,39"
-            VirtualizingPanel.IsVirtualizing="True"
-            HorizontalContentAlignment="Stretch"
-            >
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        
-                        <TextBlock
-                            Text="{Binding Word}"
-                            Grid.Column="0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            />
-                        <view:CharacterGrid
-                            NumberOfRows="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.NumberOfRowsInPuzzle}"
-                            NumberOfColumns="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.NumberOfColumnsInPuzzle}"
-                            NodesToDisplay="{Binding CharacterNodes}"
-                            Grid.Column="1"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            />
-                    
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+
+        <Border
+            Margin="415,36,40,39"
+            BorderThickness="3"
+            BorderBrush="Black"
+            CornerRadius="5">
+            <ScrollViewer
+                VerticalScrollBarVisibility="Auto"
+                Background="White">
+                <ItemsControl
+                    x:Name="ResultsListView"
+                    d:ItemsSource="{d:SampleData ItemCount=5}"
+                    ItemsSource="{Binding AnswersFoundInPuzzle}"
+                    VirtualizingPanel.IsVirtualizing="True">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Width="100">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <view:CharacterGrid
+                                    NumberOfRows="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.NumberOfRowsInPuzzle}"
+                                    NumberOfColumns="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.NumberOfColumnsInPuzzle}"
+                                    NodesToDisplay="{Binding CharacterNodes}"
+                                    Grid.Row="0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"/>
+                            <TextBlock
+                                Text="{Binding Word}"
+                                Grid.Row="1"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"/>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            </ScrollViewer>
+        </Border>
+        
+
+
         <Button x:Name="ToggleSolverButton"
                 Content="{Binding IsSolverRunning, Converter={StaticResource IsSolverRunningTextConverter}}"
                 d:Content="PlaceHolder"
