@@ -13,8 +13,25 @@
     <Border
         x:Name="border"
         Background="#e74c3c"
-        BorderThickness="2"
+        BorderThickness="4"
         BorderBrush="#FF521711">
-        <Grid x:Name="grid" Width="{Binding ElementName=grid, Path=ActualHeight}"/>
+        <Grid x:Name="grid" Width="{Binding ElementName=grid, Path=ActualHeight}">
+            <Path x:Name="LineSegmentPath" Stroke="Pink" StrokeThickness="4" StrokeLineJoin="Round">
+                <d:Path.Data>
+                    <PathGeometry>
+                        <d:PathFigure StartPoint="50,50">
+                            <LineSegment Point="400,50"/>
+                            <LineSegment Point="50,400"/>
+                            <LineSegment Point="400,400"/>
+                        </d:PathFigure>
+                    </PathGeometry>
+                </d:Path.Data>
+            </Path>
+            <Path x:Name="StartOfAnswerPath" Fill="Pink" StrokeThickness="8">
+                <d:Path.Data>
+                    <EllipseGeometry RadiusX="10" RadiusY="10" Center="50,50"/>
+                </d:Path.Data>
+            </Path>
+        </Grid>
     </Border>
 </UserControl>
