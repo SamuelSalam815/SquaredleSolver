@@ -89,7 +89,6 @@ namespace WpfSquaredleSolver.View
                 {
                     TextBlock newTextBlock = new()
                     {
-                        Text = "-",
                         HorizontalAlignment = HorizontalAlignment.Center,
                         VerticalAlignment = VerticalAlignment.Center,
                         TextAlignment = TextAlignment.Center,

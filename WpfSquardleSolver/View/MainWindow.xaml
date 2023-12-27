@@ -40,33 +40,34 @@
         </TextBox>
 
         <Border
-            Margin="415,36,40,39"
+            Margin="380,36,40,39"
             BorderThickness="3"
             BorderBrush="Black"
             CornerRadius="5">
-            <ScrollViewer
-                VerticalScrollBarVisibility="Auto"
-                Background="White">
-                <ItemsControl
-                    x:Name="ResultsListView"
-                    d:ItemsSource="{d:SampleData ItemCount=5}"
-                    ItemsSource="{Binding AnswersFoundInPuzzle}"
-                    VirtualizingPanel.IsVirtualizing="True">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
+            <ListView
+                x:Name="ResultsListView"
+                d:ItemsSource="{d:SampleData ItemCount=5}"
+                ItemsSource="{Binding AnswersFoundInPuzzle}"
+                VirtualizingPanel.IsVirtualizing="True"
+                ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel
+                            Orientation="Horizontal"
+                            Width="{Binding ElementName=ResultsListView, Path=ActualWidth}"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Width="100">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Width="100">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
 
-                                <view:CharacterGrid
+                            <view:CharacterGrid
                                     NumberOfRows="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.NumberOfRowsInPuzzle}"
                                     NumberOfColumns="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.NumberOfColumnsInPuzzle}"
                                     NodesToDisplay="{Binding CharacterNodes}"
@@ -83,12 +84,9 @@
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
-            </ItemsControl>
-            </ScrollViewer>
+            </ListView>
         </Border>
         
-
-
         <Button x:Name="ToggleSolverButton"
                 Content="{Binding IsSolverRunning, Converter={StaticResource IsSolverRunningTextConverter}}"
                 d:Content="PlaceHolder"

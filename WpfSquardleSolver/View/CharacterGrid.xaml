@@ -14,8 +14,7 @@
         x:Name="border"
         Background="#e74c3c"
         BorderThickness="2"
-        BorderBrush="#FF521711"
-        ClipToBounds="True">
+        BorderBrush="#FF521711">
         <Grid x:Name="grid" Width="{Binding ElementName=grid, Path=ActualHeight}"/>
     </Border>
 </UserControl>
