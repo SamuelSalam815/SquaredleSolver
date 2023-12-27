@@ -49,6 +49,17 @@ internal class MainWindowViewModel : INotifyPropertyChanged
     public ObservableCollection<AnswerModel> AnswersFoundInPuzzle =>
         solverModel.AnswersFoundInPuzzle;
 
+    private double backingWrapPanelWidth;
+    public double WrapPanelWidth
+    {
+        get { return backingWrapPanelWidth; }
+        set
+        {
+            backingWrapPanelWidth = value;
+            OnPropertyChanged(nameof(WrapPanelWidth));
+        }
+    }
+
     private readonly SolverModel solverModel;
     private readonly PuzzleModel puzzleModel;
 

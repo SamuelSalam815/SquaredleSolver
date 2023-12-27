@@ -1,5 +1,7 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using WpfSquaredleSolver.Model;
 using WpfSquaredleSolver.ViewModel;
 
@@ -10,6 +12,7 @@ namespace WpfSquaredleSolver.View;
 /// </summary>
 public partial class MainWindow : Window
 {
+    private ScrollViewer? ResultsListViewScrollViewer = null;
     public MainWindow()
     {
         InitializeComponent();
@@ -22,7 +25,28 @@ public partial class MainWindow : Window
             GNGT
             IIHU
             """;
-        DataContext = new MainWindowViewModel(puzzle, new SolverModel(puzzle));
+        MainWindowViewModel viewModel = new(puzzle, new SolverModel(puzzle));
+        DataContext = viewModel;
+
+        viewModel.CharacterGridViewModels.CollectionChanged += UpdateWrapPanelWidth;
+    }
+
+    private void UpdateWrapPanelWidth(object? sender, System.EventArgs e)
+    {
+        if (DataContext is not MainWindowViewModel viewModel)
+        {
+            return;
+        }
+
+        double wrapPanelWidth = ResultsListView.ActualWidth;
+        Decorator? border = VisualTreeHelper.GetChild(ResultsListView, 0) as Decorator;
+        ScrollViewer? scrollViewer = border.Child as ScrollViewer;
+        if (scrollViewer.ComputedVerticalScrollBarVisibility is Visibility.Visible)
+        {
+            wrapPanelWidth -= SystemParameters.VerticalScrollBarWidth;
+        }
+
+        viewModel.WrapPanelWidth = wrapPanelWidth;
     }
 
     private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)

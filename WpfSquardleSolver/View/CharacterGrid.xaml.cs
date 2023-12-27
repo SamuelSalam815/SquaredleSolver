@@ -1,6 +1,8 @@
 ﻿using GraphWalking.Graphs;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using WpfSquaredleSolver.ViewModel;
 
 namespace WpfSquaredleSolver.View
@@ -15,9 +17,10 @@ namespace WpfSquaredleSolver.View
         {
             InitializeComponent();
             DataContextChanged += (sender, args) => DisplayNodes();
+            grid.LayoutUpdated += (sender, args) => UpdatePathGeometry();
         }
 
-        public void DisplayNodes()
+        private void DisplayNodes()
         {
             if (DataContext is not CharacterGridViewModel viewModel)
             {
@@ -25,6 +28,8 @@ namespace WpfSquaredleSolver.View
             }
 
             grid.Children.Clear();
+            grid.Children.Add(LineSegmentPath);
+            grid.Children.Add(StartOfAnswerPath);
             grid.ColumnDefinitions.Clear();
             grid.RowDefinitions.Clear();
 
@@ -40,31 +45,62 @@ namespace WpfSquaredleSolver.View
                 grid.ColumnDefinitions.Add(rowDefinition);
             }
 
-            TextBlock[,] textBlocks = new TextBlock[viewModel.NumberOfRows, viewModel.NumberOfColumns];
-
-            for (int row = 0; row < viewModel.NumberOfRows; row++)
-            {
-                for (int column = 0; column < viewModel.NumberOfColumns; column++)
-                {
-                    TextBlock newTextBlock = new()
-                    {
-                        HorizontalAlignment = HorizontalAlignment.Center,
-                        VerticalAlignment = VerticalAlignment.Center,
-                        TextAlignment = TextAlignment.Center,
-                    };
-                    textBlocks[row, column] = newTextBlock;
-                    Grid.SetRow(newTextBlock, row);
-                    Grid.SetColumn(newTextBlock, column);
-                    grid.Children.Add(newTextBlock);
-                }
-            }
-
             foreach (CharacterNode node in viewModel.CharacterNodes)
             {
-                textBlocks[node.Row, node.Column].Text = node.Character.ToString();
+                TextBlock newTextBlock = new()
+                {
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    TextAlignment = TextAlignment.Center,
+                    Text = node.Character.ToString(),
+                };
+                Grid.SetRow(newTextBlock, node.Row);
+                Grid.SetColumn(newTextBlock, node.Column);
+                grid.Children.Add(newTextBlock);
             }
 
             grid.UpdateLayout();
+        }
+
+        private void UpdatePathGeometry()
+        {
+            if (DataContext is not CharacterGridViewModel viewModel)
+            {
+                return;
+            }
+
+            double cellWidth = LineSegmentPath.ActualWidth / viewModel.NumberOfColumns;
+            double cellHeight = LineSegmentPath.ActualHeight / viewModel.NumberOfRows;
+            double circleRadius = cellWidth / 3;
+            Point GetNodePosition(CharacterNode node)
+            {
+                return new Point(cellWidth * (0.5 + node.Column), cellHeight * (0.5 + node.Row));
+            }
+
+            CharacterNode firstNode = viewModel.CharacterNodes[0];
+            StartOfAnswerPath.Data = new EllipseGeometry(
+                new Point(cellWidth / 2, cellHeight / 2),
+                circleRadius,
+                circleRadius);
+            Grid.SetRow(StartOfAnswerPath, firstNode.Row);
+            Grid.SetColumn(StartOfAnswerPath, firstNode.Column);
+
+            PathFigure answerPathFigure = new()
+            {
+                StartPoint = GetNodePosition(firstNode),
+            };
+
+            foreach (CharacterNode node in viewModel.CharacterNodes.Skip(1))
+            {
+                LineSegment lineSegment = new(GetNodePosition(node), true);
+                answerPathFigure.Segments.Add(lineSegment);
+            }
+
+            PathGeometry answerPathGeometry = new();
+            answerPathGeometry.Figures.Add(answerPathFigure);
+            LineSegmentPath.Data = answerPathGeometry;
+            Grid.SetRowSpan(LineSegmentPath, (int)viewModel.NumberOfRows);
+            Grid.SetColumnSpan(LineSegmentPath, (int)viewModel.NumberOfColumns);
         }
     }
 }

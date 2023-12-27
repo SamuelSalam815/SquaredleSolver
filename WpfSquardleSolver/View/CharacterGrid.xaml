@@ -15,8 +15,14 @@
         Background="#e74c3c"
         BorderThickness="4"
         BorderBrush="#FF521711">
-        <Grid x:Name="grid" Width="{Binding ElementName=grid, Path=ActualHeight}">
-            <Path x:Name="LineSegmentPath" Stroke="Pink" StrokeThickness="4" StrokeLineJoin="Round">
+        <Grid x:Name="grid" >
+            <Path x:Name="LineSegmentPath"
+                  Stroke="Pink"
+                  StrokeThickness="4"
+                  StrokeLineJoin="Round"
+                  Panel.ZIndex="-2"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch">
                 <d:Path.Data>
                     <PathGeometry>
                         <d:PathFigure StartPoint="50,50">
@@ -27,7 +33,12 @@
                     </PathGeometry>
                 </d:Path.Data>
             </Path>
-            <Path x:Name="StartOfAnswerPath" Fill="Pink" StrokeThickness="8">
+            <Path x:Name="StartOfAnswerPath"
+                  Fill="Pink"
+                  StrokeThickness="8"
+                  Panel.ZIndex="-1"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch">
                 <d:Path.Data>
                     <EllipseGeometry RadiusX="10" RadiusY="10" Center="50,50"/>
                 </d:Path.Data>
