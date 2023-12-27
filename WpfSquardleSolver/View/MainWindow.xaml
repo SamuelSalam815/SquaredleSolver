@@ -71,10 +71,12 @@
                                     NumberOfColumns="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.NumberOfColumnsInPuzzle}"
                                     NodesToDisplay="{Binding CharacterNodes}"
                                     Grid.Row="0"
+                                    d:Height="50"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"/>
                             <TextBlock
                                 Text="{Binding Word}"
+                                d:Text="Answer"
                                 Grid.Row="1"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"/>
