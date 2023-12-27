@@ -47,7 +47,7 @@
             <ListView
                 x:Name="ResultsListView"
                 d:ItemsSource="{d:SampleData ItemCount=5}"
-                ItemsSource="{Binding AnswersFoundInPuzzle}"
+                ItemsSource="{Binding CharacterGridViewModels}"
                 VirtualizingPanel.IsVirtualizing="True"
                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                 ScrollViewer.VerticalScrollBarVisibility="Visible">
@@ -68,15 +68,12 @@
                             </Grid.RowDefinitions>
 
                             <view:CharacterGrid
-                                    NumberOfRows="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.NumberOfRowsInPuzzle}"
-                                    NumberOfColumns="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.NumberOfColumnsInPuzzle}"
-                                    NodesToDisplay="{Binding CharacterNodes}"
                                     Grid.Row="0"
                                     d:Height="50"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"/>
                             <TextBlock
-                                Text="{Binding Word}"
+                                Text="{Binding AnswerAsString}"
                                 d:Text="Answer"
                                 Grid.Row="1"
                                 HorizontalAlignment="Center"

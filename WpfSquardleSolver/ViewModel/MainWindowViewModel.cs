@@ -1,5 +1,9 @@
 ﻿using GraphWalking.Graphs;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Input;
 using WpfSquaredleSolver.Command;
 using WpfSquaredleSolver.Model;
@@ -36,12 +40,13 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         }
     }
 
-    private System.Collections.Generic.List<CharacterNode> PuzzleAsCharacterNodes
+    private List<CharacterNode> PuzzleAsCharacterNodes
     {
         get { return puzzleModel.PuzzleAsAdjacencyList.GetAllNodes(); }
     }
 
-    public BindingList<AnswerModel> AnswersFoundInPuzzle =>
+    public ObservableCollection<CharacterGridViewModel> CharacterGridViewModels { get; }
+    public ObservableCollection<AnswerModel> AnswersFoundInPuzzle =>
         solverModel.AnswersFoundInPuzzle;
 
     private readonly SolverModel solverModel;
@@ -49,6 +54,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
 
     public MainWindowViewModel(PuzzleModel puzzleModel, SolverModel solverModel)
     {
+        CharacterGridViewModels = new ObservableCollection<CharacterGridViewModel>();
         this.puzzleModel = puzzleModel;
         puzzleModel.PropertyChanged += OnPuzzleModelChanged;
 
@@ -56,6 +62,29 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         solverModel.SolverStarted += () => IsSolverRunning = true;
         solverModel.SolverStopped += () => IsSolverRunning = false;
         ToggleSolverOnOff = new ToggleSolverOnOff(solverModel, this);
+
+        solverModel.AnswersFoundInPuzzle.CollectionChanged += OnAnswersFoundInPuzzleChanged;
+    }
+
+    private void OnAnswersFoundInPuzzleChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        IEnumerable<AnswerModel> answersToAdd;
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add:
+                answersToAdd = e.NewItems.Cast<AnswerModel>();
+                break;
+            default:
+                CharacterGridViewModels.Clear();
+                answersToAdd = solverModel.AnswersFoundInPuzzle;
+                break;
+        }
+
+        foreach (AnswerModel answerModel in answersToAdd)
+        {
+            CharacterGridViewModel viewModel = new(puzzleModel, answerModel);
+            CharacterGridViewModels.Add(viewModel);
+        }
     }
 
     private void OnPropertyChanged(string nameOfProperty)

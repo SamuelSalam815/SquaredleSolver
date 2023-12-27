@@ -2,6 +2,7 @@
 using GraphWalking.Graphs;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ class SolverModel
 {
     public event Action? SolverStarted;
     public event Action? SolverStopped;
-    public BindingList<AnswerModel> AnswersFoundInPuzzle;
+    public ObservableCollection<AnswerModel> AnswersFoundInPuzzle;
 
     private readonly PuzzleModel puzzleModel;
     private CancellationTokenSource cancellationTokenSource;
@@ -20,7 +21,7 @@ class SolverModel
 
     public SolverModel(PuzzleModel puzzleModel)
     {
-        AnswersFoundInPuzzle = new BindingList<AnswerModel>();
+        AnswersFoundInPuzzle = new ObservableCollection<AnswerModel>();
         this.puzzleModel = puzzleModel;
         cancellationTokenSource = new CancellationTokenSource();
         puzzleSolvingBackgroundTask = Task.CompletedTask;

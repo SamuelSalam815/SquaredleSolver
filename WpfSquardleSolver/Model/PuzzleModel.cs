@@ -57,7 +57,7 @@ class PuzzleModel : INotifyPropertyChanged
     public AdjacencyList<CharacterNode> PuzzleAsAdjacencyList
     {
         get { return puzzleAsAdjacencyListBackingField; }
-        set
+        private set
         {
             puzzleAsAdjacencyListBackingField = value;
             OnPropertyChanged(nameof(PuzzleAsAdjacencyList));
