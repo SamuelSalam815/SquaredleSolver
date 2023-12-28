@@ -9,38 +9,23 @@ class CharacterGridViewModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    private readonly PuzzleModel puzzleModel;
-    public uint NumberOfRows => puzzleModel.NumberOfRows;
-    public uint NumberOfColumns => puzzleModel.NumberOfColumns;
-
+    public uint NumberOfRows { get; }
+    public uint NumberOfColumns { get; }
     public string AnswerAsString { get; }
 
     public List<CharacterNode> CharacterNodes { get; }
 
     public CharacterGridViewModel(PuzzleModel puzzleModel, AnswerModel answerModel)
     {
-        this.puzzleModel = puzzleModel;
+        NumberOfRows = puzzleModel.NumberOfRows;
+        NumberOfColumns = puzzleModel.NumberOfColumns;
         AnswerAsString = answerModel.Word;
         CharacterNodes = answerModel.CharacterNodes;
 
-        puzzleModel.PropertyChanged += OnPuzzleModelChanged;
         OnPropertyChanged(nameof(AnswerAsString));
         OnPropertyChanged(nameof(CharacterNodes));
         OnPropertyChanged(nameof(NumberOfRows));
         OnPropertyChanged(nameof(NumberOfColumns));
-    }
-
-    private void OnPuzzleModelChanged(object? sender, PropertyChangedEventArgs args)
-    {
-        switch (args.PropertyName)
-        {
-            case nameof(puzzleModel.NumberOfColumns):
-                OnPropertyChanged(nameof(NumberOfColumns));
-                break;
-            case nameof(puzzleModel.NumberOfRows):
-                OnPropertyChanged(nameof(NumberOfRows));
-                break;
-        }
     }
 
     private void OnPropertyChanged(string propertyName)
