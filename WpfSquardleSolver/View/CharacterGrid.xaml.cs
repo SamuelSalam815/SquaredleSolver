@@ -41,16 +41,16 @@ namespace WpfSquaredleSolver.View
 
             foreach (CharacterNode node in viewModel.CharacterNodes)
             {
-                TextBlock newTextBlock = new()
+                Border textBlockBorder = new()
                 {
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center,
-                    TextAlignment = TextAlignment.Center,
-                    Text = node.Character.ToString(),
+                    Child = new TextBlock()
+                    {
+                        Text = node.Character.ToString(),
+                    }
                 };
-                Grid.SetRow(newTextBlock, node.Row);
-                Grid.SetColumn(newTextBlock, node.Column);
-                grid.Children.Add(newTextBlock);
+                Grid.SetRow(textBlockBorder, node.Row);
+                Grid.SetColumn(textBlockBorder, node.Column);
+                grid.Children.Add(textBlockBorder);
             }
 
             grid.UpdateLayout();
