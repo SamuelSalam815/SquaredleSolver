@@ -10,6 +10,9 @@ using WpfSquaredleSolver.Model;
 
 namespace WpfSquaredleSolver.ViewModel;
 
+/// <summary>
+///     Exposes the required properties for the user interface of the main window.
+/// </summary>
 internal class MainWindowViewModel : INotifyPropertyChanged
 {
 

@@ -5,6 +5,9 @@ using WpfSquaredleSolver.Model;
 
 namespace WpfSquaredleSolver.ViewModel;
 
+/// <summary>
+///     Exposes the required properties to render a visual representation of a squaredle answer.
+/// </summary>
 class CharacterGridViewModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
