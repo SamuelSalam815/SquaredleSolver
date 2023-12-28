@@ -8,6 +8,9 @@ using System.Windows;
 
 namespace WpfSquaredleSolver.Model;
 
+/// <summary>
+///     Defines how the puzzle solver behaves when it is stopped.
+/// </summary>
 class SolverStopped : ISolverState
 {
     public static ISolverState Instance { get; } = new SolverStopped();

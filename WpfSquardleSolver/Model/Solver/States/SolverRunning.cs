@@ -2,6 +2,9 @@
 
 namespace WpfSquaredleSolver.Model;
 
+/// <summary>
+///     Defines how the solver behaves when it is running.
+/// </summary>
 internal class SolverRunning : ISolverState
 {
     public static ISolverState Instance { get; } = new SolverRunning();

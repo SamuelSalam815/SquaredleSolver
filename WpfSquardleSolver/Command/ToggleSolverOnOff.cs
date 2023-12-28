@@ -5,6 +5,9 @@ using WpfSquaredleSolver.ViewModel;
 
 namespace WpfSquaredleSolver.Command;
 
+/// <summary>
+///     Defines a command for toggling the puzzle solver on and off.
+/// </summary>
 class ToggleSolverOnOff : ICommand
 {
     public event EventHandler? CanExecuteChanged;

@@ -4,12 +4,14 @@ using System.ComponentModel;
 
 namespace WpfSquaredleSolver.Model;
 
+/// <summary>
+///     Represents an object used to solve a puzzle defined by a <see cref="PuzzleModel"/>
+/// </summary>
 class SolverModel
 {
     private SolverContext context;
     public ISolverState CurrentState => context.CurrentState;
     public ObservableCollection<AnswerModel> AnswersFoundInPuzzle => context.AnswersFoundInPuzzle;
-
 
     public EventHandler<SolverStateChangedEventArgs>? StateChanged;
 

@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace WpfSquaredleSolver.Model;
 
+/// <summary>
+///     Contains the mutable state for the puzzle solver.
+/// </summary>
 class SolverContext
 {
     public readonly PuzzleModel PuzzleModel;
