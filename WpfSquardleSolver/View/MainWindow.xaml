@@ -70,7 +70,7 @@
                                     Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
                                     Height="150"
                                     HorizontalAlignment="Center"/>
-                        <TextBlock
+                        <d:TextBlock
                                 Text="{Binding AnswerAsString}"
                                 d:Text="Answer"
                                 Grid.Row="1"

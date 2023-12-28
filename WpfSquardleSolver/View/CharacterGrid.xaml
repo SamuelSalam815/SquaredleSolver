@@ -44,8 +44,8 @@
                                 <Setter.Value>
                                     <DropShadowEffect
                                         Color="#dc9797"
-                                        BlurRadius="10"
-                                        ShadowDepth="5"
+                                        BlurRadius="8"
+                                        ShadowDepth="3"
                                         Opacity="1"
                                         Direction="225" />
                                 </Setter.Value>
