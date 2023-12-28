@@ -17,7 +17,6 @@ namespace WpfSquaredleSolver.View
         {
             InitializeComponent();
             DataContextChanged += (sender, args) => DisplayNodes();
-            grid.LayoutUpdated += (sender, args) => UpdatePathGeometry();
         }
 
         private void DisplayNodes()
@@ -39,21 +38,26 @@ namespace WpfSquaredleSolver.View
                 grid.ColumnDefinitions.Add(rowDefinition);
             }
 
-            foreach (CharacterNode node in viewModel.CharacterNodes)
+            foreach (CharacterNode node in viewModel.PuzzleNodes)
             {
                 Border textBlockBorder = new()
                 {
-                    Child = new TextBlock()
+                    Child = new Viewbox()
                     {
-                        Text = node.Character.ToString(),
+                        Child = new TextBlock()
+                        {
+                            Text = node.Character.ToString(),
+                        }
                     }
                 };
+                textBlockBorder.DataContext = viewModel.AnswerAsNodes.Contains(node);
                 Grid.SetRow(textBlockBorder, node.Row);
                 Grid.SetColumn(textBlockBorder, node.Column);
                 grid.Children.Add(textBlockBorder);
             }
 
             grid.UpdateLayout();
+            UpdatePathGeometry();
         }
 
         private void UpdatePathGeometry()
@@ -73,7 +77,7 @@ namespace WpfSquaredleSolver.View
                 return new Point(cellWidth * (0.5 + node.Column), cellHeight * (0.5 + node.Row));
             }
 
-            CharacterNode firstNode = viewModel.CharacterNodes[0];
+            CharacterNode firstNode = viewModel.AnswerAsNodes[0];
             Point centreOfFirstNode = GetNodePosition(firstNode);
             EllipseDrawing.Geometry = new EllipseGeometry(
                 centreOfFirstNode,
@@ -85,7 +89,7 @@ namespace WpfSquaredleSolver.View
                 StartPoint = centreOfFirstNode,
             };
 
-            foreach (CharacterNode node in viewModel.CharacterNodes.Skip(1))
+            foreach (CharacterNode node in viewModel.AnswerAsNodes.Skip(1))
             {
                 LineSegment lineSegment = new(GetNodePosition(node), true)
                 {

@@ -14,21 +14,23 @@ class CharacterGridViewModel : INotifyPropertyChanged
 
     public uint NumberOfRows { get; }
     public uint NumberOfColumns { get; }
+    public List<CharacterNode> PuzzleNodes { get; }
     public string AnswerAsString { get; }
-
-    public List<CharacterNode> CharacterNodes { get; }
+    public List<CharacterNode> AnswerAsNodes { get; }
 
     public CharacterGridViewModel(PuzzleModel puzzleModel, AnswerModel answerModel)
     {
         NumberOfRows = puzzleModel.NumberOfRows;
         NumberOfColumns = puzzleModel.NumberOfColumns;
+        PuzzleNodes = puzzleModel.PuzzleAsAdjacencyList.GetAllNodes();
         AnswerAsString = answerModel.Word;
-        CharacterNodes = answerModel.CharacterNodes;
+        AnswerAsNodes = answerModel.CharacterNodes;
 
-        OnPropertyChanged(nameof(AnswerAsString));
-        OnPropertyChanged(nameof(CharacterNodes));
         OnPropertyChanged(nameof(NumberOfRows));
         OnPropertyChanged(nameof(NumberOfColumns));
+        OnPropertyChanged(nameof(PuzzleNodes));
+        OnPropertyChanged(nameof(AnswerAsString));
+        OnPropertyChanged(nameof(AnswerAsNodes));
     }
 
     private void OnPropertyChanged(string propertyName)

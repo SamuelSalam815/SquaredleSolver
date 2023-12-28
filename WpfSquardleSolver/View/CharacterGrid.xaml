@@ -12,21 +12,46 @@
     </UserControl.Resources>
     <Border
         x:Name="border"
-        Background="LightSlateGray"
-        BorderThickness="0"
-        CornerRadius="10">
+        BorderThickness="1"
+        BorderBrush="Black"
+        CornerRadius="3">
         <Grid x:Name="grid">
             <Grid.Resources>
                 <Style TargetType="TextBlock">
                     <Setter Property="HorizontalAlignment" Value="Center"/>
                     <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
                 </Style>
                 <Style TargetType="Border">
+                    <Setter Property="Margin" Value="2,2,2,2"/>
                     <Setter Property="CornerRadius" Value="5"/>
-                    <Setter Property="BorderBrush" Value="#8d8d8d"/>
-                    <Setter Property="BorderThickness" Value="1"/>
-                    <Setter Property="Background" Value="#e0e0e0"/>
                     <Setter Property="Padding" Value="1"/>
+                    <Style.Triggers>
+                        <DataTrigger
+                            Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Converter={StaticResource IsCharacterTileInAnswerConverter}}"
+                            Value="False">
+                            <Setter Property="BorderBrush" Value="#8d8d8d"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="Background" Value="#e0e0e0"/>
+                        </DataTrigger>
+                        <DataTrigger
+                            Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Converter={StaticResource IsCharacterTileInAnswerConverter}}"
+                            Value="True">
+                            <Setter Property="BorderBrush" Value="#808080"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="Background" Value="White"/>
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect
+                                        Color="#dc9797"
+                                        BlurRadius="10"
+                                        ShadowDepth="5"
+                                        Opacity="1"
+                                        Direction="225" />
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
                 </Style>
             </Grid.Resources>
             <Image Panel.ZIndex="1"
@@ -38,7 +63,7 @@
                             <DrawingGroup Opacity="0.5">
                                 <GeometryDrawing x:Name="LineSegmentDrawing">
                                     <GeometryDrawing.Pen>
-                                        <Pen Thickness="8" Brush="Red" EndLineCap="Round"/>
+                                        <Pen Thickness="6" Brush="Red" EndLineCap="Round"/>
                                     </GeometryDrawing.Pen>
                                     <d:GeometryDrawing.Geometry>
                                         <PathGeometry>

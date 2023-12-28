@@ -68,7 +68,7 @@
                         <view:CharacterGrid
                                     Grid.Row="0"
                                     Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
-                                    Height="80"
+                                    Height="150"
                                     HorizontalAlignment="Center"/>
                         <TextBlock
                                 Text="{Binding AnswerAsString}"
