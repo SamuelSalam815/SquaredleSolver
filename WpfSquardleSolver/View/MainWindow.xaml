@@ -8,7 +8,7 @@
         xmlns:view="clr-namespace:WpfSquaredleSolver.View" 
         d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Background="#ecf0f1">
+        Title="SquaredleSolver" Height="450" Width="800" Background="#ecf0f1">
     <Window.Resources>
         <converters:IsSolverRunningColorConverter x:Key="IsSolverRunningColorConverter"/>
         <converters:IsSolverRunningTextConverter x:Key="IsSolverRunningTextConverter"/>
