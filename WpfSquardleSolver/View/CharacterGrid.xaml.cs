@@ -27,12 +27,6 @@ namespace WpfSquaredleSolver.View
                 return;
             }
 
-            grid.Children.Clear();
-            grid.Children.Add(LineSegmentPath);
-            grid.Children.Add(StartOfAnswerPath);
-            grid.ColumnDefinitions.Clear();
-            grid.RowDefinitions.Clear();
-
             for (int i = 0; i < viewModel.NumberOfRows; i++)
             {
                 RowDefinition rowDefinition = new() { Height = new GridLength(1, GridUnitType.Star) };
@@ -69,8 +63,10 @@ namespace WpfSquaredleSolver.View
                 return;
             }
 
-            double cellWidth = LineSegmentPath.ActualWidth / viewModel.NumberOfColumns;
-            double cellHeight = LineSegmentPath.ActualHeight / viewModel.NumberOfRows;
+            // magic number 100 comes from the transparent rectangle in the xaml.
+            // this rectangle maintains the aspect ratio of the image
+            double cellWidth = 100 / viewModel.NumberOfColumns;
+            double cellHeight = 100 / viewModel.NumberOfRows;
             double circleRadius = cellWidth / 3;
             Point GetNodePosition(CharacterNode node)
             {
@@ -78,29 +74,32 @@ namespace WpfSquaredleSolver.View
             }
 
             CharacterNode firstNode = viewModel.CharacterNodes[0];
-            StartOfAnswerPath.Data = new EllipseGeometry(
-                new Point(cellWidth / 2, cellHeight / 2),
+            Point centreOfFirstNode = GetNodePosition(firstNode);
+            EllipseDrawing.Geometry = new EllipseGeometry(
+                centreOfFirstNode,
                 circleRadius,
                 circleRadius);
-            Grid.SetRow(StartOfAnswerPath, firstNode.Row);
-            Grid.SetColumn(StartOfAnswerPath, firstNode.Column);
 
             PathFigure answerPathFigure = new()
             {
-                StartPoint = GetNodePosition(firstNode),
+                StartPoint = centreOfFirstNode,
             };
 
             foreach (CharacterNode node in viewModel.CharacterNodes.Skip(1))
             {
-                LineSegment lineSegment = new(GetNodePosition(node), true);
+                LineSegment lineSegment = new(GetNodePosition(node), true)
+                {
+                    IsSmoothJoin = true
+                };
                 answerPathFigure.Segments.Add(lineSegment);
             }
 
             PathGeometry answerPathGeometry = new();
             answerPathGeometry.Figures.Add(answerPathFigure);
-            LineSegmentPath.Data = answerPathGeometry;
-            Grid.SetRowSpan(LineSegmentPath, (int)viewModel.NumberOfRows);
-            Grid.SetColumnSpan(LineSegmentPath, (int)viewModel.NumberOfColumns);
+            LineSegmentDrawing.Geometry = answerPathGeometry;
+
+            Grid.SetRowSpan(HighlightedPathImage, (int)viewModel.NumberOfRows);
+            Grid.SetColumnSpan(HighlightedPathImage, (int)viewModel.NumberOfColumns);
         }
     }
 }

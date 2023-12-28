@@ -15,34 +15,43 @@
         Background="LightSlateGray"
         BorderThickness="0"
         CornerRadius="10">
-        <Grid x:Name="grid" >
-            <Path x:Name="LineSegmentPath"
-                  Stroke="Pink"
-                  StrokeThickness="4"
-                  StrokeLineJoin="Round"
-                  Panel.ZIndex="-2"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch">
-                <d:Path.Data>
-                    <PathGeometry>
-                        <d:PathFigure StartPoint="10,10">
-                            <LineSegment Point="90,10"/>
-                            <LineSegment Point="10,90"/>
-                            <LineSegment Point="90,90"/>
-                        </d:PathFigure>
-                    </PathGeometry>
-                </d:Path.Data>
-            </Path>
-            <Path x:Name="StartOfAnswerPath"
-                  Fill="Pink"
-                  StrokeThickness="8"
-                  Panel.ZIndex="-1"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch">
-                <d:Path.Data>
-                    <EllipseGeometry RadiusX="5" RadiusY="5" Center="10,10"/>
-                </d:Path.Data>
-            </Path>
+        <Grid x:Name="grid">
+            <Image Panel.ZIndex="1"
+                   x:Name="HighlightedPathImage"
+                   Stretch="UniformToFill">
+                <Image.Source>
+                    <DrawingImage>
+                        <DrawingImage.Drawing>
+                            <DrawingGroup Opacity="0.5">
+                                <GeometryDrawing x:Name="LineSegmentDrawing">
+                                    <GeometryDrawing.Pen>
+                                        <Pen Thickness="8" Brush="Red"/>
+                                    </GeometryDrawing.Pen>
+                                    <d:GeometryDrawing.Geometry>
+                                        <PathGeometry>
+                                            <PathFigure StartPoint="10,10" IsClosed="False">
+                                                <LineSegment Point="90,10" IsSmoothJoin="True"/>
+                                                <LineSegment Point="10,90" IsSmoothJoin="True"/>
+                                                <LineSegment Point="90,90"/>
+                                            </PathFigure>
+                                        </PathGeometry>
+                                    </d:GeometryDrawing.Geometry>
+                                </GeometryDrawing>
+                                <GeometryDrawing x:Name="EllipseDrawing" Brush="Red">
+                                    <d:GeometryDrawing.Geometry>
+                                        <EllipseGeometry RadiusX="8" RadiusY="8" Center="10,10"/>
+                                    </d:GeometryDrawing.Geometry>
+                                </GeometryDrawing>
+                                <GeometryDrawing Brush="Transparent">
+                                    <GeometryDrawing.Geometry>
+                                        <RectangleGeometry Rect="0,0,100,100"/>
+                                    </GeometryDrawing.Geometry>
+                                </GeometryDrawing>
+                            </DrawingGroup>
+                        </DrawingImage.Drawing>
+                    </DrawingImage>
+                </Image.Source>
+            </Image>
         </Grid>
     </Border>
 </UserControl>
