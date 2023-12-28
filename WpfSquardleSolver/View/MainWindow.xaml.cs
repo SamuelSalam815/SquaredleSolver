@@ -28,7 +28,7 @@ public partial class MainWindow : Window
         MainWindowViewModel viewModel = new(puzzle, new SolverModel(puzzle));
         DataContext = viewModel;
 
-        viewModel.CharacterGridViewModels.CollectionChanged += UpdateWrapPanelWidth;
+        viewModel.CharacterGridViewModels.ListChanged += UpdateWrapPanelWidth;
     }
 
     private void UpdateWrapPanelWidth(object? sender, System.EventArgs e)

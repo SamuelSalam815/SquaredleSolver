@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,7 +11,7 @@ namespace WpfSquaredleSolver.Model;
 class SolverContext
 {
     public readonly PuzzleModel PuzzleModel;
-    public readonly ObservableCollection<AnswerModel> AnswersFoundInPuzzle;
+    public readonly BindingList<AnswerModel> AnswersFoundInPuzzle;
     public CancellationTokenSource CancellationTokenSource;
     public Task SolverTask;
 
@@ -36,7 +36,7 @@ class SolverContext
     public SolverContext(PuzzleModel puzzleModel)
     {
         PuzzleModel = puzzleModel;
-        AnswersFoundInPuzzle = new ObservableCollection<AnswerModel>();
+        AnswersFoundInPuzzle = new BindingList<AnswerModel>();
         CancellationTokenSource = new CancellationTokenSource();
         SolverTask = Task.CompletedTask;
         backingFieldCurrentState = SolverStopped.Instance;

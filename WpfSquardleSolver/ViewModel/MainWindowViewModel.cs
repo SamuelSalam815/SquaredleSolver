@@ -1,9 +1,6 @@
 ﻿using GraphWalking.Graphs;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Input;
 using WpfSquaredleSolver.Command;
 using WpfSquaredleSolver.Model;
@@ -48,9 +45,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         get { return puzzleModel.PuzzleAsAdjacencyList.GetAllNodes(); }
     }
 
-    public ObservableCollection<CharacterGridViewModel> CharacterGridViewModels { get; }
-    public ObservableCollection<AnswerModel> AnswersFoundInPuzzle =>
-        solverModel.AnswersFoundInPuzzle;
+    public BindingList<CharacterGridViewModel> CharacterGridViewModels { get; }
 
     private double backingWrapPanelWidth;
     public double WrapPanelWidth
@@ -68,7 +63,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
 
     public MainWindowViewModel(PuzzleModel puzzleModel, SolverModel solverModel)
     {
-        CharacterGridViewModels = new ObservableCollection<CharacterGridViewModel>();
+        CharacterGridViewModels = new BindingList<CharacterGridViewModel>();
         this.puzzleModel = puzzleModel;
         puzzleModel.PropertyChanged += OnPuzzleModelChanged;
 
@@ -76,7 +71,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         ToggleSolverOnOff = new ToggleSolverOnOff(solverModel, this);
 
         solverModel.StateChanged += OnSolverStateChanged;
-        solverModel.AnswersFoundInPuzzle.CollectionChanged += OnAnswersFoundInPuzzleChanged;
+        solverModel.AnswersFoundInPuzzle.ListChanged += OnAnswersFoundInPuzzleChanged;
     }
 
     private void OnSolverStateChanged(object? sender, SolverStateChangedEventArgs e)
@@ -84,24 +79,21 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         IsSolverRunning = e.CurrentState is SolverRunning;
     }
 
-    private void OnAnswersFoundInPuzzleChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void OnAnswersFoundInPuzzleChanged(object? sender, ListChangedEventArgs e)
     {
-        IEnumerable<AnswerModel> answersToAdd;
-        switch (e.Action)
+        switch (e.ListChangedType)
         {
-            case NotifyCollectionChangedAction.Add:
-                answersToAdd = e.NewItems.Cast<AnswerModel>();
+            case ListChangedType.ItemAdded:
+                AnswerModel nextAnswer = solverModel.AnswersFoundInPuzzle[e.NewIndex];
+                CharacterGridViewModels.Add(new CharacterGridViewModel(puzzleModel, nextAnswer));
                 break;
             default:
                 CharacterGridViewModels.Clear();
-                answersToAdd = solverModel.AnswersFoundInPuzzle;
+                foreach (AnswerModel answer in solverModel.AnswersFoundInPuzzle)
+                {
+                    CharacterGridViewModels.Add(new CharacterGridViewModel(puzzleModel, answer));
+                }
                 break;
-        }
-
-        foreach (AnswerModel answerModel in answersToAdd)
-        {
-            CharacterGridViewModel viewModel = new(puzzleModel, answerModel);
-            CharacterGridViewModels.Add(viewModel);
         }
     }
 

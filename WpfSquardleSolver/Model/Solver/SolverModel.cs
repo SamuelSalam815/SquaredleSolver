@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace WpfSquaredleSolver.Model;
@@ -11,7 +10,7 @@ class SolverModel
 {
     private SolverContext context;
     public ISolverState CurrentState => context.CurrentState;
-    public ObservableCollection<AnswerModel> AnswersFoundInPuzzle => context.AnswersFoundInPuzzle;
+    public BindingList<AnswerModel> AnswersFoundInPuzzle => context.AnswersFoundInPuzzle;
 
     public EventHandler<SolverStateChangedEventArgs>? StateChanged;
 
