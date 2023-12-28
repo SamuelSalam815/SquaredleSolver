@@ -70,11 +70,15 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         puzzleModel.PropertyChanged += OnPuzzleModelChanged;
 
         this.solverModel = solverModel;
-        solverModel.SolverStarted += () => IsSolverRunning = true;
-        solverModel.SolverStopped += () => IsSolverRunning = false;
         ToggleSolverOnOff = new ToggleSolverOnOff(solverModel, this);
 
+        solverModel.StateChanged += OnSolverStateChanged;
         solverModel.AnswersFoundInPuzzle.CollectionChanged += OnAnswersFoundInPuzzleChanged;
+    }
+
+    private void OnSolverStateChanged(object? sender, SolverStateChangedEventArgs e)
+    {
+        IsSolverRunning = e.CurrentState is SolverRunning;
     }
 
     private void OnAnswersFoundInPuzzleChanged(object? sender, NotifyCollectionChangedEventArgs e)
