@@ -1,4 +1,2 @@
-- [ ] ui element that allows easy exclusion of certain characters from the puzzle
-- [ ] each answer should display a small graphic which shows how to construct the given word on the grid
-- [ ] performant one-way binding (no longer use binding list since its two-way binding is not intended)
-- [ ] dynamically draw path geometry for answer grids
+- ui element that allows filtering out of particular characters from the puzzle
+- disable solve button when solver completes until user changes the input puzzle
