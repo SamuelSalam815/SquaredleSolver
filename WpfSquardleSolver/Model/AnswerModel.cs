@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace WpfSquaredleSolver.Model;
+
+/// <summary>
+///     Represents a possible answer to a given squaredle puzzle.
+/// </summary>
 public class AnswerModel
 {
     public List<CharacterNode> CharacterNodes { get; }
