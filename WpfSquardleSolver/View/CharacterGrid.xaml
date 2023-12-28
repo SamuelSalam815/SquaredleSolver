@@ -4,17 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="450" 
-             d:DesignWidth="450">
+             d:DesignHeight="100" 
+             d:DesignWidth="100">
     <UserControl.Resources>
         <Style TargetType="{x:Type TextBlock}">
         </Style>
     </UserControl.Resources>
     <Border
         x:Name="border"
-        Background="#e74c3c"
-        BorderThickness="4"
-        BorderBrush="#FF521711">
+        Background="LightSlateGray"
+        BorderThickness="0"
+        CornerRadius="10">
         <Grid x:Name="grid" >
             <Path x:Name="LineSegmentPath"
                   Stroke="Pink"
@@ -25,10 +25,10 @@
                   VerticalAlignment="Stretch">
                 <d:Path.Data>
                     <PathGeometry>
-                        <d:PathFigure StartPoint="50,50">
-                            <LineSegment Point="400,50"/>
-                            <LineSegment Point="50,400"/>
-                            <LineSegment Point="400,400"/>
+                        <d:PathFigure StartPoint="10,10">
+                            <LineSegment Point="90,10"/>
+                            <LineSegment Point="10,90"/>
+                            <LineSegment Point="90,90"/>
                         </d:PathFigure>
                     </PathGeometry>
                 </d:Path.Data>
@@ -40,7 +40,7 @@
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch">
                 <d:Path.Data>
-                    <EllipseGeometry RadiusX="10" RadiusY="10" Center="50,50"/>
+                    <EllipseGeometry RadiusX="5" RadiusY="5" Center="10,10"/>
                 </d:Path.Data>
             </Path>
         </Grid>

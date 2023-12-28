@@ -39,50 +39,46 @@
             </TextBox.Resources>
         </TextBox>
 
-        <Border
-            Margin="370,36,40,39"
-            BorderThickness="3"
-            BorderBrush="Black"
-            CornerRadius="5">
-            <ListView
+        <ListView
+                Margin="370,36,40,39"
+                Background="White"
                 x:Name="ResultsListView"
                 d:ItemsSource="{d:SampleData ItemCount=5}"
                 ItemsSource="{Binding CharacterGridViewModels}"
                 HorizontalAlignment="Stretch"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ScrollViewer.HorizontalScrollBarVisibility="Hidden">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel
                             Orientation="Horizontal"
                             Width="{Binding ElementName=ResultsListView, Path=DataContext.WrapPanelWidth}"
                             VirtualizingPanel.IsVirtualizing="True"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
 
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
 
-                            <view:CharacterGrid
+                        <view:CharacterGrid
                                     Grid.Row="0"
                                     Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
                                     Height="80"
                                     HorizontalAlignment="Center"/>
-                            <TextBlock
+                        <TextBlock
                                 Text="{Binding AnswerAsString}"
                                 d:Text="Answer"
                                 Grid.Row="1"
                                 HorizontalAlignment="Center"/>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ListView>
-        </Border>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ListView>
         
         <Button x:Name="ToggleSolverButton"
                 Content="{Binding IsSolverRunning, Converter={StaticResource IsSolverRunningTextConverter}}"
