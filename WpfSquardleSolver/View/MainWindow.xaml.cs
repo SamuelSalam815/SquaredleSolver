@@ -12,7 +12,6 @@ namespace WpfSquaredleSolver.View;
 /// </summary>
 public partial class MainWindow : Window
 {
-    private ScrollViewer? ResultsListViewScrollViewer = null;
     public MainWindow()
     {
         InitializeComponent();
@@ -38,6 +37,7 @@ public partial class MainWindow : Window
             return;
         }
 
+        // Make sure scroll bars do not overlap the items being displayed
         double wrapPanelWidth = ResultsListView.ActualWidth;
         Decorator? border = VisualTreeHelper.GetChild(ResultsListView, 0) as Decorator;
         ScrollViewer? scrollViewer = border.Child as ScrollViewer;
