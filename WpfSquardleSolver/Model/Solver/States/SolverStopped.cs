@@ -4,14 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace WpfSquaredleSolver.Model;
 
 /// <summary>
 ///     Defines how the puzzle solver behaves when it is stopped.
 /// </summary>
-class SolverStopped : ISolverState
+public class SolverStopped : ISolverState
 {
     public static ISolverState Instance { get; } = new SolverStopped();
 
@@ -50,8 +49,6 @@ class SolverStopped : ISolverState
 
         IEnumerable<List<CharacterNode>> allPaths =
             PathGenerator<CharacterNode>.EnumerateAllPaths(puzzleModel.PuzzleAsAdjacencyList);
-        ICollection<AnswerModel> answersFoundInPuzzle = context.AnswersFoundInPuzzle;
-        HashSet<string> validWords = puzzleModel.ValidWords;
         HashSet<string> wordsAlreadyFound = new();
         foreach (List<CharacterNode> path in allPaths)
         {
@@ -66,10 +63,17 @@ class SolverStopped : ISolverState
             }
 
             AnswerModel answer = new(path);
-            if (!wordsAlreadyFound.Contains(answer.Word) && validWords.Contains(answer.Word))
+            if (!wordsAlreadyFound.Contains(answer.Word) && puzzleModel.ValidWords.Contains(answer.Word))
             {
                 wordsAlreadyFound.Add(answer.Word);
-                Application.Current.Dispatcher.Invoke(() => answersFoundInPuzzle.Add(answer));
+                if (context.AddAnswersOnOwningThread)
+                {
+                    context.OwningDispatcher.Invoke(() => context.AnswersFoundInPuzzle.Add(answer));
+                }
+                else
+                {
+                    context.AnswersFoundInPuzzle.Add(answer);
+                }
             }
         }
 

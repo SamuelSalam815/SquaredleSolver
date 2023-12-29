@@ -1,16 +1,12 @@
 ﻿// see https://github.com/dwyl/english-words for text file containing English words
 
-using GraphWalking;
-using GraphWalking.Graphs;
-using System.Diagnostics;
-using System.Text;
+using WpfSquaredleSolver.Model;
 
 internal class Program
 {
 
-    private static void Main(string[] args)
+    private static async Task Main(string[] args)
     {
-        Console.WriteLine("Loading words...");
         HashSet<string> validWords = new();
         using (StreamReader reader = new("words_alpha.txt"))
         {
@@ -22,44 +18,35 @@ internal class Program
             }
         }
 
-        Console.WriteLine("Building graph...");
-        AdjacencyList<CharacterNode> graph = CharacterGraphBuilder.FromLetterGrid("""
-        pnoc
-        rahe
-        gngt
-        iihu
-        """);
+        PuzzleModel puzzleModel = new();
+        Console.WriteLine("Loading words...");
+        puzzleModel.LoadValidWords("words_alpha.txt");
         Console.WriteLine("Generating words...");
-        HashSet<string> wordsGenerated = new();
-        Stopwatch stopwatch = Stopwatch.StartNew();
-        StringBuilder stringBuilder = new();
-        foreach (List<CharacterNode> path in PathGenerator<CharacterNode>.EnumerateAllPaths(graph))
+
+        SolverModel solverModel = new(puzzleModel, false);
+        puzzleModel.PuzzleAsText = """
+            PNOC
+            RAHE
+            GNGT
+            IIHU
+            """;
+        solverModel.StateChanged += (sender, e) =>
         {
-            if (path.Count <= 3)
+            if (e.PreviousState is not SolverRunning)
             {
-                continue;
+                return;
             }
 
-            stringBuilder.Clear();
-            foreach (CharacterNode node in path)
+            Console.WriteLine("Time taken to generate words: " + (solverModel.StopTime - solverModel.StartTime));
+            Console.WriteLine("Press any key to print generated words . . . ");
+            Console.ReadKey();
+            foreach (AnswerModel answer in solverModel.AnswersFoundInPuzzle)
             {
-                stringBuilder.Append(node.Character);
+                Console.WriteLine(answer.Word);
             }
+        };
 
-            string word = stringBuilder.ToString();
-            if (validWords.Contains(word))
-            {
-                wordsGenerated.Add(word);
-            }
-        }
-        stopwatch.Stop();
-        Console.WriteLine("Time taken to generate words: " + stopwatch.Elapsed);
-        Console.WriteLine("Press any key to print generated words . . . ");
-        Console.ReadKey();
-        foreach (string word in wordsGenerated)
-        {
-            Console.WriteLine(word);
-        }
+        await solverModel.StartSolvingPuzzle();
     }
 }
 

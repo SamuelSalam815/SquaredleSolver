@@ -1,12 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace WpfSquaredleSolver.Model;
 
 /// <summary>
 ///     Represents an object used to solve a puzzle defined by a <see cref="PuzzleModel"/>
 /// </summary>
-class SolverModel
+public class SolverModel
 {
     private SolverContext context;
     public ISolverState CurrentState => context.CurrentState;
@@ -18,10 +19,12 @@ class SolverModel
 
     public DateTime StopTime => context.StopTime;
 
-    public SolverModel(PuzzleModel puzzleModel)
+    public SolverModel(PuzzleModel puzzleModel, bool addAnswersOnCurrentThread = true)
     {
-
-        context = new SolverContext(puzzleModel);
+        context = new SolverContext(puzzleModel)
+        {
+            AddAnswersOnOwningThread = addAnswersOnCurrentThread
+        };
         context.StateChanged += (sender, e) => StateChanged?.Invoke(this, e);
 
         puzzleModel.PropertyChanged += OnPuzzleModelChanged;
@@ -32,9 +35,10 @@ class SolverModel
         CurrentState.OnPuzzleModelChanged(context);
     }
 
-    public void StartSolvingPuzzle()
+    public Task StartSolvingPuzzle()
     {
         CurrentState.StartSolution(context);
+        return context.SolverTask;
     }
 
     public void StopSolvingPuzzle()

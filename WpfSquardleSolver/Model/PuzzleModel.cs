@@ -9,7 +9,7 @@ namespace WpfSquaredleSolver.Model;
 /// <summary>
 ///     Represents the current squaredle puzzle to be solved
 /// </summary>
-class PuzzleModel : INotifyPropertyChanged
+public class PuzzleModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
 

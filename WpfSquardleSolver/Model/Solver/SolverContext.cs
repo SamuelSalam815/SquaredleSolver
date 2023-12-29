@@ -2,22 +2,26 @@
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace WpfSquaredleSolver.Model;
 
 /// <summary>
 ///     Contains the mutable state for the puzzle solver.
 /// </summary>
-class SolverContext
+public class SolverContext
 {
     public EventHandler<SolverStateChangedEventArgs>? StateChanged;
 
     public readonly PuzzleModel PuzzleModel;
     public readonly BindingList<AnswerModel> AnswersFoundInPuzzle;
+    public readonly Dispatcher OwningDispatcher;
     public CancellationTokenSource CancellationTokenSource;
     public Task SolverTask;
     public DateTime StartTime;
     public DateTime StopTime;
+
+    public bool AddAnswersOnOwningThread { init; get; }
 
     private ISolverState backingFieldCurrentState;
     public ISolverState CurrentState
@@ -43,6 +47,9 @@ class SolverContext
         AnswersFoundInPuzzle = new BindingList<AnswerModel>();
         CancellationTokenSource = new CancellationTokenSource();
         SolverTask = Task.CompletedTask;
+
+        OwningDispatcher = Dispatcher.CurrentDispatcher;
+
         backingFieldCurrentState = SolverStopped.Instance;
         StateChanged += OnStateChanged;
     }

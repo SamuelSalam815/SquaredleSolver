@@ -3,7 +3,7 @@
 /// <summary>
 ///     Represents state-specific behaviour for the puzzle solver.
 /// </summary>
-internal interface ISolverState
+public interface ISolverState
 {
     /// <summary>
     ///     Retrieves the static instance for a particular solver state.

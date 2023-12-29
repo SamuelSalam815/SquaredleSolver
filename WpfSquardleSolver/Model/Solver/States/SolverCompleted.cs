@@ -5,7 +5,7 @@ namespace WpfSquaredleSolver.Model;
 /// <summary>
 ///     Defines how the puzzle solver behaves when it has solved the current puzzle. - Not used yet
 /// </summary>
-internal class SolverCompleted : ISolverState
+public class SolverCompleted : ISolverState
 {
     public static ISolverState Instance { get; } = new SolverCompleted();
 

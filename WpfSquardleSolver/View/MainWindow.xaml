@@ -69,31 +69,24 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-
-                        <view:CharacterGrid
-                                    Grid.Row="0"
-                                    Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
-                                    Height="150"
-                                    HorizontalAlignment="Center"/>
-                    </Grid>
+                    <view:CharacterGrid
+                        Grid.Row="0"
+                        Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
+                        Height="150"
+                        HorizontalAlignment="Center"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ListView>
 
         <Button x:Name="ToggleSolverButton"
-                Content="{Binding SolverState, Converter={StaticResource SolverStateToTextConverter}}"
-                d:Content="PlaceHolder"
-                Command="{Binding ToggleSolverOnOff}"
-                d:Background="Green"
-                Background="{Binding SolverState, Converter={StaticResource SolverStateToColorConverter}}"
-                HorizontalAlignment="Left"
-                Margin="226,164,0,0"
-                VerticalAlignment="Top"
-                Width="132"/>
+            Content="{Binding SolverState, Converter={StaticResource SolverStateToTextConverter}}"
+            d:Content="PlaceHolder"
+            Command="{Binding ToggleSolverOnOff}"
+            d:Background="Green"
+            Background="{Binding SolverState, Converter={StaticResource SolverStateToColorConverter}}"
+            HorizontalAlignment="Left"
+            Margin="226,164,0,0"
+            VerticalAlignment="Top"
+            Width="132"/>
     </Grid>
 </Window>

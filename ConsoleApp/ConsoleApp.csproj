@@ -2,13 +2,14 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\GraphWalking\GraphWalking.csproj" />
+    <ProjectReference Include="..\WpfSquardleSolver\WpfSquaredleSolver.csproj" />
   </ItemGroup>
 
   <ItemGroup>

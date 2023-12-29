@@ -22,7 +22,7 @@ internal class SolverStateToTextConverter : IValueConverter
         {
             SolverRunning => "Stop Solving Puzzle",
             SolverStopped => "Start Solving Puzzle",
-            SolverCompleted => "Puzzle Complete",
+            SolverCompleted => "Puzzle Explored",
             _ => DependencyProperty.UnsetValue,
         };
     }
