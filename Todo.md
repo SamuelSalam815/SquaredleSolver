@@ -1,2 +1,1 @@
 - ui element that allows filtering out of particular characters from the puzzle
-- disable solve button when solver completes until user changes the input puzzle
