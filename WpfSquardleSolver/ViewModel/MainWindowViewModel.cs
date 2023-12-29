@@ -1,12 +1,17 @@
 ﻿using GraphWalking.Graphs;
+using SquaredleSolver;
+using SquaredleSolver.SolverStates;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using WpfSquaredleSolver.Command;
-using WpfSquaredleSolver.Model;
 
 namespace WpfSquaredleSolver.ViewModel;
 
@@ -39,7 +44,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         get { return puzzleModel.PuzzleAsAdjacencyList.GetAllNodes(); }
     }
 
-    public BindingList<CharacterGridViewModel> CharacterGridViewModels { get; }
+    public ObservableCollection<CharacterGridViewModel> CharacterGridViewModels { get; }
 
     private double backingWrapPanelWidth;
     public double WrapPanelWidth
@@ -64,13 +69,12 @@ internal class MainWindowViewModel : INotifyPropertyChanged
     }
 
     private CancellationTokenSource solverRunTimeCancellationTokenSource;
-    private Task updateSolverRunTimeTask;
     private readonly SolverModel solverModel;
     private readonly PuzzleModel puzzleModel;
 
     public MainWindowViewModel(PuzzleModel puzzleModel, SolverModel solverModel)
     {
-        CharacterGridViewModels = new BindingList<CharacterGridViewModel>();
+        CharacterGridViewModels = new ObservableCollection<CharacterGridViewModel>();
         this.puzzleModel = puzzleModel;
         puzzleModel.PropertyChanged += OnPuzzleModelChanged;
 
@@ -78,9 +82,9 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         ToggleSolverOnOff = new ToggleSolverOnOff(solverModel);
 
         solverRunTimeCancellationTokenSource = new CancellationTokenSource();
-        updateSolverRunTimeTask = Task.CompletedTask;
         solverModel.StateChanged += OnSolverStateChanged;
-        solverModel.AnswersFoundInPuzzle.ListChanged += OnAnswersFoundInPuzzleChanged;
+        solverModel.AnswersFoundInPuzzle.CollectionChanged +=
+            (sender, e) => Application.Current.Dispatcher.Invoke(() => OnAnswersFoundInPuzzleChanged(sender, e));
     }
 
     private void OnSolverStateChanged(object? sender, SolverStateChangedEventArgs e)
@@ -90,7 +94,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         if (e.CurrentState is SolverRunning)
         {
             solverRunTimeCancellationTokenSource = new CancellationTokenSource();
-            updateSolverRunTimeTask = UpdateSolverRunTime(
+            UpdateSolverRunTime(
                 TimeSpan.FromMilliseconds(50),
                 solverRunTimeCancellationTokenSource.Token);
         }
@@ -102,30 +106,32 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         }
     }
 
-    private async Task UpdateSolverRunTime(TimeSpan updateInterval, CancellationToken cancellationToken)
+    private async void UpdateSolverRunTime(TimeSpan updateInterval, CancellationToken cancellationToken)
     {
         while (!cancellationToken.IsCancellationRequested)
         {
             SolverRunTime = DateTime.Now - solverModel.StartTime;
-            await Task.Delay(updateInterval, cancellationToken);
+            await Task.Delay(updateInterval);
         }
     }
 
-    private void OnAnswersFoundInPuzzleChanged(object? sender, ListChangedEventArgs e)
+    private void OnAnswersFoundInPuzzleChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        switch (e.ListChangedType)
+        IEnumerable<AnswerModel> answersToAdd;
+        switch (e.Action)
         {
-            case ListChangedType.ItemAdded:
-                AnswerModel nextAnswer = solverModel.AnswersFoundInPuzzle[e.NewIndex];
-                CharacterGridViewModels.Add(new CharacterGridViewModel(puzzleModel, nextAnswer));
+            case NotifyCollectionChangedAction.Add:
+                answersToAdd = e.NewItems.Cast<AnswerModel>();
                 break;
             default:
                 CharacterGridViewModels.Clear();
-                foreach (AnswerModel answer in solverModel.AnswersFoundInPuzzle)
-                {
-                    CharacterGridViewModels.Add(new CharacterGridViewModel(puzzleModel, answer));
-                }
+                answersToAdd = solverModel.AnswersFoundInPuzzle;
                 break;
+        }
+
+        foreach (AnswerModel answer in answersToAdd)
+        {
+            CharacterGridViewModels.Add(new CharacterGridViewModel(puzzleModel, answer));
         }
     }
 

@@ -1,4 +1,4 @@
-﻿namespace WpfSquaredleSolver.Model;
+﻿namespace SquaredleSolver.SolverStates;
 
 /// <summary>
 ///     Represents state-specific behaviour for the puzzle solver.

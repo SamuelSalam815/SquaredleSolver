@@ -1,6 +1,7 @@
-﻿using System;
+﻿using SquaredleSolver;
+using SquaredleSolver.SolverStates;
+using System;
 using System.Windows.Input;
-using WpfSquaredleSolver.Model;
 
 namespace WpfSquaredleSolver.Command;
 

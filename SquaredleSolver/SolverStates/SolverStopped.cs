@@ -1,11 +1,7 @@
 ﻿using GraphWalking;
 using GraphWalking.Graphs;
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace WpfSquaredleSolver.Model;
+namespace SquaredleSolver.SolverStates;
 
 /// <summary>
 ///     Defines how the puzzle solver behaves when it is stopped.
@@ -66,14 +62,7 @@ public class SolverStopped : ISolverState
             if (!wordsAlreadyFound.Contains(answer.Word) && puzzleModel.ValidWords.Contains(answer.Word))
             {
                 wordsAlreadyFound.Add(answer.Word);
-                if (context.AddAnswersOnOwningThread)
-                {
-                    context.OwningDispatcher.Invoke(() => context.AnswersFoundInPuzzle.Add(answer));
-                }
-                else
-                {
-                    context.AnswersFoundInPuzzle.Add(answer);
-                }
+                context.AnswersFoundInPuzzle.Add(answer);
             }
         }
 

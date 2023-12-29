@@ -1,8 +1,8 @@
+using SquaredleSolver.SolverStates;
 using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using WpfSquaredleSolver.Model;
 
 namespace WpfSquaredleSolver.ValueConverters;
 

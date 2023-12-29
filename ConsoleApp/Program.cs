@@ -1,6 +1,7 @@
 ﻿// see https://github.com/dwyl/english-words for text file containing English words
 
-using WpfSquaredleSolver.Model;
+using SquaredleSolver;
+using SquaredleSolver.SolverStates;
 
 internal class Program
 {
@@ -18,18 +19,18 @@ internal class Program
             }
         }
 
-        PuzzleModel puzzleModel = new();
         Console.WriteLine("Loading words...");
+        PuzzleModel puzzleModel = new();
         puzzleModel.LoadValidWords("words_alpha.txt");
-        Console.WriteLine("Generating words...");
-
-        SolverModel solverModel = new(puzzleModel, false);
         puzzleModel.PuzzleAsText = """
             PNOC
             RAHE
             GNGT
             IIHU
             """;
+
+        Console.WriteLine("Generating words...");
+        SolverModel solverModel = new(puzzleModel, false);
         solverModel.StateChanged += (sender, e) =>
         {
             if (e.PreviousState is not SolverRunning)

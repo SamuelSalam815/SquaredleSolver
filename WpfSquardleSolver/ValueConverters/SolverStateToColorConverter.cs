@@ -1,9 +1,9 @@
-﻿using System;
+﻿using SquaredleSolver.SolverStates;
+using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
-using WpfSquaredleSolver.Model;
 
 namespace WpfSquaredleSolver.ValueConverters;
 

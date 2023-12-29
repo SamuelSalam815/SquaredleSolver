@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WpfSquaredleSolver.Model;
+namespace SquaredleSolver.SolverStates;
 
 /// <summary>
 ///     Defines how the solver behaves when it is running.

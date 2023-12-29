@@ -1,10 +1,7 @@
 ﻿using GraphWalking.Graphs;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 
-namespace WpfSquaredleSolver.Model;
+namespace SquaredleSolver;
 
 /// <summary>
 ///     Represents the current squaredle puzzle to be solved

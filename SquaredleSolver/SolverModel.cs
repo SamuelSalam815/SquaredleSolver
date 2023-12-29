@@ -1,8 +1,8 @@
-﻿using System;
+﻿using SquaredleSolver.SolverStates;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Threading.Tasks;
 
-namespace WpfSquaredleSolver.Model;
+namespace SquaredleSolver;
 
 /// <summary>
 ///     Represents an object used to solve a puzzle defined by a <see cref="PuzzleModel"/>
@@ -11,7 +11,7 @@ public class SolverModel
 {
     private SolverContext context;
     public ISolverState CurrentState => context.CurrentState;
-    public BindingList<AnswerModel> AnswersFoundInPuzzle => context.AnswersFoundInPuzzle;
+    public ObservableCollection<AnswerModel> AnswersFoundInPuzzle => context.AnswersFoundInPuzzle;
 
     public EventHandler<SolverStateChangedEventArgs>? StateChanged;
 

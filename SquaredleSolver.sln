@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "ConsoleApp\Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfSquaredleSolver", "WpfSquardleSolver\WpfSquaredleSolver.csproj", "{0EE5C6E0-797C-46FC-8B8B-4C5914566C3C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquaredleSolver", "SquaredleSolver\SquaredleSolver.csproj", "{2DE2683D-5509-492C-A800-D3AC137A10AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{0EE5C6E0-797C-46FC-8B8B-4C5914566C3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EE5C6E0-797C-46FC-8B8B-4C5914566C3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EE5C6E0-797C-46FC-8B8B-4C5914566C3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DE2683D-5509-492C-A800-D3AC137A10AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DE2683D-5509-492C-A800-D3AC137A10AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DE2683D-5509-492C-A800-D3AC137A10AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DE2683D-5509-492C-A800-D3AC137A10AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

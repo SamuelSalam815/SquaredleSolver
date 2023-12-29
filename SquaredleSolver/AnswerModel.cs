@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WpfSquaredleSolver.Model;
+namespace SquaredleSolver;
 
 /// <summary>
 ///     Represents a possible answer to a given squaredle puzzle.

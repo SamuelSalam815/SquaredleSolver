@@ -1,7 +1,7 @@
 ﻿using GraphWalking.Graphs;
+using SquaredleSolver;
 using System.Collections.Generic;
 using System.ComponentModel;
-using WpfSquaredleSolver.Model;
 
 namespace WpfSquaredleSolver.ViewModel;
 

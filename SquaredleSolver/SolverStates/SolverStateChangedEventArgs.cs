@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace WpfSquaredleSolver.Model;
+﻿namespace SquaredleSolver.SolverStates;
 
 public class SolverStateChangedEventArgs : EventArgs
 {

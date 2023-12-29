@@ -1,8 +1,8 @@
-﻿using System.Windows;
+﻿using SquaredleSolver;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using WpfSquaredleSolver.Model;
 using WpfSquaredleSolver.ViewModel;
 
 namespace WpfSquaredleSolver.View;
@@ -27,11 +27,11 @@ public partial class MainWindow : Window
         MainWindowViewModel viewModel = new(puzzle, new SolverModel(puzzle));
         DataContext = viewModel;
 
-        viewModel.CharacterGridViewModels.ListChanged += (sender, e) => Application.Current.Dispatcher.Invoke(() => UpdateWrapPanelWidth(sender, e));
-        ResultsListView.SizeChanged += UpdateWrapPanelWidth;
+        viewModel.CharacterGridViewModels.CollectionChanged += (sender, e) => Dispatcher.Invoke(UpdateWrapPanelWidth);
+        ResultsListView.SizeChanged += (sender, e) => UpdateWrapPanelWidth();
     }
 
-    private void UpdateWrapPanelWidth(object? sender, System.EventArgs e)
+    private void UpdateWrapPanelWidth()
     {
         if (DataContext is not MainWindowViewModel viewModel)
         {
