@@ -40,22 +40,22 @@
         </Border>
 
         <TextBlock
-            Margin="226,184,0,0"
+            Margin="226,-50,0,0"
             Text="{Binding SolverRunTime, Converter={StaticResource TimeSpanToTextConverter}}"
             HorizontalAlignment="Left"
             Width="132"
             Height="17"
-            VerticalAlignment="Top"
+            VerticalAlignment="Center"
             TextAlignment="Center">
             <d:TextBlock.Text>RunTime</d:TextBlock.Text>
         </TextBlock>
         <TextBlock
-            Margin="226,201,0,0"
+            Margin="226,50,0,0"
             Text="{Binding NumberOfAnswersFound, Converter={StaticResource NumberOfAnswersFoundToTextConverter}}"
             HorizontalAlignment="Left"
             Width="132"
             Height="17"
-            VerticalAlignment="Top"
+            VerticalAlignment="Center"
             TextAlignment="Center">
             <d:TextBlock.Text>Answers Found: 5</d:TextBlock.Text>
         </TextBlock>
@@ -93,9 +93,10 @@
             d:Background="#2ecc71"
             Command="{Binding ToggleSolverOnOff}"
             HorizontalAlignment="Left"
-            Margin="226,164,0,0"
-            VerticalAlignment="Top"
-            Width="132">
+            VerticalAlignment="Center"
+            Margin="226,0,0,0"
+            Width="132"
+            Height="20">
             <Button.Resources>
                 <Style TargetType="Button">
                     <Style.Triggers>
