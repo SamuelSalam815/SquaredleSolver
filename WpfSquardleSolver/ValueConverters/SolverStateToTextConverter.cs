@@ -2,27 +2,29 @@ using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using WpfSquaredleSolver.Model;
 
 namespace WpfSquaredleSolver.ValueConverters;
 
 /// <summary>
 ///     Determines the text for the button that toggles the puzzle solver on or off
 /// </summary>
-internal class IsSolverRunningTextConverter : IValueConverter
+internal class SolverStateToTextConverter : IValueConverter
 {
     public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is not bool boolValue)
+        if (value is not ISolverState state)
         {
             return DependencyProperty.UnsetValue;
         }
 
-        if (boolValue)
+        return state switch
         {
-            return "Stop Solving Puzzle";
-        }
-
-        return "Start Solving Puzzle";
+            SolverRunning => "Stop Solving Puzzle",
+            SolverStopped => "Start Solving Puzzle",
+            SolverCompleted => "Puzzle Complete",
+            _ => DependencyProperty.UnsetValue,
+        };
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

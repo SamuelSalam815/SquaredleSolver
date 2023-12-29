@@ -29,16 +29,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
     public uint NumberOfRowsInPuzzle => puzzleModel.NumberOfRows;
     public uint NumberOfColumnsInPuzzle => puzzleModel.NumberOfColumns;
 
-    private bool isSolverRunningBackingField = false;
-    public bool IsSolverRunning
-    {
-        get { return isSolverRunningBackingField; }
-        set
-        {
-            isSolverRunningBackingField = value;
-            OnPropertyChanged(nameof(IsSolverRunning));
-        }
-    }
+    public ISolverState SolverState => solverModel.CurrentState;
 
     private List<CharacterNode> PuzzleAsCharacterNodes
     {
@@ -68,15 +59,10 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         puzzleModel.PropertyChanged += OnPuzzleModelChanged;
 
         this.solverModel = solverModel;
-        ToggleSolverOnOff = new ToggleSolverOnOff(solverModel, this);
+        ToggleSolverOnOff = new ToggleSolverOnOff(solverModel);
 
-        solverModel.StateChanged += OnSolverStateChanged;
+        solverModel.StateChanged += (sender, e) => OnPropertyChanged(nameof(SolverState));
         solverModel.AnswersFoundInPuzzle.ListChanged += OnAnswersFoundInPuzzleChanged;
-    }
-
-    private void OnSolverStateChanged(object? sender, SolverStateChangedEventArgs e)
-    {
-        IsSolverRunning = e.CurrentState is SolverRunning;
     }
 
     private void OnAnswersFoundInPuzzleChanged(object? sender, ListChangedEventArgs e)

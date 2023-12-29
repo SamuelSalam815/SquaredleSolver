@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
 using WpfSquaredleSolver.Model;
-using WpfSquaredleSolver.ViewModel;
 
 namespace WpfSquaredleSolver.Command;
 
@@ -12,21 +11,21 @@ class ToggleSolverOnOff : ICommand
 {
     public event EventHandler? CanExecuteChanged;
     private readonly SolverModel solverModel;
-    private readonly MainWindowViewModel solverViewModel;
 
     public ToggleSolverOnOff(
-        SolverModel solverModel,
-        MainWindowViewModel solverViewModel)
+        SolverModel solverModel)
     {
         this.solverModel = solverModel;
-        this.solverViewModel = solverViewModel;
     }
 
-    public bool CanExecute(object? parameter) => true;
+    public bool CanExecute(object? parameter)
+    {
+        return solverModel.CurrentState is not SolverCompleted;
+    }
 
     public void Execute(object? parameter)
     {
-        if (solverViewModel.IsSolverRunning)
+        if (solverModel.CurrentState is SolverRunning)
         {
             solverModel.StopSolvingPuzzle();
         }

@@ -18,7 +18,7 @@ internal class SolverRunning : ISolverState
 
     public void OnSolverCompleted(SolverContext context)
     {
-        context.CurrentState = SolverStopped.Instance;
+        context.CurrentState = SolverCompleted.Instance;
     }
 
     public void StartSolution(SolverContext context)
@@ -30,7 +30,6 @@ internal class SolverRunning : ISolverState
     {
         context.CancellationTokenSource.Cancel();
         context.SolverTask.Wait();
-        context.AnswersFoundInPuzzle.Clear();
         context.CurrentState = SolverStopped.Instance;
     }
 }

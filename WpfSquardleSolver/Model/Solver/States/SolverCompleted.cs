@@ -13,7 +13,6 @@ internal class SolverCompleted : ISolverState
 
     public void OnPuzzleModelChanged(SolverContext context)
     {
-        context.AnswersFoundInPuzzle.Clear();
         context.CurrentState = SolverStopped.Instance;
     }
 
