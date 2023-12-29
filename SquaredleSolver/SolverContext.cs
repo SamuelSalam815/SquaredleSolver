@@ -1,5 +1,6 @@
 ﻿using SquaredleSolver.SolverStates;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace SquaredleSolver;
 
@@ -12,10 +13,9 @@ public class SolverContext
 
     public readonly PuzzleModel PuzzleModel;
     public readonly ObservableCollection<AnswerModel> AnswersFoundInPuzzle;
+    public readonly Stopwatch Stopwatch;
     public CancellationTokenSource CancellationTokenSource;
     public Task SolverTask;
-    public DateTime StartTime;
-    public DateTime StopTime;
 
     public bool AddAnswersOnOwningThread { init; get; }
 
@@ -41,6 +41,7 @@ public class SolverContext
     {
         PuzzleModel = puzzleModel;
         AnswersFoundInPuzzle = new ObservableCollection<AnswerModel>();
+        Stopwatch = new Stopwatch();
         CancellationTokenSource = new CancellationTokenSource();
         SolverTask = Task.CompletedTask;
 
@@ -52,12 +53,12 @@ public class SolverContext
     {
         if (e.PreviousState is SolverRunning)
         {
-            StopTime = DateTime.Now;
+            Stopwatch.Stop();
         }
 
         if (e.CurrentState is SolverRunning)
         {
-            StartTime = DateTime.Now;
+            Stopwatch.Restart();
         }
     }
 }

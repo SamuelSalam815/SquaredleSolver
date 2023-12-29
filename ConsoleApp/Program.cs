@@ -33,12 +33,12 @@ internal class Program
         SolverModel solverModel = new(puzzleModel, false);
         solverModel.StateChanged += (sender, e) =>
         {
-            if (e.PreviousState is not SolverRunning)
+            if (e.CurrentState is not SolverCompleted)
             {
                 return;
             }
 
-            Console.WriteLine("Time taken to generate words: " + (solverModel.StopTime - solverModel.StartTime));
+            Console.WriteLine("Time taken to generate words: " + solverModel.TimeSpentSolving);
             Console.WriteLine("Press any key to print generated words . . . ");
             Console.ReadKey();
             foreach (AnswerModel answer in solverModel.AnswersFoundInPuzzle)

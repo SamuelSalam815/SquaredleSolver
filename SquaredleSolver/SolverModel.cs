@@ -15,9 +15,7 @@ public class SolverModel
 
     public EventHandler<SolverStateChangedEventArgs>? StateChanged;
 
-    public DateTime StartTime => context.StartTime;
-
-    public DateTime StopTime => context.StopTime;
+    public TimeSpan TimeSpentSolving => context.Stopwatch.Elapsed;
 
     public SolverModel(PuzzleModel puzzleModel, bool addAnswersOnCurrentThread = true)
     {

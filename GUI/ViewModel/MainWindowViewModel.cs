@@ -102,7 +102,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         if (e.PreviousState is SolverRunning)
         {
             solverRunTimeCancellationTokenSource.Cancel();
-            SolverRunTime = solverModel.StopTime - solverModel.StartTime;
+            SolverRunTime = solverModel.TimeSpentSolving;
         }
     }
 
@@ -110,7 +110,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
     {
         while (!cancellationToken.IsCancellationRequested)
         {
-            SolverRunTime = DateTime.Now - solverModel.StartTime;
+            SolverRunTime = solverModel.TimeSpentSolving;
             await Task.Delay(updateInterval);
         }
     }
