@@ -22,7 +22,7 @@ public class SolverStopped : ISolverState
         }
 
         context.CancellationTokenSource = new CancellationTokenSource();
-        context.AnswersFoundInPuzzle.Clear();
+        context.AnswersFound.Clear();
         context.CurrentState = SolverRunning.Instance;
         context.SolverTask = Task.Run(() => SolvePuzzle(context));
     }
@@ -62,7 +62,7 @@ public class SolverStopped : ISolverState
             if (!wordsAlreadyFound.Contains(answer.Word) && puzzleModel.ValidWords.Contains(answer.Word))
             {
                 wordsAlreadyFound.Add(answer.Word);
-                context.AnswersFoundInPuzzle.Add(answer);
+                context.AnswersFound.Add(answer);
             }
         }
 

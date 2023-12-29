@@ -11,7 +11,7 @@ public class SolverModel
 {
     private SolverContext context;
     public ISolverState CurrentState => context.CurrentState;
-    public ObservableCollection<AnswerModel> AnswersFoundInPuzzle => context.AnswersFoundInPuzzle;
+    public ObservableCollection<AnswerModel> AnswersFound => context.AnswersFound;
 
     public EventHandler<SolverStateChangedEventArgs>? StateChanged;
 

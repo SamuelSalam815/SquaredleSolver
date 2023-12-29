@@ -12,7 +12,7 @@ public class SolverContext
     public EventHandler<SolverStateChangedEventArgs>? StateChanged;
 
     public readonly PuzzleModel PuzzleModel;
-    public readonly ObservableCollection<AnswerModel> AnswersFoundInPuzzle;
+    public readonly ObservableCollection<AnswerModel> AnswersFound;
     public readonly Stopwatch Stopwatch;
     public CancellationTokenSource CancellationTokenSource;
     public Task SolverTask;
@@ -40,7 +40,7 @@ public class SolverContext
     public SolverContext(PuzzleModel puzzleModel)
     {
         PuzzleModel = puzzleModel;
-        AnswersFoundInPuzzle = new ObservableCollection<AnswerModel>();
+        AnswersFound = new ObservableCollection<AnswerModel>();
         Stopwatch = new Stopwatch();
         CancellationTokenSource = new CancellationTokenSource();
         SolverTask = Task.CompletedTask;

@@ -26,7 +26,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
 
     public string PuzzleAsText
     {
-        get { return puzzleModel.PuzzleAsText; }
+        get => puzzleModel.PuzzleAsText;
         set
         {
             puzzleModel.PuzzleAsText = value;
@@ -34,8 +34,19 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         }
     }
 
+    private int _numberOfAnswersFound;
+    public int NumberOfAnswersFound
+    {
+        get => _numberOfAnswersFound;
+        set
+        {
+            _numberOfAnswersFound = value;
+            OnPropertyChanged(nameof(NumberOfAnswersFound));
+        }
+    }
     public uint NumberOfRowsInPuzzle => puzzleModel.NumberOfRows;
     public uint NumberOfColumnsInPuzzle => puzzleModel.NumberOfColumns;
+
 
     public ISolverState SolverState => solverModel.CurrentState;
 
@@ -83,8 +94,8 @@ internal class MainWindowViewModel : INotifyPropertyChanged
 
         solverRunTimeCancellationTokenSource = new CancellationTokenSource();
         solverModel.StateChanged += OnSolverStateChanged;
-        solverModel.AnswersFoundInPuzzle.CollectionChanged +=
-            (sender, e) => Application.Current.Dispatcher.Invoke(() => OnAnswersFoundInPuzzleChanged(sender, e));
+        solverModel.AnswersFound.CollectionChanged +=
+            (sender, e) => Application.Current.Dispatcher.Invoke(() => OnAnswersFoundChanged(sender, e));
     }
 
     private void OnSolverStateChanged(object? sender, SolverStateChangedEventArgs e)
@@ -115,9 +126,10 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         }
     }
 
-    private void OnAnswersFoundInPuzzleChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void OnAnswersFoundChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         IEnumerable<AnswerModel> answersToAdd;
+        NumberOfAnswersFound = solverModel.AnswersFound.Count;
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:
@@ -125,7 +137,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
                 break;
             default:
                 CharacterGridViewModels.Clear();
-                answersToAdd = solverModel.AnswersFoundInPuzzle;
+                answersToAdd = solverModel.AnswersFound;
                 break;
         }
 

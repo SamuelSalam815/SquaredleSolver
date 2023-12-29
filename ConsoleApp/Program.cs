@@ -41,7 +41,7 @@ internal class Program
             Console.WriteLine("Time taken to generate words: " + solverModel.TimeSpentSolving);
             Console.WriteLine("Press any key to print generated words . . . ");
             Console.ReadKey();
-            foreach (AnswerModel answer in solverModel.AnswersFoundInPuzzle)
+            foreach (AnswerModel answer in solverModel.AnswersFound)
             {
                 Console.WriteLine(answer.Word);
             }

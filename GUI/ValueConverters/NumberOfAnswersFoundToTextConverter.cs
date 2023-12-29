@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 
 namespace WpfSquaredleSolver.ValueConverters;
 
-internal class IsCharacterTileInAnswerConverter : IValueConverter
+internal class NumberOfAnswersFoundToTextConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is not Border borderControl)
+        if (value is not int answerCount)
         {
             return DependencyProperty.UnsetValue;
         }
 
-        return borderControl.DataContext;
+        return $"Answers found: {answerCount}";
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

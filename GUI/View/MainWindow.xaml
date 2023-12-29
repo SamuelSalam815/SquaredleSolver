@@ -13,6 +13,7 @@
         <converters:SolverStateToColorConverter x:Key="SolverStateToColorConverter"/>
         <converters:SolverStateToTextConverter x:Key="SolverStateToTextConverter"/>
         <converters:TimeSpanToTextConverter x:Key="TimeSpanToTextConverter"/>
+        <converters:NumberOfAnswersFoundToTextConverter x:Key="NumberOfAnswersFoundToTextConverter"/>
     </Window.Resources>
     <Grid>
         <Border
@@ -31,7 +32,7 @@
                     PreviewKeyDown="TextBox_PreviewKeyDown"
                     CharacterCasing="Upper"
                     AcceptsReturn="True" 
-                    d:Text="HELL&#10;OWR&#10;LDFO&#10;OBAR"
+                    d:Text="HELL&#10;OW R&#10;LDFO&#10;OBAR"
                     Text="{Binding PuzzleAsText, UpdateSourceTrigger=PropertyChanged}"
                     FontFamily="Courier New"
                     Background="Transparent"
@@ -48,6 +49,16 @@
             VerticalAlignment="Top"
             TextAlignment="Center">
             <d:TextBlock.Text>RunTime</d:TextBlock.Text>
+        </TextBlock>
+        <TextBlock
+            Margin="226,201,0,0"
+            Text="{Binding NumberOfAnswersFound, Converter={StaticResource NumberOfAnswersFoundToTextConverter}}"
+            HorizontalAlignment="Left"
+            Width="132"
+            Height="17"
+            VerticalAlignment="Top"
+            TextAlignment="Center">
+            <d:TextBlock.Text>Answers Found: 5</d:TextBlock.Text>
         </TextBlock>
         <ListView
                 Margin="396,10,10,10"
