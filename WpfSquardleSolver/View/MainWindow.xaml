@@ -60,9 +60,10 @@
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel
-                            Orientation="Horizontal"
-                            Width="{Binding ElementName=ResultsListView, Path=DataContext.WrapPanelWidth}"
-                            VirtualizingPanel.IsVirtualizing="True"/>
+                        Orientation="Horizontal"
+                        Width="{Binding ElementName=ResultsListView, Path=DataContext.WrapPanelWidth}"
+                        VirtualizingPanel.IsVirtualizing="True"
+                        d:Width="384"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
