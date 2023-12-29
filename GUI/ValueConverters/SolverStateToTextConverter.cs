@@ -20,9 +20,9 @@ internal class SolverStateToTextConverter : IValueConverter
 
         return state switch
         {
-            SolverRunning => "Stop Solving Puzzle",
-            SolverStopped => "Start Solving Puzzle",
-            SolverCompleted => "Puzzle Explored",
+            SolverRunning => nameof(SolverRunning),
+            SolverStopped => nameof(SolverStopped),
+            SolverCompleted => nameof(SolverCompleted),
             _ => DependencyProperty.UnsetValue,
         };
     }
