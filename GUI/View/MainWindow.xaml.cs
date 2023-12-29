@@ -3,9 +3,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using WpfSquaredleSolver.ViewModel;
+using GUI.ViewModel;
 
-namespace WpfSquaredleSolver.View;
+namespace GUI.View;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml

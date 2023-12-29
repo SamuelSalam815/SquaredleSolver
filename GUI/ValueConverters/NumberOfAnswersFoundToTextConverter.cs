@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace WpfSquaredleSolver.ValueConverters;
+namespace GUI.ValueConverters;
 
 internal class NumberOfAnswersFoundToTextConverter : IValueConverter
 {

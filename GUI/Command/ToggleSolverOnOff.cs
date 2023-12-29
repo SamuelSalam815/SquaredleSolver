@@ -3,7 +3,7 @@ using SquaredleSolver.SolverStates;
 using System;
 using System.Windows.Input;
 
-namespace WpfSquaredleSolver.Command;
+namespace GUI.Command;
 
 /// <summary>
 ///     Defines a command for toggling the puzzle solver on and off.

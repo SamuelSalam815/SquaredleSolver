@@ -1,4 +1,5 @@
 ﻿using GraphWalking.Graphs;
+using GUI.Command;
 using SquaredleSolver;
 using SquaredleSolver.SolverStates;
 using System;
@@ -11,9 +12,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using WpfSquaredleSolver.Command;
 
-namespace WpfSquaredleSolver.ViewModel;
+namespace GUI.ViewModel;
 
 /// <summary>
 ///     Exposes the required properties for the user interface of the main window.

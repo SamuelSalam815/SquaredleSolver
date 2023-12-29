@@ -3,7 +3,7 @@ using SquaredleSolver;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace WpfSquaredleSolver.ViewModel;
+namespace GUI.ViewModel;
 
 /// <summary>
 ///     Exposes the required properties to render a visual representation of a squaredle answer.
