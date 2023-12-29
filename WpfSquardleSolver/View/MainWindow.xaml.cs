@@ -28,6 +28,7 @@ public partial class MainWindow : Window
         DataContext = viewModel;
 
         viewModel.CharacterGridViewModels.ListChanged += UpdateWrapPanelWidth;
+        ResultsListView.SizeChanged += UpdateWrapPanelWidth;
     }
 
     private void UpdateWrapPanelWidth(object? sender, System.EventArgs e)

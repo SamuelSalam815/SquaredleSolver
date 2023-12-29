@@ -1,6 +1,9 @@
 ﻿using GraphWalking.Graphs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using WpfSquaredleSolver.Command;
 using WpfSquaredleSolver.Model;
@@ -49,6 +52,19 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         }
     }
 
+    private TimeSpan _solverRunTime = TimeSpan.Zero;
+    public TimeSpan SolverRunTime
+    {
+        get { return _solverRunTime; }
+        set
+        {
+            _solverRunTime = value;
+            OnPropertyChanged(nameof(SolverRunTime));
+        }
+    }
+
+    private CancellationTokenSource solverRunTimeCancellationTokenSource;
+    private Task updateSolverRunTimeTask;
     private readonly SolverModel solverModel;
     private readonly PuzzleModel puzzleModel;
 
@@ -61,8 +77,38 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         this.solverModel = solverModel;
         ToggleSolverOnOff = new ToggleSolverOnOff(solverModel);
 
-        solverModel.StateChanged += (sender, e) => OnPropertyChanged(nameof(SolverState));
+        solverRunTimeCancellationTokenSource = new CancellationTokenSource();
+        updateSolverRunTimeTask = Task.CompletedTask;
+        solverModel.StateChanged += OnSolverStateChanged;
         solverModel.AnswersFoundInPuzzle.ListChanged += OnAnswersFoundInPuzzleChanged;
+    }
+
+    private void OnSolverStateChanged(object? sender, SolverStateChangedEventArgs e)
+    {
+        OnPropertyChanged(nameof(SolverState));
+
+        if (e.CurrentState is SolverRunning)
+        {
+            solverRunTimeCancellationTokenSource = new CancellationTokenSource();
+            updateSolverRunTimeTask = UpdateSolverRunTime(
+                TimeSpan.FromMilliseconds(50),
+                solverRunTimeCancellationTokenSource.Token);
+        }
+
+        if (e.PreviousState is SolverRunning)
+        {
+            solverRunTimeCancellationTokenSource.Cancel();
+            SolverRunTime = solverModel.StopTime - solverModel.StartTime;
+        }
+    }
+
+    private async Task UpdateSolverRunTime(TimeSpan updateInterval, CancellationToken cancellationToken)
+    {
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            SolverRunTime = DateTime.Now - solverModel.StartTime;
+            await Task.Delay(updateInterval, cancellationToken);
+        }
     }
 
     private void OnAnswersFoundInPuzzleChanged(object? sender, ListChangedEventArgs e)
@@ -105,5 +151,4 @@ internal class MainWindowViewModel : INotifyPropertyChanged
                 break;
         }
     }
-
 }

@@ -14,6 +14,10 @@ class SolverModel
 
     public EventHandler<SolverStateChangedEventArgs>? StateChanged;
 
+    public DateTime StartTime => context.StartTime;
+
+    public DateTime StopTime => context.StopTime;
+
     public SolverModel(PuzzleModel puzzleModel)
     {
 

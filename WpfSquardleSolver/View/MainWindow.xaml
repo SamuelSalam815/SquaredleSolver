@@ -8,44 +8,53 @@
         xmlns:view="clr-namespace:WpfSquaredleSolver.View" 
         d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
         mc:Ignorable="d"
-        Title="SquaredleSolver" Height="450" Width="800" Background="#ecf0f1">
+        Title="SquaredleSolver" Height="383" Width="793" Background="#ecf0f1">
     <Window.Resources>
         <converters:SolverStateToColorConverter x:Key="SolverStateToColorConverter"/>
         <converters:SolverStateToTextConverter x:Key="SolverStateToTextConverter"/>
+        <converters:TimeSpanToTextConverter x:Key="TimeSpanToTextConverter"/>
     </Window.Resources>
     <Grid>
-        <TextBox 
-            x:Name="InputField"
-            HorizontalAlignment="Left" 
-            PreviewKeyDown="TextBox_PreviewKeyDown"
-            TextAlignment="Center"
-            VerticalContentAlignment="Center"
-            CharacterCasing="Upper"
-            VerticalScrollBarVisibility="Auto"
-            Margin="148,56,0,0" 
-            AcceptsReturn="True" 
-            TextWrapping="NoWrap"
-            d:Text="HELL&#10;OWOR&#10;LDFO&#10;OBAR"
-            Text="{Binding PuzzleAsText, UpdateSourceTrigger=PropertyChanged}"
-            VerticalAlignment="Top" 
-            Width="93" 
-            Height="110" 
-            FontFamily="Courier New" 
-            FontSize="20" Background="#bdc3c7">
-            <TextBox.Resources>
-                <Style TargetType="{x:Type Border}">
-                    <Setter Property="CornerRadius" Value="2"/>
-                </Style>
-            </TextBox.Resources>
-        </TextBox>
+        <Border
+            Width="180" 
+            Height="180"
+            Margin="10,0,0,0"
+            Padding="10"
+            Background="#bdc3c7"
+            CornerRadius="20"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Left">
+            <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBox 
+                    x:Name="InputField"
+                    FontStretch="ExtraExpanded"
+                    PreviewKeyDown="TextBox_PreviewKeyDown"
+                    CharacterCasing="Upper"
+                    AcceptsReturn="True" 
+                    d:Text="HELL&#10;OWR&#10;LDFO&#10;OBAR"
+                    Text="{Binding PuzzleAsText, UpdateSourceTrigger=PropertyChanged}"
+                    FontFamily="Courier New"
+                    Background="Transparent"
+                    BorderThickness="0"/>
+            </Viewbox>
+        </Border>
 
+        <TextBlock
+            Margin="226,184,0,0"
+            Text="{Binding SolverRunTime, Converter={StaticResource TimeSpanToTextConverter}}"
+            HorizontalAlignment="Left"
+            Width="132"
+            Height="17"
+            VerticalAlignment="Top"
+            TextAlignment="Center">
+            <d:TextBlock.Text>RunTime</d:TextBlock.Text>
+        </TextBlock>
         <ListView
-                Margin="370,36,40,39"
+                Margin="396,10,10,10"
                 Background="White"
                 x:Name="ResultsListView"
                 d:ItemsSource="{d:SampleData ItemCount=5}"
                 ItemsSource="{Binding CharacterGridViewModels}"
-                HorizontalAlignment="Stretch"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ScrollViewer.HorizontalScrollBarVisibility="Hidden">
             <ItemsControl.ItemsPanel>
@@ -74,7 +83,7 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ListView>
-        
+
         <Button x:Name="ToggleSolverButton"
                 Content="{Binding SolverState, Converter={StaticResource SolverStateToTextConverter}}"
                 d:Content="PlaceHolder"
@@ -82,8 +91,8 @@
                 d:Background="Green"
                 Background="{Binding SolverState, Converter={StaticResource SolverStateToColorConverter}}"
                 HorizontalAlignment="Left"
-                Margin="128,184,0,0"
+                Margin="226,164,0,0"
                 VerticalAlignment="Top"
-                Width="133"/>
+                Width="132"/>
     </Grid>
 </Window>
