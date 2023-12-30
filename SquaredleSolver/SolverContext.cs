@@ -1,5 +1,7 @@
-﻿using SquaredleSolver.SolverStates;
+﻿using GraphWalking;
+using SquaredleSolver.SolverStates;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace SquaredleSolver;
@@ -16,6 +18,7 @@ public class SolverContext
     public readonly Stopwatch Stopwatch;
     public CancellationTokenSource CancellationTokenSource;
     public Task SolverTask;
+    public FailFastPathGenerator PathGenerator;
 
     public bool AddAnswersOnOwningThread { init; get; }
 
@@ -40,6 +43,7 @@ public class SolverContext
     public SolverContext(PuzzleModel puzzleModel)
     {
         PuzzleModel = puzzleModel;
+        PuzzleModel.PropertyChanged += OnPuzzleModelChanged;
         AnswersFound = new ObservableCollection<AnswerModel>();
         Stopwatch = new Stopwatch();
         CancellationTokenSource = new CancellationTokenSource();
@@ -47,6 +51,16 @@ public class SolverContext
 
         backingFieldCurrentState = SolverStopped.Instance;
         StateChanged += OnStateChanged;
+
+        PathGenerator = new FailFastPathGenerator(puzzleModel.ValidWords, puzzleModel.MinimumWordLength);
+    }
+
+    private void OnPuzzleModelChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(PuzzleModel.ValidWords))
+        {
+            PathGenerator = new FailFastPathGenerator(PuzzleModel.ValidWords, PuzzleModel.MinimumWordLength);
+        }
     }
 
     private void OnStateChanged(object? sender, SolverStateChangedEventArgs e)

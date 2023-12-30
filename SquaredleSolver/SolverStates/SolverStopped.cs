@@ -1,5 +1,4 @@
-﻿using GraphWalking;
-using GraphWalking.Graphs;
+﻿using GraphWalking.Graphs;
 
 namespace SquaredleSolver.SolverStates;
 
@@ -44,7 +43,7 @@ public class SolverStopped : ISolverState
         }
 
         IEnumerable<List<CharacterNode>> allPaths =
-            BruteForcePathGenerator<CharacterNode>.EnumerateAllPaths(puzzleModel.PuzzleAsAdjacencyList);
+            context.PathGenerator.EnumerateAllPaths(puzzleModel.PuzzleAsAdjacencyList);
         HashSet<string> wordsAlreadyFound = new();
         foreach (List<CharacterNode> path in allPaths)
         {
@@ -53,13 +52,8 @@ public class SolverStopped : ISolverState
                 return;
             }
 
-            if (path.Count <= 3)
-            {
-                continue;
-            }
-
             AnswerModel answer = new(path);
-            if (!wordsAlreadyFound.Contains(answer.Word) && puzzleModel.ValidWords.Contains(answer.Word))
+            if (!wordsAlreadyFound.Contains(answer.Word))
             {
                 wordsAlreadyFound.Add(answer.Word);
                 context.AnswersFound.Add(answer);

@@ -64,6 +64,8 @@ public class PuzzleModel : INotifyPropertyChanged
         }
     }
 
+    public int MinimumWordLength => 4;
+
     public HashSet<string> ValidWords { get; private set; } = new();
 
     private void OnPropertyChanged(string propertyName)
@@ -78,7 +80,10 @@ public class PuzzleModel : INotifyPropertyChanged
         string? line = reader.ReadLine();
         while (line is not null)
         {
-            newValidWords.Add(line.ToUpper());
+            if (line.Length >= MinimumWordLength)
+            {
+                newValidWords.Add(line.ToUpper());
+            }
             line = reader.ReadLine();
         }
 
