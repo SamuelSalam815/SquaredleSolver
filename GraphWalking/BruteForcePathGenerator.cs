@@ -6,7 +6,7 @@ namespace GraphWalking;
 ///     Generates paths from <see cref="AdjacencyList{TNodeId}"/>s.
 ///     In a path a node may never be visited more than once.
 /// </summary>
-public static class PathGenerator<TNode> where TNode : IEquatable<TNode>
+public static class BruteForcePathGenerator<TNode> where TNode : IEquatable<TNode>
 {
     private record struct CheckPoint(TNode Node, TNode PreviousNode);
 

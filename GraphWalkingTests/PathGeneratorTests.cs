@@ -18,7 +18,7 @@ public class PathGeneratorTests
             [3] = new() { 4 },
         };
 
-        IEnumerable<List<int>> paths = PathGenerator<int>.EnumerateAllPaths(graph);
+        IEnumerable<List<int>> paths = BruteForcePathGenerator<int>.EnumerateAllPaths(graph);
 
         paths.Should().BeEquivalentTo(new List<List<int>>()
         {

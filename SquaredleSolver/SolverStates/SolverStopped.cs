@@ -44,7 +44,7 @@ public class SolverStopped : ISolverState
         }
 
         IEnumerable<List<CharacterNode>> allPaths =
-            PathGenerator<CharacterNode>.EnumerateAllPaths(puzzleModel.PuzzleAsAdjacencyList);
+            BruteForcePathGenerator<CharacterNode>.EnumerateAllPaths(puzzleModel.PuzzleAsAdjacencyList);
         HashSet<string> wordsAlreadyFound = new();
         foreach (List<CharacterNode> path in allPaths)
         {
