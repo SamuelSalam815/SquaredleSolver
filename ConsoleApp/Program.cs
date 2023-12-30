@@ -1,8 +1,8 @@
 ﻿// see https://github.com/dwyl/english-words for text file containing English words
 
 using GraphWalking;
+using GraphWalking.Graphs;
 using SquaredleSolver;
-using SquaredleSolver.SolverStates;
 using System.Diagnostics;
 
 internal class Program
@@ -10,18 +10,7 @@ internal class Program
 
     private static async Task Main(string[] args)
     {
-        HashSet<string> validWords = new();
-        using (StreamReader reader = new("words_alpha.txt"))
-        {
-            string? line = reader.ReadLine();
-            while (line is not null)
-            {
-                validWords.Add(line.ToLower());
-                line = reader.ReadLine();
-            }
-        }
-
-        Console.WriteLine("Loading words...");
+        Console.WriteLine("Loading puzzle...");
         PuzzleModel puzzleModel = new();
         puzzleModel.LoadValidWords("words_alpha.txt");
         puzzleModel.PuzzleAsText = """
@@ -31,42 +20,39 @@ internal class Program
             IIHU
             """;
 
+        // Fail-Fast
         Console.WriteLine("Running fail fast generator...");
         FailFastPathGenerator pathGenerator = new(puzzleModel.ValidWords, 4);
         HashSet<string> failFastGeneratedWords = new();
-        Stopwatch failFastStopwatch = new();
-        failFastStopwatch.Start();
+        Stopwatch stopWatch = new();
+        stopWatch.Start();
         foreach (var path in pathGenerator.EnumerateAllPaths(puzzleModel.PuzzleAsAdjacencyList))
         {
             failFastGeneratedWords.Add(string.Concat(path.Select(x => x.Character)));
         }
-        failFastStopwatch.Stop();
-        Console.WriteLine("Time elapsed: " + failFastStopwatch.Elapsed);
+        stopWatch.Stop();
+        Console.WriteLine("Time elapsed: " + stopWatch.Elapsed);
 
-        Console.WriteLine("Running model generator...");
-        SolverModel solverModel = new(puzzleModel, false);
-        solverModel.StateChanged += (sender, e) =>
+        // Brute force
+        Console.WriteLine("Running brute force generator...");
+        HashSet<string> bruteForcedWords = new();
+        stopWatch.Restart();
+        foreach (List<CharacterNode> path in BruteForcePathGenerator<CharacterNode>.EnumerateAllPaths(puzzleModel.PuzzleAsAdjacencyList))
         {
-            if (e.CurrentState is not SolverCompleted)
+            string word = string.Concat(path.Select(x => x.Character));
+            if (word.Length > 3 && puzzleModel.ValidWords.Contains(word))
             {
-                return;
+                bruteForcedWords.Add(word);
             }
+        }
+        stopWatch.Stop();
+        Console.WriteLine("Time elapsed: " + stopWatch.Elapsed);
 
-            Console.WriteLine("Time elapsed: " + solverModel.TimeSpentSolving);
-            //Console.WriteLine("Press any key to print generated words . . . ");
-            //Console.ReadKey();
-            //foreach (AnswerModel answer in solverModel.AnswersFound)
-            //{
-            //    Console.WriteLine(answer.Word);
-            //}
-        };
-
-        await solverModel.StartSolvingPuzzle();
-        HashSet<string> modelWords = solverModel.AnswersFound.Select(x => x.Word).ToHashSet();
+        // Cross validation
         Console.WriteLine("Cross-Validating results...");
         int inconsistencyCount = 0;
         Console.WriteLine("Words missing from fail fast: ");
-        foreach (string word in modelWords)
+        foreach (string word in bruteForcedWords)
         {
             if (!failFastGeneratedWords.Contains(word))
             {
@@ -74,17 +60,15 @@ internal class Program
                 Console.WriteLine(word);
             }
         }
-
-        Console.WriteLine("Words missing from model answer: ");
+        Console.WriteLine("Words missing from brute force answers: ");
         foreach (string word in failFastGeneratedWords)
         {
-            if (!modelWords.Contains(word))
+            if (!bruteForcedWords.Contains(word))
             {
                 inconsistencyCount++;
                 Console.WriteLine(word);
             }
         }
-
         Console.WriteLine("Cross-Validation inconsistencies: " + inconsistencyCount);
     }
 }

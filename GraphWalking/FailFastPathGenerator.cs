@@ -64,6 +64,7 @@ public class FailFastPathGenerator
                 out CharacterNode currentNode,
                 out CharacterNode previousNode,
                 out string currentWord);
+
             while (currentPath.Count > 0 && !currentPath.Last().Equals(previousNode))
             {
                 currentPath.RemoveAt(currentPath.Count - 1);
@@ -72,23 +73,25 @@ public class FailFastPathGenerator
             currentPath.Add(currentNode);
             currentWord += currentNode.Character;
 
-            if (viablePrefixes.Contains(currentWord))
-            {
-                List<CharacterNode> adjacentNodes =
-                    adjacencyList.GetValueOrDefault(currentNode, emptyList);
-                foreach (CharacterNode adjacentNode in adjacentNodes)
-                {
-                    if (!currentPath.Contains(adjacentNode))
-                    {
-                        stack.Push(new CheckPoint(adjacentNode, currentNode, currentWord));
-                    }
-                }
-            }
-
             if (currentWord.Length >= minimumWordLength && validWords.Contains(currentWord))
             {
                 yield return new List<CharacterNode>(currentPath);
             }
+
+            if (!viablePrefixes.Contains(currentWord))
+            {
+                continue;
+            }
+
+            List<CharacterNode> adjacentNodes = adjacencyList.GetValueOrDefault(currentNode, emptyList);
+            foreach (CharacterNode adjacentNode in adjacentNodes)
+            {
+                if (!currentPath.Contains(adjacentNode))
+                {
+                    stack.Push(new CheckPoint(adjacentNode, currentNode, currentWord));
+                }
+            }
+
         }
     }
 
