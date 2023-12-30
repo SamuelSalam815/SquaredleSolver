@@ -8,8 +8,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -79,7 +77,6 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         }
     }
 
-    private CancellationTokenSource solverRunTimeCancellationTokenSource;
     private readonly SolverModel solverModel;
     private readonly PuzzleModel puzzleModel;
 
@@ -92,7 +89,6 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         this.solverModel = solverModel;
         ToggleSolverOnOff = new ToggleSolverOnOff(solverModel);
 
-        solverRunTimeCancellationTokenSource = new CancellationTokenSource();
         solverModel.StateChanged += OnSolverStateChanged;
         solverModel.AnswersFound.CollectionChanged +=
             (sender, e) => Application.Current.Dispatcher.Invoke(() => OnAnswersFoundChanged(sender, e));
@@ -104,29 +100,13 @@ internal class MainWindowViewModel : INotifyPropertyChanged
 
         if (e.CurrentState is SolverRunning)
         {
-            solverRunTimeCancellationTokenSource = new CancellationTokenSource();
-            UpdateSolverRunTime(
-                TimeSpan.FromMilliseconds(50),
-                solverRunTimeCancellationTokenSource.Token);
+            SolverRunTime = TimeSpan.Zero;
         }
 
         if (e.PreviousState is SolverRunning)
         {
-            solverRunTimeCancellationTokenSource.Cancel();
             SolverRunTime = solverModel.TimeSpentSolving;
         }
-    }
-
-    private void UpdateSolverRunTime(TimeSpan updateInterval, CancellationToken cancellationToken)
-    {
-        Task.Run(() =>
-        {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                SolverRunTime = solverModel.TimeSpentSolving;
-                Thread.Sleep(updateInterval);
-            }
-        }, CancellationToken.None);
     }
 
     private void OnAnswersFoundChanged(object? sender, NotifyCollectionChangedEventArgs e)

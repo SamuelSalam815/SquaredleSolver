@@ -13,6 +13,11 @@ internal class TimeSpanToTextConverter : IValueConverter
             return DependencyProperty.UnsetValue;
         }
 
+        if (timespan == TimeSpan.Zero)
+        {
+            return "Searching...";
+        }
+
         return "Search Time: " + timespan.ToString("s\\.fff") + "s";
     }
 
