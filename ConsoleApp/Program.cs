@@ -1,7 +1,9 @@
 ﻿// see https://github.com/dwyl/english-words for text file containing English words
 
+using GraphWalking;
 using SquaredleSolver;
 using SquaredleSolver.SolverStates;
+using System.Diagnostics;
 
 internal class Program
 {
@@ -29,7 +31,19 @@ internal class Program
             IIHU
             """;
 
-        Console.WriteLine("Generating words...");
+        Console.WriteLine("Running fail fast generator...");
+        FailFastPathGenerator pathGenerator = new(puzzleModel.ValidWords, 4);
+        HashSet<string> failFastGeneratedWords = new();
+        Stopwatch failFastStopwatch = new();
+        failFastStopwatch.Start();
+        foreach (var path in pathGenerator.EnumerateAllPaths(puzzleModel.PuzzleAsAdjacencyList))
+        {
+            failFastGeneratedWords.Add(string.Concat(path.Select(x => x.Character)));
+        }
+        failFastStopwatch.Stop();
+        Console.WriteLine("Time elapsed: " + failFastStopwatch.Elapsed);
+
+        Console.WriteLine("Running model generator...");
         SolverModel solverModel = new(puzzleModel, false);
         solverModel.StateChanged += (sender, e) =>
         {
@@ -38,16 +52,40 @@ internal class Program
                 return;
             }
 
-            Console.WriteLine("Time taken to generate words: " + solverModel.TimeSpentSolving);
-            Console.WriteLine("Press any key to print generated words . . . ");
-            Console.ReadKey();
-            foreach (AnswerModel answer in solverModel.AnswersFound)
-            {
-                Console.WriteLine(answer.Word);
-            }
+            Console.WriteLine("Time elapsed: " + solverModel.TimeSpentSolving);
+            //Console.WriteLine("Press any key to print generated words . . . ");
+            //Console.ReadKey();
+            //foreach (AnswerModel answer in solverModel.AnswersFound)
+            //{
+            //    Console.WriteLine(answer.Word);
+            //}
         };
 
         await solverModel.StartSolvingPuzzle();
+        HashSet<string> modelWords = solverModel.AnswersFound.Select(x => x.Word).ToHashSet();
+        Console.WriteLine("Cross-Validating results...");
+        int inconsistencyCount = 0;
+        Console.WriteLine("Words missing from fail fast: ");
+        foreach (string word in modelWords)
+        {
+            if (!failFastGeneratedWords.Contains(word))
+            {
+                inconsistencyCount++;
+                Console.WriteLine(word);
+            }
+        }
+
+        Console.WriteLine("Words missing from model answer: ");
+        foreach (string word in failFastGeneratedWords)
+        {
+            if (!modelWords.Contains(word))
+            {
+                inconsistencyCount++;
+                Console.WriteLine(word);
+            }
+        }
+
+        Console.WriteLine("Cross-Validation inconsistencies: " + inconsistencyCount);
     }
 }
 

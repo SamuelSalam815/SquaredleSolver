@@ -32,21 +32,15 @@ public static class BruteForcePathGenerator<TNode> where TNode : IEquatable<TNod
             }
 
             currentPath.Add(currentNode);
-            bool pathAtMaximumLength = true;
             foreach (TNode nextNode in adjacencyList.GetValueOrDefault(currentNode, emptyList))
             {
                 if (!currentPath.Contains(nextNode))
                 {
-                    pathAtMaximumLength = false;
                     stack.Push(new CheckPoint(nextNode, currentNode));
                 }
             }
 
             yield return new List<TNode>(currentPath);
-            if (pathAtMaximumLength)
-            {
-                currentPath.RemoveAt(currentPath.Count - 1);
-            }
         }
     }
 
