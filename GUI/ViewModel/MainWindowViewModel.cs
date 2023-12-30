@@ -117,13 +117,16 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         }
     }
 
-    private async void UpdateSolverRunTime(TimeSpan updateInterval, CancellationToken cancellationToken)
+    private void UpdateSolverRunTime(TimeSpan updateInterval, CancellationToken cancellationToken)
     {
-        while (!cancellationToken.IsCancellationRequested)
+        Task.Run(() =>
         {
-            SolverRunTime = solverModel.TimeSpentSolving;
-            await Task.Delay(updateInterval);
-        }
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                SolverRunTime = solverModel.TimeSpentSolving;
+                Thread.Sleep(updateInterval);
+            }
+        }, CancellationToken.None);
     }
 
     private void OnAnswersFoundChanged(object? sender, NotifyCollectionChangedEventArgs e)
