@@ -1,4 +1,5 @@
-﻿using GUI.ViewModel;
+﻿using GUI.Command;
+using GUI.ViewModel;
 using SquaredleSolver;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,7 +27,11 @@ public partial class MainWindow : Window
             """;
         NodeFilterModel filter = new(puzzle);
         SolverModel solver = new(puzzle, filter);
-        MainWindowViewModel viewModel = new(puzzle, filter, solver);
+        MainWindowViewModel viewModel = new(
+            puzzle,
+            filter,
+            solver,
+            new FocusPuzzleInput(InputField));
         DataContext = viewModel;
 
         viewModel.CharacterGridViewModels.CollectionChanged += (sender, e) => Dispatcher.Invoke(UpdateWrapPanelWidth);
@@ -68,9 +73,21 @@ public partial class MainWindow : Window
             case Key.Down:
             case >= Key.A and <= Key.Z:
                 return;
+            case Key.Escape:
+                ToggleSolverButton.Focus();
+                break;
         }
 
         e.Handled = true;
     }
 
+    private void Window_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        ToggleSolverButton.Focus();
+    }
+
+    private void InputField_LostFocus(object sender, RoutedEventArgs e)
+    {
+        InputField.Visibility = Visibility.Collapsed;
+    }
 }

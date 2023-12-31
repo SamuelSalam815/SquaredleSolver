@@ -23,6 +23,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
     private readonly SolverModel solverModel;
     private readonly PuzzleModel puzzleModel;
 
+    public ICommand FocusPuzzleInput { get; }
     public ICommand ToggleSolverOnOff { get; }
     public ObservableCollection<CharacterGridViewModel> CharacterGridViewModels { get; }
     public NodeFilterGridViewModel NodeFilterGridViewModel { get; }
@@ -30,11 +31,13 @@ internal class MainWindowViewModel : INotifyPropertyChanged
     public MainWindowViewModel(
         PuzzleModel puzzleModel,
         NodeFilterModel filterModel,
-        SolverModel solverModel)
+        SolverModel solverModel,
+        ICommand focusPuzzleInput)
     {
         this.solverModel = solverModel;
         this.puzzleModel = puzzleModel;
 
+        FocusPuzzleInput = focusPuzzleInput;
         ToggleSolverOnOff = new ToggleSolverOnOff(solverModel);
         CharacterGridViewModels = new ObservableCollection<CharacterGridViewModel>();
         NodeFilterGridViewModel = new NodeFilterGridViewModel(filterModel, puzzleModel);
