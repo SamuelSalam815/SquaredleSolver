@@ -38,9 +38,8 @@
                     BorderThickness="0"/>
             </Viewbox>
         </Border>
-
         <TextBlock
-            Margin="226,-50,0,0"
+            Margin="226,-150,0,0"
             Text="{Binding SolverRunTime, Converter={StaticResource TimeSpanToTextConverter}}"
             HorizontalAlignment="Left"
             Width="132"
@@ -49,8 +48,42 @@
             TextAlignment="Center">
             <d:TextBlock.Text>RunTime</d:TextBlock.Text>
         </TextBlock>
+        <Button x:Name="ToggleSolverButton"
+            d:Content="PlaceHolder"
+            d:Background="#2ecc71"
+            Command="{Binding ToggleSolverOnOff}"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Margin="226,-100,0,0"
+            Width="132"
+            Height="20">
+            <Button.Resources>
+                <Style TargetType="Button">
+                    <Style.Triggers>
+                        <DataTrigger
+                            Binding="{Binding SolverState, Converter={StaticResource SolverStateToTextConverter}}"
+                            Value="SolverStopped">
+                            <Setter Property="Background" Value="#2ecc71"/>
+                            <Setter Property="Content" Value="Explore Puzzle"/>
+                        </DataTrigger>
+                        <DataTrigger
+                            Binding="{Binding SolverState, Converter={StaticResource SolverStateToTextConverter}}"
+                            Value="SolverRunning">
+                            <Setter Property="Background" Value="#e74c3c"/>
+                            <Setter Property="Content" Value="Stop Exploring"/>
+                        </DataTrigger>
+                        <DataTrigger
+                            Binding="{Binding SolverState, Converter={StaticResource SolverStateToTextConverter}}"
+                            Value="SolverCompleted">
+                            <Setter Property="Background" Value="#f1c40f"/>
+                            <Setter Property="Content" Value="Puzzle Explored"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Resources>
+        </Button>
         <TextBlock
-            Margin="226,50,0,0"
+            Margin="226,-50,0,0"
             Text="{Binding NumberOfAnswersFound, Converter={StaticResource NumberOfAnswersFoundToTextConverter}}"
             HorizontalAlignment="Left"
             Width="132"
@@ -59,6 +92,15 @@
             TextAlignment="Center">
             <d:TextBlock.Text>Answers Found: 5</d:TextBlock.Text>
         </TextBlock>
+        <view:NodeFilterGrid
+            Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
+            Height="150"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Margin="217,125,0,0"
+            d:Background="Gray"
+            DataContext="{Binding NodeFilterGridViewModel}"
+            />
         <ListView
                 Margin="396,10,10,10"
                 Background="White"
@@ -88,39 +130,6 @@
             </ItemsControl.ItemTemplate>
         </ListView>
 
-        <Button x:Name="ToggleSolverButton"
-            d:Content="PlaceHolder"
-            d:Background="#2ecc71"
-            Command="{Binding ToggleSolverOnOff}"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            Margin="226,0,0,0"
-            Width="132"
-            Height="20">
-            <Button.Resources>
-                <Style TargetType="Button">
-                    <Style.Triggers>
-                        <DataTrigger
-                            Binding="{Binding SolverState, Converter={StaticResource SolverStateToTextConverter}}"
-                            Value="SolverStopped">
-                            <Setter Property="Background" Value="#2ecc71"/>
-                            <Setter Property="Content" Value="Explore Puzzle"/>
-                        </DataTrigger>
-                        <DataTrigger
-                            Binding="{Binding SolverState, Converter={StaticResource SolverStateToTextConverter}}"
-                            Value="SolverRunning">
-                            <Setter Property="Background" Value="#e74c3c"/>
-                            <Setter Property="Content" Value="Stop Exploring"/>
-                        </DataTrigger>
-                        <DataTrigger
-                            Binding="{Binding SolverState, Converter={StaticResource SolverStateToTextConverter}}"
-                            Value="SolverCompleted">
-                            <Setter Property="Background" Value="#f1c40f"/>
-                            <Setter Property="Content" Value="Puzzle Explored"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Resources>
-        </Button>
+
     </Grid>
 </Window>

@@ -14,13 +14,12 @@ public class SolverContext
     public EventHandler<SolverStateChangedEventArgs>? StateChanged;
 
     public readonly PuzzleModel PuzzleModel;
+    public readonly NodeFilterModel FilterModel;
     public readonly ObservableCollection<AnswerModel> AnswersFound;
     public readonly Stopwatch Stopwatch;
     public CancellationTokenSource CancellationTokenSource;
     public Task SolverTask;
-    public FailFastPathGenerator PathGenerator;
-
-    public bool AddAnswersOnOwningThread { init; get; }
+    public FailFastPathGenerator PathGenerator { get; private set; }
 
     private ISolverState backingFieldCurrentState;
     public ISolverState CurrentState
@@ -30,6 +29,17 @@ public class SolverContext
         {
             ISolverState previousState = backingFieldCurrentState;
             backingFieldCurrentState = value;
+
+            if (previousState is SolverRunning)
+            {
+                Stopwatch.Stop();
+            }
+
+            if (CurrentState is SolverRunning)
+            {
+                Stopwatch.Restart();
+            }
+;
             StateChanged?.Invoke(
                 this,
                 new SolverStateChangedEventArgs()
@@ -40,39 +50,42 @@ public class SolverContext
         }
     }
 
-    public SolverContext(PuzzleModel puzzleModel)
+    public SolverContext(PuzzleModel puzzleModel, NodeFilterModel filterModel)
     {
         PuzzleModel = puzzleModel;
-        PuzzleModel.PropertyChanged += OnPuzzleModelChanged;
+        FilterModel = filterModel;
         AnswersFound = new ObservableCollection<AnswerModel>();
         Stopwatch = new Stopwatch();
         CancellationTokenSource = new CancellationTokenSource();
         SolverTask = Task.CompletedTask;
-
+        PathGenerator = new FailFastPathGenerator(
+            puzzleModel.ValidWords,
+            puzzleModel.MinimumWordLength,
+            filterModel.ExcludedNodes);
         backingFieldCurrentState = SolverStopped.Instance;
-        StateChanged += OnStateChanged;
 
-        PathGenerator = new FailFastPathGenerator(puzzleModel.ValidWords, puzzleModel.MinimumWordLength);
+        PuzzleModel.PropertyChanged += OnPuzzleChanged;
+        FilterModel.PropertyChanged += OnNodeFilterChanged;
     }
 
-    private void OnPuzzleModelChanged(object? sender, PropertyChangedEventArgs e)
+    private void OnNodeFilterChanged(object? sender, EventArgs e)
+    {
+        UpdatePathGenerator();
+    }
+
+    private void OnPuzzleChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(PuzzleModel.ValidWords))
         {
-            PathGenerator = new FailFastPathGenerator(PuzzleModel.ValidWords, PuzzleModel.MinimumWordLength);
+            UpdatePathGenerator();
         }
     }
 
-    private void OnStateChanged(object? sender, SolverStateChangedEventArgs e)
+    private void UpdatePathGenerator()
     {
-        if (e.PreviousState is SolverRunning)
-        {
-            Stopwatch.Stop();
-        }
-
-        if (e.CurrentState is SolverRunning)
-        {
-            Stopwatch.Restart();
-        }
+        PathGenerator = new FailFastPathGenerator(
+            PuzzleModel.ValidWords,
+            PuzzleModel.MinimumWordLength,
+            FilterModel.ExcludedNodes);
     }
 }

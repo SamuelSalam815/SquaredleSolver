@@ -11,7 +11,9 @@ public class SolverStopped : ISolverState
 
     private SolverStopped() { }
 
-    public void OnPuzzleModelChanged(SolverContext context) { }
+    public void OnPuzzleChanged(SolverContext context) { }
+
+    public void OnNodeFilterChanged(SolverContext context) { }
 
     public void StartSolution(SolverContext context)
     {
@@ -28,10 +30,7 @@ public class SolverStopped : ISolverState
 
     public void StopSolution(SolverContext context) { }
 
-    public void OnSolverCompleted(SolverContext context)
-    {
-        throw new InvalidOperationException();
-    }
+    public void OnSolverCompleted(SolverContext context) => throw new InvalidOperationException();
 
     private static void SolvePuzzle(SolverContext context)
     {

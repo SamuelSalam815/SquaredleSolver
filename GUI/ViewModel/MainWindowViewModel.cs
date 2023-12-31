@@ -18,9 +18,40 @@ namespace GUI.ViewModel;
 /// </summary>
 internal class MainWindowViewModel : INotifyPropertyChanged
 {
-
     public event PropertyChangedEventHandler? PropertyChanged;
+
+    private readonly SolverModel solverModel;
+    private readonly PuzzleModel puzzleModel;
+
     public ICommand ToggleSolverOnOff { get; }
+    public ObservableCollection<CharacterGridViewModel> CharacterGridViewModels { get; }
+    public NodeFilterGridViewModel NodeFilterGridViewModel { get; }
+
+    public MainWindowViewModel(
+        PuzzleModel puzzleModel,
+        NodeFilterModel filterModel,
+        SolverModel solverModel)
+    {
+        this.solverModel = solverModel;
+        this.puzzleModel = puzzleModel;
+
+        ToggleSolverOnOff = new ToggleSolverOnOff(solverModel);
+        CharacterGridViewModels = new ObservableCollection<CharacterGridViewModel>();
+        NodeFilterGridViewModel = new NodeFilterGridViewModel(filterModel, puzzleModel);
+
+        puzzleModel.PropertyChanged += OnPuzzleModelChanged;
+        solverModel.StateChanged += OnSolverStateChanged;
+        solverModel.AnswersFound.CollectionChanged +=
+            (sender, e) => Application.Current.Dispatcher.Invoke(() => OnAnswersFoundChanged(sender, e));
+    }
+
+    public uint NumberOfRowsInPuzzle => puzzleModel.NumberOfRows;
+
+    public uint NumberOfColumnsInPuzzle => puzzleModel.NumberOfColumns;
+
+    public ISolverState SolverState => solverModel.CurrentState;
+
+    private List<CharacterNode> PuzzleAsCharacterNodes => puzzleModel.PuzzleAsAdjacencyList.GetAllNodes();
 
     public string PuzzleAsText
     {
@@ -32,7 +63,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         }
     }
 
-    private int _numberOfAnswersFound;
+    private int _numberOfAnswersFound = 0;
     public int NumberOfAnswersFound
     {
         get => _numberOfAnswersFound;
@@ -42,26 +73,14 @@ internal class MainWindowViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(NumberOfAnswersFound));
         }
     }
-    public uint NumberOfRowsInPuzzle => puzzleModel.NumberOfRows;
-    public uint NumberOfColumnsInPuzzle => puzzleModel.NumberOfColumns;
 
-
-    public ISolverState SolverState => solverModel.CurrentState;
-
-    private List<CharacterNode> PuzzleAsCharacterNodes
-    {
-        get { return puzzleModel.PuzzleAsAdjacencyList.GetAllNodes(); }
-    }
-
-    public ObservableCollection<CharacterGridViewModel> CharacterGridViewModels { get; }
-
-    private double backingWrapPanelWidth;
+    private double _wrapPanelWidth = 0;
     public double WrapPanelWidth
     {
-        get { return backingWrapPanelWidth; }
+        get { return _wrapPanelWidth; }
         set
         {
-            backingWrapPanelWidth = value;
+            _wrapPanelWidth = value;
             OnPropertyChanged(nameof(WrapPanelWidth));
         }
     }
@@ -75,23 +94,6 @@ internal class MainWindowViewModel : INotifyPropertyChanged
             _solverRunTime = value;
             OnPropertyChanged(nameof(SolverRunTime));
         }
-    }
-
-    private readonly SolverModel solverModel;
-    private readonly PuzzleModel puzzleModel;
-
-    public MainWindowViewModel(PuzzleModel puzzleModel, SolverModel solverModel)
-    {
-        CharacterGridViewModels = new ObservableCollection<CharacterGridViewModel>();
-        this.puzzleModel = puzzleModel;
-        puzzleModel.PropertyChanged += OnPuzzleModelChanged;
-
-        this.solverModel = solverModel;
-        ToggleSolverOnOff = new ToggleSolverOnOff(solverModel);
-
-        solverModel.StateChanged += OnSolverStateChanged;
-        solverModel.AnswersFound.CollectionChanged +=
-            (sender, e) => Application.Current.Dispatcher.Invoke(() => OnAnswersFoundChanged(sender, e));
     }
 
     private void OnSolverStateChanged(object? sender, SolverStateChangedEventArgs e)

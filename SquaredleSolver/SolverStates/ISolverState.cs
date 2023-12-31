@@ -14,7 +14,13 @@ public interface ISolverState
     ///     Triggers state-specific behaviour for when the puzzle being solved changes.
     /// </summary>
     /// <param name="context">The context for the solver.</param>
-    public void OnPuzzleModelChanged(SolverContext context);
+    public void OnPuzzleChanged(SolverContext context);
+
+    /// <summary>
+    ///     Triggers state-specific behaviour for when the filter on allows answers changes.
+    /// </summary>
+    /// <param name="context"></param>
+    public void OnNodeFilterChanged(SolverContext context);
 
     /// <summary>
     ///     Triggers state-specific behaviour for when the puzzle being solved is completed.

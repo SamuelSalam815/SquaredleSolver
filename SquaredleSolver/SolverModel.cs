@@ -17,20 +17,23 @@ public class SolverModel
 
     public TimeSpan TimeSpentSolving => context.Stopwatch.Elapsed;
 
-    public SolverModel(PuzzleModel puzzleModel, bool addAnswersOnCurrentThread = true)
+    public SolverModel(PuzzleModel puzzleModel, NodeFilterModel filterModel)
     {
-        context = new SolverContext(puzzleModel)
-        {
-            AddAnswersOnOwningThread = addAnswersOnCurrentThread
-        };
+        context = new SolverContext(puzzleModel, filterModel);
         context.StateChanged += (sender, e) => StateChanged?.Invoke(this, e);
 
         puzzleModel.PropertyChanged += OnPuzzleModelChanged;
+        filterModel.PropertyChanged += OnFilterChanged;
+    }
+
+    private void OnFilterChanged(object? sender, EventArgs e)
+    {
+        CurrentState.OnNodeFilterChanged(context);
     }
 
     private void OnPuzzleModelChanged(object? sender, PropertyChangedEventArgs args)
     {
-        CurrentState.OnPuzzleModelChanged(context);
+        CurrentState.OnPuzzleChanged(context);
     }
 
     public Task StartSolvingPuzzle()

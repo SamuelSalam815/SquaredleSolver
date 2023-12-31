@@ -1,9 +1,9 @@
-﻿using SquaredleSolver;
+﻿using GUI.ViewModel;
+using SquaredleSolver;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using GUI.ViewModel;
 
 namespace GUI.View;
 
@@ -24,7 +24,9 @@ public partial class MainWindow : Window
             GNGT
             IIHU
             """;
-        MainWindowViewModel viewModel = new(puzzle, new SolverModel(puzzle));
+        NodeFilterModel filter = new(puzzle);
+        SolverModel solver = new(puzzle, filter);
+        MainWindowViewModel viewModel = new(puzzle, filter, solver);
         DataContext = viewModel;
 
         viewModel.CharacterGridViewModels.CollectionChanged += (sender, e) => Dispatcher.Invoke(UpdateWrapPanelWidth);
