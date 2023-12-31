@@ -1,1 +1,3 @@
-- ui element that allows filtering out of particular characters from the puzzle
+- when puzzle is not being edited make filter control replace it
+- improve the styling of the filter control
+- style answers to show nodes that have been filtered out
