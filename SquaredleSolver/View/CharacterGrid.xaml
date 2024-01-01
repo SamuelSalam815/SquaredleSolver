@@ -6,13 +6,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="100" 
              d:DesignWidth="100">
-    <Border
-        x:Name="border"
-        BorderThickness="1"
-        BorderBrush="Black"
-        CornerRadius="3">
+    <Viewbox>
         <Grid x:Name="grid">
-        <!-- The intended data context for each element in this grid is CharacterNodeViewModel -->
+            <!-- The intended data context for each element in this grid is CharacterNodeViewModel -->
             <Grid.Resources>
                 <Style TargetType="TextBlock">
                     <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -25,12 +21,13 @@
                     </Style.Triggers>
                 </Style>
                 <Style TargetType="Border">
-                    <Setter Property="Margin" Value="2"/>
-                    <Setter Property="CornerRadius" Value="5"/>
-                    <Setter Property="Padding" Value="1"/>
-                            <Setter Property="BorderBrush" Value="#8d8d8d"/>
-                            <Setter Property="BorderThickness" Value="1"/>
-                            <Setter Property="Background" Value="#e0e0e0"/>
+                    <Setter Property="Grid.Row" Value="{Binding Row}"/>
+                    <Setter Property="Grid.Column" Value="{Binding Column}"/>
+                    <Setter Property="CornerRadius" Value="2"/>
+                    <Setter Property="BorderBrush" Value="#808080"/>
+                    <Setter Property="Background" Value="#e0e0e0"/>
+                    <Setter Property="BorderThickness" Value="0.5"/>
+                    <Setter Property="Margin" Value="1"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsExcluded}" Value="True">
                             <Setter Property="Background" Value="#f3f3f3"/>
@@ -42,11 +39,11 @@
                             <Setter Property="Effect">
                                 <Setter.Value>
                                     <DropShadowEffect
-                                        Color="#dc9797"
-                                        BlurRadius="8"
-                                        ShadowDepth="3"
-                                        Opacity="1"
-                                        Direction="225" />
+                                    Color="#dc9797"
+                                    BlurRadius="8"
+                                    ShadowDepth="3"
+                                    Opacity="1"
+                                    Direction="225" />
                                 </Setter.Value>
                             </Setter>
                         </DataTrigger>
@@ -54,8 +51,8 @@
                 </Style>
             </Grid.Resources>
             <Image Panel.ZIndex="1"
-                   x:Name="HighlightedPathImage"
-                   Stretch="UniformToFill">
+               x:Name="HighlightedPathImage"
+               Stretch="UniformToFill">
                 <Image.Source>
                     <DrawingImage>
                         <DrawingImage.Drawing>
@@ -92,6 +89,6 @@
             <d:Border Width="20" Height="20">
                 <d:TextBlock Text="A"/>
             </d:Border>
-        </Grid>
-    </Border>
+        </Grid>    
+    </Viewbox>
 </UserControl>

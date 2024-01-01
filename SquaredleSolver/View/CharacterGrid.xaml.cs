@@ -58,6 +58,7 @@ public partial class CharacterGrid : UserControl
         }
 
         grid.UpdateLayout();
+
         UpdatePathGeometry();
     }
 

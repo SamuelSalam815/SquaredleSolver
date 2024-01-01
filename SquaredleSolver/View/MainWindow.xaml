@@ -66,11 +66,9 @@
         </Border>
         <Border
             Width="160" Height="160" Margin="10,0,0,0"
-            Padding="1"
             VerticalAlignment="Center"
             HorizontalAlignment="Left">
-            <Viewbox>
-                <view:FilterGrid
+            <view:FilterGrid
                     d:Background="Gray"
                     x:Name="VisualPuzzleFilter"
                     DataContext="{Binding NodeFilterGridViewModel}">
@@ -87,7 +85,6 @@
                         </Style>
                     </view:FilterGrid.Resources>
                 </view:FilterGrid>
-            </Viewbox>
         </Border>
 
         <Button
@@ -184,11 +181,11 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <view:CharacterGrid
-                        Grid.Row="0"
-                        Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
-                        Height="150"
-                        HorizontalAlignment="Center"/>
+                    <Border
+                        Width="150"
+                        Height="150">
+                        <view:CharacterGrid/>
+                    </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ListView>

@@ -9,9 +9,7 @@
              d:DesignWidth="800"
              d:DataContext="{d:DesignInstance Type=vm:FilterNodeViewModel}">
     <Viewbox>
-        <Grid
-            x:Name="ButtonGrid"
-            Width="{Binding RelativeSource={RelativeSource Mode=Self}, Path=ActualHeight}">
+        <Grid x:Name="ButtonGrid">
             <Grid.Resources>
             <!-- The data context for elements in this grid is inteded to be FilterNodeViewModel -->
                 <Style TargetType="TextBlock">
@@ -26,6 +24,7 @@
                     </Style.Triggers>
                 </Style>
                 <Style TargetType="Border">
+                    <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=ActualHeight}"/>
                     <Setter Property="Grid.Row" Value="{Binding Row}"/>
                     <Setter Property="Grid.Column" Value="{Binding Column}"/>
                     <Setter Property="CornerRadius" Value="2"/>
