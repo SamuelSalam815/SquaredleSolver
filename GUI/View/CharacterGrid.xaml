@@ -3,43 +3,41 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:valueconverters="clr-namespace:GUI.ValueConverters"
              mc:Ignorable="d" 
              d:DesignHeight="100" 
              d:DesignWidth="100">
-    <UserControl.Resources>
-        <valueconverters:IsCharacterTileInAnswerConverter x:Key="IsCharacterTileInAnswerConverter"/>
-    </UserControl.Resources>
     <Border
         x:Name="border"
         BorderThickness="1"
         BorderBrush="Black"
         CornerRadius="3">
         <Grid x:Name="grid">
+        <!-- The intended data context for each element in this grid is CharacterNodeViewModel -->
             <Grid.Resources>
                 <Style TargetType="TextBlock">
                     <Setter Property="HorizontalAlignment" Value="Center"/>
                     <Setter Property="VerticalAlignment" Value="Center"/>
                     <Setter Property="FontWeight" Value="Bold"/>
-                    <Setter Property="FontFamily" Value="Courier New"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsExcluded}" Value="True">
+                            <Setter Property="Foreground" Value="#9c9c9c"/>
+                        </DataTrigger>
+                    </Style.Triggers>
                 </Style>
                 <Style TargetType="Border">
                     <Setter Property="Margin" Value="2"/>
                     <Setter Property="CornerRadius" Value="5"/>
                     <Setter Property="Padding" Value="1"/>
-                    <Style.Triggers>
-                        <DataTrigger
-                            Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Converter={StaticResource IsCharacterTileInAnswerConverter}}"
-                            Value="False">
                             <Setter Property="BorderBrush" Value="#8d8d8d"/>
                             <Setter Property="BorderThickness" Value="1"/>
                             <Setter Property="Background" Value="#e0e0e0"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsExcluded}" Value="True">
+                            <Setter Property="Background" Value="#f3f3f3"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
                         </DataTrigger>
-                        <DataTrigger
-                            Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Converter={StaticResource IsCharacterTileInAnswerConverter}}"
-                            Value="True">
+                        <DataTrigger Binding="{Binding IsOnHighlightedPath}" Value="True">
                             <Setter Property="BorderBrush" Value="#808080"/>
-                            <Setter Property="BorderThickness" Value="1"/>
                             <Setter Property="Background" Value="White"/>
                             <Setter Property="Effect">
                                 <Setter.Value>

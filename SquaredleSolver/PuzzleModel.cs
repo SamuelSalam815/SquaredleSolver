@@ -10,13 +10,13 @@ public class PuzzleModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    private string puzzleAsTextBackingField = string.Empty;
+    private string _puzzleAsText = string.Empty;
     public string PuzzleAsText
     {
-        get { return puzzleAsTextBackingField; }
+        get { return _puzzleAsText; }
         set
         {
-            puzzleAsTextBackingField = value;
+            _puzzleAsText = value;
             OnPropertyChanged(nameof(PuzzleAsText));
             PuzzleAsAdjacencyList = CharacterGraphBuilder.FromLetterGrid(PuzzleAsText);
 
@@ -31,40 +31,52 @@ public class PuzzleModel : INotifyPropertyChanged
         }
     }
 
-    private uint numberOfRowsBackingField;
+    private uint _numberOfRows;
     public uint NumberOfRows
     {
-        get { return numberOfRowsBackingField; }
+        get { return _numberOfRows; }
         private set
         {
-            numberOfRowsBackingField = value;
+            _numberOfRows = value;
             OnPropertyChanged(nameof(NumberOfRows));
         }
     }
 
-    private uint numberOfColumnsBackingField;
+    private uint _numberOfColumns;
     public uint NumberOfColumns
     {
-        get { return numberOfColumnsBackingField; }
+        get { return _numberOfColumns; }
         private set
         {
-            numberOfColumnsBackingField = value;
+            _numberOfColumns = value;
             OnPropertyChanged(nameof(NumberOfColumns));
         }
     }
 
-    private AdjacencyList<CharacterNode> puzzleAsAdjacencyListBackingField = new();
+    private AdjacencyList<CharacterNode> _puzzleAsAdjacencyList = new();
     public AdjacencyList<CharacterNode> PuzzleAsAdjacencyList
     {
-        get { return puzzleAsAdjacencyListBackingField; }
+        get { return _puzzleAsAdjacencyList; }
         private set
         {
-            puzzleAsAdjacencyListBackingField = value;
+            _puzzleAsAdjacencyList = value;
             OnPropertyChanged(nameof(PuzzleAsAdjacencyList));
+            PuzzleAsNodes = _puzzleAsAdjacencyList.GetAllNodes();
         }
     }
 
-    public int MinimumWordLength => 4;
+    private List<CharacterNode> _puzzleAsNodes = new();
+    public List<CharacterNode> PuzzleAsNodes
+    {
+        get { return _puzzleAsNodes; }
+        private set
+        {
+            _puzzleAsNodes = value;
+            OnPropertyChanged(nameof(PuzzleAsNodes));
+        }
+    }
+
+    public static int MinimumWordLength => 4;
 
     public HashSet<string> ValidWords { get; private set; } = new();
 

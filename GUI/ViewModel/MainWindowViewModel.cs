@@ -1,5 +1,4 @@
-﻿using GraphWalking.Graphs;
-using GUI.Command;
+﻿using GUI.Command;
 using SquaredleSolver;
 using SquaredleSolver.SolverStates;
 using System;
@@ -22,25 +21,27 @@ internal class MainWindowViewModel : INotifyPropertyChanged
 
     private readonly SolverModel solverModel;
     private readonly PuzzleModel puzzleModel;
+    private readonly FilterModel filterModel;
 
     public ICommand FocusPuzzleInput { get; }
     public ICommand ToggleSolverOnOff { get; }
     public ObservableCollection<CharacterGridViewModel> CharacterGridViewModels { get; }
-    public NodeFilterGridViewModel NodeFilterGridViewModel { get; }
+    public FilterGridViewModel NodeFilterGridViewModel { get; }
 
     public MainWindowViewModel(
         PuzzleModel puzzleModel,
-        NodeFilterModel filterModel,
+        FilterModel filterModel,
         SolverModel solverModel,
         ICommand focusPuzzleInput)
     {
         this.solverModel = solverModel;
         this.puzzleModel = puzzleModel;
+        this.filterModel = filterModel;
 
         FocusPuzzleInput = focusPuzzleInput;
         ToggleSolverOnOff = new ToggleSolverOnOff(solverModel);
         CharacterGridViewModels = new ObservableCollection<CharacterGridViewModel>();
-        NodeFilterGridViewModel = new NodeFilterGridViewModel(filterModel, puzzleModel);
+        NodeFilterGridViewModel = new FilterGridViewModel(filterModel, puzzleModel);
 
         puzzleModel.PropertyChanged += OnPuzzleModelChanged;
         solverModel.StateChanged += OnSolverStateChanged;
@@ -53,8 +54,6 @@ internal class MainWindowViewModel : INotifyPropertyChanged
     public uint NumberOfColumnsInPuzzle => puzzleModel.NumberOfColumns;
 
     public ISolverState SolverState => solverModel.CurrentState;
-
-    private List<CharacterNode> PuzzleAsCharacterNodes => puzzleModel.PuzzleAsAdjacencyList.GetAllNodes();
 
     public string PuzzleAsText
     {
@@ -147,7 +146,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
 
         foreach (AnswerModel answer in answersToAdd)
         {
-            CharacterGridViewModels.Add(new CharacterGridViewModel(puzzleModel, answer));
+            CharacterGridViewModels.Add(new CharacterGridViewModel(answer, puzzleModel, filterModel));
         }
     }
 
@@ -163,7 +162,6 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         switch (args.PropertyName)
         {
             case nameof(puzzleModel.PuzzleAsAdjacencyList):
-                OnPropertyChanged(nameof(PuzzleAsCharacterNodes));
                 break;
             case nameof(puzzleModel.NumberOfRows):
                 OnPropertyChanged(nameof(NumberOfRowsInPuzzle));

@@ -3,24 +3,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:GUI.View"
              xmlns:vm="clr-namespace:GUI.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="450"
              d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance Type=vm:NodeViewModel}">
+             d:DataContext="{d:DesignInstance Type=vm:FilterNodeViewModel}">
     <Viewbox>
         <Grid
             x:Name="ButtonGrid"
             Width="{Binding RelativeSource={RelativeSource Mode=Self}, Path=ActualHeight}">
             <Grid.Resources>
-            <!-- The data context for buttons in this grid is inteded to be NodeViewModel -->
+            <!-- The data context for elements in this grid is inteded to be FilterNodeViewModel -->
                 <Style TargetType="TextBlock">
                     <Setter Property="HorizontalAlignment" Value="Center"/>
                     <Setter Property="VerticalAlignment" Value="Center"/>
                     <Setter Property="Text" Value="{Binding Character}"/>
                     <Setter Property="FontWeight" Value="Bold"/>
-                    <Setter Property="FontFamily" Value="Courier New"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsIncluded}" Value="False">
                             <Setter Property="Foreground" Value="#9c9c9c"/>

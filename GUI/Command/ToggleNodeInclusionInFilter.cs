@@ -6,14 +6,14 @@ using System.Windows.Input;
 namespace GUI.Command;
 internal class ToggleNodeInclusionInFilter : ICommand
 {
-    private readonly NodeViewModel node;
-    private readonly NodeFilterModel filter;
+    private readonly FilterNodeViewModel node;
+    private readonly FilterModel filter;
 
     public event EventHandler? CanExecuteChanged;
 
     public ToggleNodeInclusionInFilter(
-        NodeViewModel node,
-        NodeFilterModel filter)
+        FilterNodeViewModel node,
+        FilterModel filter)
     {
         this.node = node;
         this.filter = filter;

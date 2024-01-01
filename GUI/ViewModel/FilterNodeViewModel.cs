@@ -9,11 +9,9 @@ namespace GUI.ViewModel;
 /// <summary>
 ///     Represents whether an individual node is included in the search for answers.
 /// </summary>
-internal class NodeViewModel : INotifyPropertyChanged
+internal class FilterNodeViewModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
-
-    private readonly NodeFilterModel filter;
 
     public CharacterNode CharacterNode { get; }
     public ICommand ToggleNodeInclusion { get; }
@@ -32,11 +30,10 @@ internal class NodeViewModel : INotifyPropertyChanged
         }
     }
 
-    public NodeViewModel(
+    public FilterNodeViewModel(
         CharacterNode node,
-        NodeFilterModel filter)
+        FilterModel filter)
     {
-        this.filter = filter;
         CharacterNode = node;
         ToggleNodeInclusion = new ToggleNodeInclusionInFilter(this, filter);
     }

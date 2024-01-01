@@ -12,7 +12,7 @@ namespace GUI.View;
 /// </summary>
 public partial class NodeFilterGrid : UserControl
 {
-    NodeFilterGridViewModel? viewModel = null;
+    FilterGridViewModel? viewModel = null;
     public NodeFilterGrid()
     {
         InitializeComponent();
@@ -21,7 +21,7 @@ public partial class NodeFilterGrid : UserControl
 
     private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
-        if (e.NewValue is NodeFilterGridViewModel newViewModel)
+        if (e.NewValue is FilterGridViewModel newViewModel)
         {
             if (viewModel is not null)
             {
@@ -63,9 +63,9 @@ public partial class NodeFilterGrid : UserControl
             ButtonGrid.ColumnDefinitions.Add(rowDefinition);
         }
 
-        foreach (CharacterNode node in puzzle.PuzzleAsAdjacencyList.GetAllNodes())
+        foreach (CharacterNode node in puzzle.PuzzleAsNodes)
         {
-            NodeViewModel nodeViewModel = new(node, viewModel.NodeFilterModel);
+            FilterNodeViewModel nodeViewModel = new(node, viewModel.NodeFilterModel);
             Border border = new()
             {
                 DataContext = nodeViewModel,

@@ -17,7 +17,7 @@ public class SolverModel
 
     public TimeSpan TimeSpentSolving => context.Stopwatch.Elapsed;
 
-    public SolverModel(PuzzleModel puzzleModel, NodeFilterModel filterModel)
+    public SolverModel(PuzzleModel puzzleModel, FilterModel filterModel)
     {
         context = new SolverContext(puzzleModel, filterModel);
         context.StateChanged += (sender, e) => StateChanged?.Invoke(this, e);

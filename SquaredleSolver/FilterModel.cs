@@ -4,14 +4,14 @@ using System.ComponentModel;
 
 namespace SquaredleSolver;
 
-public class NodeFilterModel : INotifyPropertyChanged
+public class FilterModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
 
     private readonly List<CharacterNode> excludedNodes;
     public readonly ReadOnlyCollection<CharacterNode> ExcludedNodes;
 
-    public NodeFilterModel(PuzzleModel puzzleModel)
+    public FilterModel(PuzzleModel puzzleModel)
     {
         excludedNodes = new List<CharacterNode>();
         ExcludedNodes = new ReadOnlyCollection<CharacterNode>(excludedNodes);

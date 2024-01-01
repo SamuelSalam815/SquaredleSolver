@@ -14,7 +14,7 @@ public class SolverContext
     public EventHandler<SolverStateChangedEventArgs>? StateChanged;
 
     public readonly PuzzleModel PuzzleModel;
-    public readonly NodeFilterModel FilterModel;
+    public readonly FilterModel FilterModel;
     public readonly ObservableCollection<AnswerModel> AnswersFound;
     public readonly Stopwatch Stopwatch;
     public CancellationTokenSource CancellationTokenSource;
@@ -50,7 +50,7 @@ public class SolverContext
         }
     }
 
-    public SolverContext(PuzzleModel puzzleModel, NodeFilterModel filterModel)
+    public SolverContext(PuzzleModel puzzleModel, FilterModel filterModel)
     {
         PuzzleModel = puzzleModel;
         FilterModel = filterModel;
@@ -60,7 +60,7 @@ public class SolverContext
         SolverTask = Task.CompletedTask;
         PathGenerator = new FailFastPathGenerator(
             puzzleModel.ValidWords,
-            puzzleModel.MinimumWordLength,
+            PuzzleModel.MinimumWordLength,
             filterModel.ExcludedNodes);
         backingFieldCurrentState = SolverStopped.Instance;
 

@@ -25,7 +25,7 @@ public partial class MainWindow : Window
             GNGT
             IIHU
             """;
-        NodeFilterModel filter = new(puzzle);
+        FilterModel filter = new(puzzle);
         SolverModel solver = new(puzzle, filter);
         MainWindowViewModel viewModel = new(
             puzzle,

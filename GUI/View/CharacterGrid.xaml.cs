@@ -1,9 +1,9 @@
 ﻿using GraphWalking.Graphs;
+using GUI.ViewModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using GUI.ViewModel;
 
 namespace GUI.View
 {
@@ -26,22 +26,24 @@ namespace GUI.View
                 return;
             }
 
-            for (int i = 0; i < viewModel.NumberOfRows; i++)
+            for (int i = 0; i < viewModel.Puzzle.NumberOfRows; i++)
             {
                 RowDefinition rowDefinition = new() { Height = new GridLength(1, GridUnitType.Star) };
                 grid.RowDefinitions.Add(rowDefinition);
             }
 
-            for (int i = 0; i < viewModel.NumberOfColumns; i++)
+            for (int i = 0; i < viewModel.Puzzle.NumberOfColumns; i++)
             {
                 ColumnDefinition rowDefinition = new() { Width = new GridLength(1, GridUnitType.Star) };
                 grid.ColumnDefinitions.Add(rowDefinition);
             }
 
-            foreach (CharacterNode node in viewModel.PuzzleNodes)
+            foreach (CharacterNode node in viewModel.Puzzle.PuzzleAsNodes)
             {
+                CharacterNodeViewModel nodeViewModel = new(node, viewModel.Answer, viewModel.Filter);
                 Border textBlockBorder = new()
                 {
+                    DataContext = nodeViewModel,
                     Child = new Viewbox()
                     {
                         Child = new TextBlock()
@@ -50,7 +52,6 @@ namespace GUI.View
                         }
                     }
                 };
-                textBlockBorder.DataContext = viewModel.AnswerAsNodes.Contains(node);
                 Grid.SetRow(textBlockBorder, node.Row);
                 Grid.SetColumn(textBlockBorder, node.Column);
                 grid.Children.Add(textBlockBorder);
@@ -69,15 +70,15 @@ namespace GUI.View
 
             // magic number 100 comes from the transparent rectangle in the xaml.
             // this rectangle maintains the aspect ratio of the image
-            double cellWidth = 100 / viewModel.NumberOfColumns;
-            double cellHeight = 100 / viewModel.NumberOfRows;
+            double cellWidth = 100 / viewModel.Puzzle.NumberOfColumns;
+            double cellHeight = 100 / viewModel.Puzzle.NumberOfRows;
             double circleRadius = cellWidth / 3;
             Point GetNodePosition(CharacterNode node)
             {
                 return new Point(cellWidth * (0.5 + node.Column), cellHeight * (0.5 + node.Row));
             }
 
-            CharacterNode firstNode = viewModel.AnswerAsNodes[0];
+            CharacterNode firstNode = viewModel.Answer.CharacterNodes[0];
             Point centreOfFirstNode = GetNodePosition(firstNode);
             EllipseDrawing.Geometry = new EllipseGeometry(
                 centreOfFirstNode,
@@ -89,7 +90,7 @@ namespace GUI.View
                 StartPoint = centreOfFirstNode,
             };
 
-            foreach (CharacterNode node in viewModel.AnswerAsNodes.Skip(1))
+            foreach (CharacterNode node in viewModel.Answer.CharacterNodes.Skip(1))
             {
                 LineSegment lineSegment = new(GetNodePosition(node), true)
                 {
@@ -102,8 +103,8 @@ namespace GUI.View
             answerPathGeometry.Figures.Add(answerPathFigure);
             LineSegmentDrawing.Geometry = answerPathGeometry;
 
-            Grid.SetRowSpan(HighlightedPathImage, (int)viewModel.NumberOfRows);
-            Grid.SetColumnSpan(HighlightedPathImage, (int)viewModel.NumberOfColumns);
+            Grid.SetRowSpan(HighlightedPathImage, (int)viewModel.Puzzle.NumberOfRows);
+            Grid.SetColumnSpan(HighlightedPathImage, (int)viewModel.Puzzle.NumberOfColumns);
         }
     }
 }

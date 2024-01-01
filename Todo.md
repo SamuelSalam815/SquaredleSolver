@@ -1,1 +1,1 @@
-- style answers to show nodes that have been filtered out
+- make puzzle search auto-restart when changing puzzle filter

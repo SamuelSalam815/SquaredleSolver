@@ -2,16 +2,16 @@
 using System.ComponentModel;
 
 namespace GUI.ViewModel;
-internal class NodeFilterGridViewModel : INotifyPropertyChanged
+internal class FilterGridViewModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public NodeFilterModel NodeFilterModel { get; }
+    public FilterModel NodeFilterModel { get; }
 
     public PuzzleModel PuzzleModel { get; }
 
-    public NodeFilterGridViewModel(
-        NodeFilterModel nodeFilterModel,
+    public FilterGridViewModel(
+        FilterModel nodeFilterModel,
         PuzzleModel puzzleModel)
     {
         NodeFilterModel = nodeFilterModel;
