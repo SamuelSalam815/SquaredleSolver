@@ -8,7 +8,7 @@
         xmlns:view="clr-namespace:GUI.View" 
         d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
         mc:Ignorable="d"
-        Title="SquaredleSolver" Height="383" Width="793" Background="#ecf0f1"
+        Title="SquaredleSolver" Height="399" Width="793" Background="#ecf0f1"
         MouseLeftButtonUp="Window_MouseLeftButtonUp">
     <Window.Resources>
         <converters:SolverStateToTextConverter x:Key="SolverStateToTextConverter"/>
@@ -16,12 +16,36 @@
         <converters:NumberOfAnswersFoundToTextConverter x:Key="NumberOfAnswersFoundToTextConverter"/>
     </Window.Resources>
     <Grid>
-        
+        <TextBlock
+            Height="20"
+            VerticalAlignment="Top"
+            TextAlignment="Left"
+            Text="Answers" Margin="396,10,0,0" HorizontalAlignment="Left" Width="46"/>
+
+        <TextBlock
+            Width="160"
+            Margin="10,-190,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            TextAlignment="Center"
+            d:Text="Place Holder">
+            <TextBlock.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Text" Value="Puzzle Definition"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=VisualPuzzleFilter, Path=Visibility}" Value="Visible">
+                            <Setter Property="Text" Value="Answer Filter"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Resources>
+        </TextBlock>
         <Border
             Width="160" Height="160" Margin="10,0,0,0"
-            Padding="10"
             BorderBrush="Black"
+            Background="White"
             BorderThickness="1"
+            CornerRadius="3"
             VerticalAlignment="Center"
             HorizontalAlignment="Left">
             <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -42,7 +66,7 @@
         </Border>
         <Border
             Width="160" Height="160" Margin="10,0,0,0"
-            Padding="10"
+            Padding="1"
             VerticalAlignment="Center"
             HorizontalAlignment="Left">
             <Viewbox>
@@ -65,28 +89,35 @@
                 </view:NodeFilterGrid>
             </Viewbox>
         </Border>
-        
-        
+
         <Button
-            Width="30"
+            Width="100"
             Height="20"
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
-            Margin="75,210,0,0"
-            Content="Edit"
+            Margin="40,200,0,0"
+            Content="Change Puzzle"
             VerticalContentAlignment="Center"
             Visibility="{Binding ElementName=VisualPuzzleFilter, Path=Visibility}"
-            Command="{Binding FocusPuzzleInput}"
-                />
+            Command="{Binding FocusPuzzleInput}"/>
         <TextBlock
             Margin="226,-50,0,0"
-            Text="{Binding SolverRunTime, Converter={StaticResource TimeSpanToTextConverter}}"
+            d:Text="Run Time"
             HorizontalAlignment="Left"
             Width="132"
             Height="17"
             VerticalAlignment="Center"
             TextAlignment="Center">
-            <d:TextBlock.Text>RunTime</d:TextBlock.Text>
+            <TextBlock.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Text" Value="{Binding SolverRunTime, Converter={StaticResource TimeSpanToTextConverter}}"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasSolverBeenRunBefore}" Value="False">
+                            <Setter Property="Text" Value="Welcome!"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Resources>
         </TextBlock>
         <Button x:Name="ToggleSolverButton"
             d:Content="PlaceHolder"
@@ -132,9 +163,9 @@
             TextAlignment="Center">
             <d:TextBlock.Text>Answers Found: 5</d:TextBlock.Text>
         </TextBlock>
-        
+
         <ListView
-                Margin="396,10,10,10"
+                Margin="396,30,10,10"
                 Background="White"
                 x:Name="ResultsListView"
                 d:ItemsSource="{d:SampleData ItemCount=5}"

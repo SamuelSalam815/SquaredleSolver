@@ -4,6 +4,7 @@ using SquaredleSolver;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace GUI.View;
 /// <summary>
@@ -68,11 +69,14 @@ public partial class NodeFilterGrid : UserControl
             Border border = new()
             {
                 DataContext = nodeViewModel,
-                Child = new Button()
+                Child = new TextBlock()
                 {
                     DataContext = nodeViewModel
                 }
             };
+            MouseGesture leftClick = new(MouseAction.LeftClick, ModifierKeys.None);
+            MouseBinding toggleInclusionBinding = new(nodeViewModel.ToggleNodeInclusion, leftClick);
+            border.InputBindings.Add(toggleInclusionBinding);
             ButtonGrid.Children.Add(border);
         }
 

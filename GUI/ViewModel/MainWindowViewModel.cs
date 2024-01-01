@@ -99,12 +99,28 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         }
     }
 
+    private bool _hasSolverBeenRunBefore = false;
+    public bool HasSolverBeenRunBefore
+    {
+        get { return _hasSolverBeenRunBefore; }
+        set
+        {
+            _hasSolverBeenRunBefore = value;
+            OnPropertyChanged(nameof(HasSolverBeenRunBefore));
+        }
+    }
+
     private void OnSolverStateChanged(object? sender, SolverStateChangedEventArgs e)
     {
         OnPropertyChanged(nameof(SolverState));
 
         if (e.CurrentState is SolverRunning)
         {
+            if (!HasSolverBeenRunBefore)
+            {
+                HasSolverBeenRunBefore = true;
+            }
+
             SolverRunTime = TimeSpan.Zero;
         }
 
