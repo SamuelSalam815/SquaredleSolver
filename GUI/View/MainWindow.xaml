@@ -70,12 +70,12 @@
             VerticalAlignment="Center"
             HorizontalAlignment="Left">
             <Viewbox>
-                <view:NodeFilterGrid
+                <view:FilterGrid
                     d:Background="Gray"
                     x:Name="VisualPuzzleFilter"
                     DataContext="{Binding NodeFilterGridViewModel}">
-                    <view:NodeFilterGrid.Resources>
-                        <Style TargetType="view:NodeFilterGrid">
+                    <view:FilterGrid.Resources>
+                        <Style TargetType="view:FilterGrid">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ElementName=InputField, Path=IsFocused}" Value="True">
                                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -85,8 +85,8 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </view:NodeFilterGrid.Resources>
-                </view:NodeFilterGrid>
+                    </view:FilterGrid.Resources>
+                </view:FilterGrid>
             </Viewbox>
         </Border>
 

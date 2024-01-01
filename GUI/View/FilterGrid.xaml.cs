@@ -10,10 +10,10 @@ namespace GUI.View;
 /// <summary>
 /// Interaction logic for NodeFilterGrid.xaml
 /// </summary>
-public partial class NodeFilterGrid : UserControl
+public partial class FilterGrid : UserControl
 {
     FilterGridViewModel? viewModel = null;
-    public NodeFilterGrid()
+    public FilterGrid()
     {
         InitializeComponent();
         DataContextChanged += OnDataContextChanged;
