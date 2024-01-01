@@ -32,10 +32,11 @@ internal class FilterNodeViewModel : INotifyPropertyChanged
 
     public FilterNodeViewModel(
         CharacterNode node,
-        FilterModel filter)
+        FilterModel filter,
+        SolverModel solver)
     {
         CharacterNode = node;
-        ToggleNodeInclusion = new ToggleNodeInclusionInFilter(this, filter);
+        ToggleNodeInclusion = new ToggleNodeInclusionInFilter(this, filter, solver);
     }
 
     private void OnPropertyChanged(string propertyName)

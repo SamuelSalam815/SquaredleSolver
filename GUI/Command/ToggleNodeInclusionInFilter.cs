@@ -8,15 +8,18 @@ internal class ToggleNodeInclusionInFilter : ICommand
 {
     private readonly FilterNodeViewModel node;
     private readonly FilterModel filter;
+    private readonly SolverModel solver;
 
     public event EventHandler? CanExecuteChanged;
 
     public ToggleNodeInclusionInFilter(
         FilterNodeViewModel node,
-        FilterModel filter)
+        FilterModel filter,
+        SolverModel solver)
     {
         this.node = node;
         this.filter = filter;
+        this.solver = solver;
     }
 
     public bool CanExecute(object? parameter) => true;
@@ -33,5 +36,7 @@ internal class ToggleNodeInclusionInFilter : ICommand
             filter.IncludeNode(node.CharacterNode);
             node.IsIncluded = true;
         }
+
+        solver.StartSolvingPuzzle();
     }
 }

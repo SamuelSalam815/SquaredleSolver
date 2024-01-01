@@ -41,7 +41,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         FocusPuzzleInput = focusPuzzleInput;
         ToggleSolverOnOff = new ToggleSolverOnOff(solverModel);
         CharacterGridViewModels = new ObservableCollection<CharacterGridViewModel>();
-        NodeFilterGridViewModel = new FilterGridViewModel(filterModel, puzzleModel);
+        NodeFilterGridViewModel = new FilterGridViewModel(filterModel, puzzleModel, solverModel);
 
         puzzleModel.PropertyChanged += OnPuzzleModelChanged;
         solverModel.StateChanged += OnSolverStateChanged;

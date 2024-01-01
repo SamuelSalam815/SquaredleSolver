@@ -65,7 +65,7 @@ public partial class FilterGrid : UserControl
 
         foreach (CharacterNode node in puzzle.PuzzleAsNodes)
         {
-            FilterNodeViewModel nodeViewModel = new(node, viewModel.NodeFilterModel);
+            FilterNodeViewModel nodeViewModel = new(node, viewModel.NodeFilterModel, viewModel.SolverModel);
             Border border = new()
             {
                 DataContext = nodeViewModel,
