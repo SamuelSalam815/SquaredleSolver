@@ -1,13 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>SquaredleSolver.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="SquaredleSolver.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GraphWalking\GraphWalking.csproj" />
+    <ProjectReference Include="..\SquaredleSolverModel\SquaredleSolverModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="words_alpha.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
