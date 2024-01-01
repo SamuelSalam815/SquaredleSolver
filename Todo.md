@@ -1,0 +1,1 @@
+- make puzzle search auto-restart when changing puzzle filter

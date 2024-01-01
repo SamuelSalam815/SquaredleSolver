@@ -10,16 +10,12 @@ internal class FilterGridViewModel : INotifyPropertyChanged
 
     public PuzzleModel PuzzleModel { get; }
 
-    public SolverModel SolverModel { get; }
-
     public FilterGridViewModel(
         FilterModel nodeFilterModel,
-        PuzzleModel puzzleModel,
-        SolverModel solverModel)
+        PuzzleModel puzzleModel)
     {
         NodeFilterModel = nodeFilterModel;
         PuzzleModel = puzzleModel;
-        SolverModel = solverModel;
 
         NodeFilterModel.PropertyChanged += (sender, e) => OnPropertyChanged(nameof(NodeFilterModel));
         PuzzleModel.PropertyChanged += (sender, e) => OnPropertyChanged(nameof(PuzzleModel));
