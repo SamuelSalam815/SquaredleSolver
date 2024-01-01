@@ -20,8 +20,8 @@
         <Border
             Width="160" Height="160" Margin="10,0,0,0"
             Padding="10"
-            Background="#bdc3c7"
-            CornerRadius="20"
+            BorderBrush="Black"
+            BorderThickness="1"
             VerticalAlignment="Center"
             HorizontalAlignment="Left">
             <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -40,29 +40,33 @@
                     BorderThickness="0" />
             </Viewbox>
         </Border>
-        <view:NodeFilterGrid
-            x:Name="VisualPuzzleFilter"
-            Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
-            Height="140"
-            Margin="20,0,0,0"
-            HorizontalAlignment="Left"
+        <Border
+            Width="160" Height="160" Margin="10,0,0,0"
+            Padding="10"
             VerticalAlignment="Center"
-            d:Background="Gray"
-            Panel.ZIndex="1"
-            DataContext="{Binding NodeFilterGridViewModel}">
-            <view:NodeFilterGrid.Resources>
-                <Style TargetType="view:NodeFilterGrid">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=InputField, Path=IsFocused}" Value="True">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=InputField, Path=IsFocused}" Value="False">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </view:NodeFilterGrid.Resources>
-        </view:NodeFilterGrid>
+            HorizontalAlignment="Left">
+            <Viewbox>
+                <view:NodeFilterGrid
+                    d:Background="Gray"
+                    x:Name="VisualPuzzleFilter"
+                    DataContext="{Binding NodeFilterGridViewModel}">
+                    <view:NodeFilterGrid.Resources>
+                        <Style TargetType="view:NodeFilterGrid">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=InputField, Path=IsFocused}" Value="True">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ElementName=InputField, Path=IsFocused}" Value="False">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </view:NodeFilterGrid.Resources>
+                </view:NodeFilterGrid>
+            </Viewbox>
+        </Border>
+        
+        
         <Button
             Width="30"
             Height="20"

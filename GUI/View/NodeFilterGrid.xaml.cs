@@ -64,12 +64,16 @@ public partial class NodeFilterGrid : UserControl
 
         foreach (CharacterNode node in puzzle.PuzzleAsAdjacencyList.GetAllNodes())
         {
-            Button button = new()
+            NodeViewModel nodeViewModel = new(node, viewModel.NodeFilterModel);
+            Border border = new()
             {
-                DataContext = new NodeViewModel(node, viewModel.NodeFilterModel),
+                DataContext = nodeViewModel,
+                Child = new Button()
+                {
+                    DataContext = nodeViewModel
+                }
             };
-
-            ButtonGrid.Children.Add(button);
+            ButtonGrid.Children.Add(border);
         }
 
         ButtonGrid.UpdateLayout();

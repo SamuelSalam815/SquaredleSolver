@@ -16,22 +16,32 @@
             <Grid.Resources>
             <!-- The data context for buttons in this grid is inteded to be NodeViewModel -->
                 <Style TargetType="Button">
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
                     <Setter Property="Command" Value="{Binding ToggleNodeInclusion}"/>
-                    <Setter Property="Grid.Row" Value="{Binding Row}"/>
-                    <Setter Property="Grid.Column" Value="{Binding Column}"/>
                     <Setter Property="Content" Value="{Binding Character}"/>
                     <Setter Property="Background" Value="LightGray"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="FontFamily" Value="Courier New"/>
+                    <Setter Property="BorderThickness" Value="0.7"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsIncluded}" Value="False">
-                            <Setter Property="Background" Value="DarkGray"/>
+                            <Setter Property="Background" Value="#f3f3f3"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Foreground" Value="#9c9c9c"/>
                         </DataTrigger>
                     </Style.Triggers>
+                    <Style.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="3"/>
+                            <Setter Property="BorderBrush" Value="#808080"/>
+                        </Style>
+                    </Style.Resources>
                 </Style>
                 <Style TargetType="Border">
-                    <Setter Property="Padding" Value="3"/>
-                    <Setter Property="CornerRadius" Value="3"/>
-                    <Setter Property="BorderThickness" Value="3"/>
-                    <Setter Property="BorderBrush" Value="AliceBlue"/>
+                    <Setter Property="Padding" Value="1"/>
+                    <Setter Property="Grid.Row" Value="{Binding Row}"/>
+                    <Setter Property="Grid.Column" Value="{Binding Column}"/>
                 </Style>
             </Grid.Resources>
 
@@ -54,7 +64,7 @@
                 <d:Button Content="C"/>
             </d:Border>
             <d:Border Grid.Row="1" Grid.Column ="1">
-                <d:Button Content="B"/>
+                <d:Button Content="D"/>
             </d:Border>
         </Grid>
     </Viewbox>
