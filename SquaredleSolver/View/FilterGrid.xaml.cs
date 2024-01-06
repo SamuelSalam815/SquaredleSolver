@@ -70,9 +70,6 @@ public partial class FilterGrid : UserControl
             {
                 DataContext = nodeViewModel,
                 Child = new TextBlock()
-                {
-                    DataContext = nodeViewModel
-                }
             };
             MouseGesture leftClick = new(MouseAction.LeftClick, ModifierKeys.None);
             MouseBinding toggleInclusionBinding = new(nodeViewModel.ToggleNodeInclusion, leftClick);

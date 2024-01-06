@@ -26,16 +26,18 @@ public partial class CharacterGrid : UserControl
             return;
         }
 
+        TileGrid.RowDefinitions.Clear();
         for (int i = 0; i < viewModel.Puzzle.NumberOfRows; i++)
         {
             RowDefinition rowDefinition = new() { Height = new GridLength(1, GridUnitType.Star) };
-            grid.RowDefinitions.Add(rowDefinition);
+            TileGrid.RowDefinitions.Add(rowDefinition);
         }
 
+        TileGrid.ColumnDefinitions.Clear();
         for (int i = 0; i < viewModel.Puzzle.NumberOfColumns; i++)
         {
             ColumnDefinition rowDefinition = new() { Width = new GridLength(1, GridUnitType.Star) };
-            grid.ColumnDefinitions.Add(rowDefinition);
+            TileGrid.ColumnDefinitions.Add(rowDefinition);
         }
 
         foreach (CharacterNode node in viewModel.Puzzle.PuzzleAsNodes)
@@ -44,20 +46,12 @@ public partial class CharacterGrid : UserControl
             Border textBlockBorder = new()
             {
                 DataContext = nodeViewModel,
-                Child = new Viewbox()
-                {
-                    Child = new TextBlock()
-                    {
-                        Text = node.Character.ToString(),
-                    }
-                }
+                Child = new TextBlock()
             };
-            Grid.SetRow(textBlockBorder, node.Row);
-            Grid.SetColumn(textBlockBorder, node.Column);
-            grid.Children.Add(textBlockBorder);
+            TileGrid.Children.Add(textBlockBorder);
         }
 
-        grid.UpdateLayout();
+        TileGrid.UpdateLayout();
 
         UpdatePathGeometry();
     }
@@ -69,23 +63,31 @@ public partial class CharacterGrid : UserControl
             return;
         }
 
-        // magic number 100 comes from the transparent rectangle in the xaml.
-        // this rectangle maintains the aspect ratio of the image
-        double cellWidth = 100 / viewModel.Puzzle.NumberOfColumns;
-        double cellHeight = 100 / viewModel.Puzzle.NumberOfRows;
-        double circleRadius = cellWidth / 3;
+        double cellSize = 100;
+        TransparentPathLayer.Geometry = new RectangleGeometry
+        {
+            Rect = new Rect(
+                0,
+                0,
+                cellSize * viewModel.Puzzle.NumberOfColumns,
+                cellSize * viewModel.Puzzle.NumberOfRows)
+        };
+
         Point GetNodePosition(CharacterNode node)
         {
-            return new Point(cellWidth * (0.5 + node.Column), cellHeight * (0.5 + node.Row));
+            return new Point(cellSize * (0.5 + node.Column), cellSize * (0.5 + node.Row));
         }
 
         CharacterNode firstNode = viewModel.Answer.CharacterNodes[0];
         Point centreOfFirstNode = GetNodePosition(firstNode);
+        double circleRadius = cellSize / 3;
         EllipseDrawing.Geometry = new EllipseGeometry(
             centreOfFirstNode,
             circleRadius,
             circleRadius);
 
+        double penThickness = circleRadius * 0.8;
+        LineSegmentDrawing.Pen.Thickness = penThickness;
         PathFigure answerPathFigure = new()
         {
             StartPoint = centreOfFirstNode,
@@ -103,8 +105,5 @@ public partial class CharacterGrid : UserControl
         PathGeometry answerPathGeometry = new();
         answerPathGeometry.Figures.Add(answerPathFigure);
         LineSegmentDrawing.Geometry = answerPathGeometry;
-
-        Grid.SetRowSpan(HighlightedPathImage, (int)viewModel.Puzzle.NumberOfRows);
-        Grid.SetColumnSpan(HighlightedPathImage, (int)viewModel.Puzzle.NumberOfColumns);
     }
 }

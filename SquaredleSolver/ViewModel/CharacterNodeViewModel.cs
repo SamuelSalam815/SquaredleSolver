@@ -10,6 +10,8 @@ internal class CharacterNodeViewModel
     public int Row => characterNode.Row;
     public int Column => characterNode.Column;
 
+    public char Character => characterNode.Character;
+
     public CharacterNodeViewModel(CharacterNode node, AnswerModel answer, FilterModel filter)
     {
         characterNode = node;

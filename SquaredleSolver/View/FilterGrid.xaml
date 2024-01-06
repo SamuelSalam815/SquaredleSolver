@@ -48,6 +48,7 @@
             <d:Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </d:Grid.ColumnDefinitions>
 
             <d:Border Grid.Row="0" Grid.Column ="0">
@@ -61,6 +62,9 @@
             </d:Border>
             <d:Border Grid.Row="1" Grid.Column ="1">
                 <d:TextBlock Text="D"/>
+            </d:Border>
+            <d:Border Grid.Row="1" Grid.Column ="2">
+                <d:TextBlock Text="E"/>
             </d:Border>
         </Grid>
     </Viewbox>
