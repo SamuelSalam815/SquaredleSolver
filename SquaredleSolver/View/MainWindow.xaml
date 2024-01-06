@@ -8,7 +8,7 @@
         xmlns:view="clr-namespace:SquaredleSolver.View" 
         d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
         mc:Ignorable="d"
-        Title="SquaredleSolver" Height="399" Width="793" Background="#ecf0f1"
+        Title="SquaredleSolver" Height="400" Width="800" Background="#ecf0f1"
         MouseLeftButtonUp="Window_MouseLeftButtonUp">
     <Window.Resources>
         <converters:SolverStateToTextConverter x:Key="SolverStateToTextConverter"/>
@@ -141,14 +141,20 @@
 
         <DockPanel Margin="{StaticResource spacing}">
             <DockPanel DockPanel.Dock="Top">
-                <TextBlock
-                    Height="20"
-                    Text="Answer Size"
-                    HorizontalAlignment="Left"/>
-                <Slider
-                    Name="AnswerSizeSlider"
-                    Minimum="50" Maximum="400" Value="150" TickFrequency="50" IsSnapToTickEnabled="True"
-                    Orientation="Horizontal"/>
+                <TextBlock Height="20" Text="Answer Size"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" MaxWidth="150"/>
+                    </Grid.ColumnDefinitions>
+                    <Slider
+                        HorizontalAlignment="Stretch"
+                        Name="AnswerSizeSlider"
+                        Minimum="50"
+                        Maximum="400"
+                        Value="150"
+                        TickFrequency="50"
+                        IsSnapToTickEnabled="True"/>
+                </Grid>
             </DockPanel>
             <ListView
                 Background="White"
