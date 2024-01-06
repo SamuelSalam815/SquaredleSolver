@@ -105,4 +105,14 @@ public partial class AnswerTile : UserControl
         answerPathGeometry.Figures.Add(answerPathFigure);
         LineSegmentDrawing.Geometry = answerPathGeometry;
     }
+
+    private void UserControl_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        if (DataContext is not AnswerTileViewModel viewModel)
+        {
+            return;
+        }
+
+        viewModel.Filter.AnswersAlreadyAttempted.Add(viewModel.Answer.Word);
+    }
 }

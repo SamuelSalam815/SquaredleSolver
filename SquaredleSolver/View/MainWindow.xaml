@@ -8,7 +8,7 @@
         xmlns:view="clr-namespace:SquaredleSolver.View" 
         d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
         mc:Ignorable="d"
-        Title="SquaredleSolver" Height="400" Width="800" Background="#ecf0f1"
+        Title="SquaredleSolver" Height="400" Width="850" Background="#ecf0f1"
         MouseLeftButtonUp="Window_MouseLeftButtonUp">
     <Window.Resources>
         <converters:SolverStateToTextConverter x:Key="SolverStateToTextConverter"/>
@@ -160,16 +160,13 @@
                 Background="White"
                 x:Name="ResultsListView"
                 d:ItemsSource="{d:SampleData ItemCount=5}"
-                ItemsSource="{Binding CharacterGridViewModels}"
+                ItemsSource="{Binding AnswerTilesDisplayed}"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
-                ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                VirtualizingPanel.IsVirtualizing="True">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel
-                        Orientation="Horizontal"
-                        Width="{Binding ElementName=ResultsListView, Path=DataContext.WrapPanelWidth}"
-                        VirtualizingPanel.IsVirtualizing="True"
-                        d:Width="384"/>
+                        <WrapPanel/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 

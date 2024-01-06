@@ -25,7 +25,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
 
     public ICommand FocusPuzzleInput { get; }
     public ICommand ToggleSolverOnOff { get; }
-    public ObservableCollection<AnswerTileViewModel> CharacterGridViewModels { get; }
+    public ObservableCollection<AnswerTileViewModel> AnswerTilesDisplayed { get; }
     public FilterGridViewModel NodeFilterGridViewModel { get; }
 
     public MainWindowViewModel(
@@ -40,13 +40,38 @@ internal class MainWindowViewModel : INotifyPropertyChanged
 
         FocusPuzzleInput = focusPuzzleInput;
         ToggleSolverOnOff = new ToggleSolverOnOff(solverModel);
-        CharacterGridViewModels = new ObservableCollection<AnswerTileViewModel>();
+        AnswerTilesDisplayed = new ObservableCollection<AnswerTileViewModel>();
         NodeFilterGridViewModel = new FilterGridViewModel(filterModel, puzzleModel);
 
         puzzleModel.PropertyChanged += OnPuzzleModelChanged;
         solverModel.StateChanged += OnSolverStateChanged;
         solverModel.AnswersFound.CollectionChanged +=
             (sender, e) => Application.Current.Dispatcher.Invoke(() => OnAnswersFoundChanged(sender, e));
+        filterModel.AnswersAlreadyAttempted.CollectionChanged += OnAttemptedAnswersChanged;
+    }
+
+    private void OnAttemptedAnswersChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.Action == NotifyCollectionChangedAction.Add)
+        {
+            List<string> newDisallowedWords = e.NewItems.Cast<string>().ToList();
+            IEnumerable<AnswerTileViewModel> viewModelsToRemove =
+                AnswerTilesDisplayed
+                .Where(tile => newDisallowedWords.Contains(tile.Answer.Word))
+                .ToList();
+            foreach (AnswerTileViewModel tile in viewModelsToRemove)
+            {
+                AnswerTilesDisplayed.Remove(tile);
+            }
+        }
+        else
+        {
+            AnswerTilesDisplayed.Clear();
+            foreach (AnswerModel answer in solverModel.AnswersFound)
+            {
+                AddAnswerIfNotAttempted(answer);
+            }
+        }
     }
 
     public uint NumberOfRowsInPuzzle => puzzleModel.NumberOfRows;
@@ -139,14 +164,22 @@ internal class MainWindowViewModel : INotifyPropertyChanged
                 answersToAdd = e.NewItems.Cast<AnswerModel>();
                 break;
             default:
-                CharacterGridViewModels.Clear();
+                AnswerTilesDisplayed.Clear();
                 answersToAdd = solverModel.AnswersFound;
                 break;
         }
 
         foreach (AnswerModel answer in answersToAdd)
         {
-            CharacterGridViewModels.Add(new AnswerTileViewModel(answer, puzzleModel, filterModel));
+            AddAnswerIfNotAttempted(answer);
+        }
+    }
+
+    private void AddAnswerIfNotAttempted(AnswerModel answer)
+    {
+        if (!filterModel.AnswersAlreadyAttempted.Contains(answer.Word))
+        {
+            AnswerTilesDisplayed.Add(new AnswerTileViewModel(answer, puzzleModel, filterModel));
         }
     }
 

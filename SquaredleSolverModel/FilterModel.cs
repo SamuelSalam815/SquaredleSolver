@@ -10,19 +10,24 @@ public class FilterModel : INotifyPropertyChanged
 
     private readonly List<CharacterNode> excludedNodes;
     public readonly ReadOnlyCollection<CharacterNode> ExcludedNodes;
+    public readonly ObservableCollection<string> AnswersAlreadyAttempted;
 
     public FilterModel(PuzzleModel puzzleModel)
     {
         excludedNodes = new List<CharacterNode>();
         ExcludedNodes = new ReadOnlyCollection<CharacterNode>(excludedNodes);
+        AnswersAlreadyAttempted = new ObservableCollection<string>();
 
         puzzleModel.PropertyChanged += OnPuzzleChanged;
+        AnswersAlreadyAttempted.CollectionChanged += (sender, e) => OnPropertyChanged(nameof(AnswersAlreadyAttempted));
     }
 
     private void OnPuzzleChanged(object? sender, PropertyChangedEventArgs e)
     {
         excludedNodes.Clear();
         OnPropertyChanged(nameof(ExcludedNodes));
+
+        AnswersAlreadyAttempted.Clear();
     }
 
     public void IncludeNode(CharacterNode node)

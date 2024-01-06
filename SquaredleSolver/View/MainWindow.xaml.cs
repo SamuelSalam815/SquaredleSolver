@@ -2,9 +2,7 @@
 using SquaredleSolver.ViewModel;
 using SquaredleSolverModel;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace SquaredleSolver.View;
 
@@ -33,28 +31,6 @@ public partial class MainWindow : Window
             solver,
             new FocusPuzzleInput(InputField));
         DataContext = viewModel;
-
-        viewModel.CharacterGridViewModels.CollectionChanged += (sender, e) => Dispatcher.Invoke(UpdateWrapPanelWidth);
-        ResultsListView.SizeChanged += (sender, e) => UpdateWrapPanelWidth();
-    }
-
-    private void UpdateWrapPanelWidth()
-    {
-        if (DataContext is not MainWindowViewModel viewModel)
-        {
-            return;
-        }
-
-        // Make sure scroll bars do not overlap the items being displayed
-        double wrapPanelWidth = ResultsListView.ActualWidth;
-        Decorator? border = VisualTreeHelper.GetChild(ResultsListView, 0) as Decorator;
-        ScrollViewer? scrollViewer = border.Child as ScrollViewer;
-        if (scrollViewer.ComputedVerticalScrollBarVisibility is Visibility.Visible)
-        {
-            wrapPanelWidth -= SystemParameters.VerticalScrollBarWidth;
-        }
-
-        viewModel.WrapPanelWidth = wrapPanelWidth;
     }
 
     private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
