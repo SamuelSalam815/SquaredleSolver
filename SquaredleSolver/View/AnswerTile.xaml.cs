@@ -42,7 +42,7 @@ public partial class AnswerTile : UserControl
 
         foreach (CharacterNode node in viewModel.Puzzle.PuzzleAsNodes)
         {
-            AnswerTileNodeViewModel nodeViewModel = new(node, viewModel.Answer, viewModel.Filter);
+            AnswerTileCharacterNodeViewModel nodeViewModel = new(node, viewModel.Answer, viewModel.Filter);
             Border textBlockBorder = new()
             {
                 DataContext = nodeViewModel,

@@ -2,7 +2,7 @@
 using SquaredleSolverModel;
 
 namespace SquaredleSolver.ViewModel;
-internal class AnswerTileNodeViewModel
+internal class AnswerTileCharacterNodeViewModel
 {
     private readonly CharacterNode characterNode;
     public bool IsOnHighlightedPath { get; }
@@ -12,7 +12,7 @@ internal class AnswerTileNodeViewModel
 
     public char Character => characterNode.Character;
 
-    public AnswerTileNodeViewModel(CharacterNode node, AnswerModel answer, FilterModel filter)
+    public AnswerTileCharacterNodeViewModel(CharacterNode node, AnswerModel answer, FilterModel filter)
     {
         characterNode = node;
         IsOnHighlightedPath = answer.CharacterNodes.Contains(node);
