@@ -15,194 +15,164 @@
         <converters:TimeSpanToTextConverter x:Key="TimeSpanToTextConverter"/>
         <converters:NumberOfAnswersFoundToTextConverter x:Key="NumberOfAnswersFoundToTextConverter"/>
     </Window.Resources>
-    <Grid>
-        <TextBlock
-            Height="20"
-            VerticalAlignment="Top"
-            TextAlignment="Left"
-            Text="Answer Size"
-            Margin="396,10,0,0"
-            HorizontalAlignment="Left"
-            Width="66"/>
+    <DockPanel>
+        <DockPanel.Resources>
+            <Thickness x:Key="spacing">10,10</Thickness>
+        </DockPanel.Resources>
 
-        <Slider
-            Name="AnswerSizeSlider"
-            Minimum="50"
-            Maximum="400"
-            Value="150"
-            TickFrequency="50"
-            IsSnapToTickEnabled="True"
-            Orientation="Horizontal"
-            VerticalAlignment="Top"
-            Margin="467,10,10,0"
-            Height="20"/>
-
-        <TextBlock
-            Width="{Binding ElementName=InputField, Path=Width}"
-            Margin="10,-250,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            TextAlignment="Center"
-            d:Text="Place Holder">
-            <TextBlock.Resources>
-                <Style TargetType="TextBlock">
-                    <Setter Property="Text" Value="Puzzle Definition"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=VisualPuzzleFilter, Path=Visibility}" Value="Visible">
-                            <Setter Property="Text" Value="Answer Filter"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBlock.Resources>
-        </TextBlock>
-        <Border
-            Width="200" Height="200" Margin="10,0,0,0"
-            Padding="10"
-            BorderBrush="Black"
-            Background="White"
-            BorderThickness="1"
-            CornerRadius="3"
-            VerticalAlignment="Center"
-            HorizontalAlignment="Left">
-            <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBox 
-                    x:Name="InputField"
-                    FontStretch="ExtraExpanded"
-                    PreviewKeyDown="TextBox_PreviewKeyDown"
-                    LostFocus="InputField_LostFocus"
-                    CharacterCasing="Upper"
-                    AcceptsReturn="True" 
-                    Visibility="Collapsed"
-                    d:Text="HELL&#10;OW R&#10;LDFO&#10;OBAR"
-                    Text="{Binding PuzzleAsText, UpdateSourceTrigger=PropertyChanged}"
-                    FontFamily="Courier New"
-                    Background="Transparent"
-                    BorderThickness="0" />
-            </Viewbox>
-        </Border>
-        <Border
-            Width="200" Height="200" Margin="10,0,0,0"
-            Padding="10"
-            VerticalAlignment="Center"
-            HorizontalAlignment="Left">
-            <view:FilterGrid
-                    d:Background="Gray"
-                    x:Name="VisualPuzzleFilter"
-                    DataContext="{Binding NodeFilterGridViewModel}">
-                <view:FilterGrid.Resources>
-                    <Style TargetType="view:FilterGrid">
+        <StackPanel VerticalAlignment="Center" Margin="{StaticResource spacing}">
+            <TextBlock
+                Width="{Binding ElementName=InputField, Path=Width}"
+                HorizontalAlignment="Center"
+                TextAlignment="Center"
+                d:Text="Place Holder">
+                <TextBlock.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Text" Value="Puzzle Definition"/>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding ElementName=InputField, Path=IsFocused}" Value="True">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding ElementName=InputField, Path=IsFocused}" Value="False">
-                                <Setter Property="Visibility" Value="Visible"/>
+                            <DataTrigger Binding="{Binding ElementName=VisualPuzzleFilter, Path=Visibility}" Value="Visible">
+                                <Setter Property="Text" Value="Answer Filter"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </view:FilterGrid.Resources>
-            </view:FilterGrid>
-        </Border>
+                </TextBlock.Resources>
+            </TextBlock>
+            <Border
+                Margin="{StaticResource spacing}"
+                Width="{Binding RelativeSource={RelativeSource Mode=Self},Path=ActualHeight}"
+                Height="250"
+                Padding="10"
+                BorderBrush="Black"
+                Background="White"
+                BorderThickness="1"
+                CornerRadius="3">
+                <Grid>
+                    <Viewbox>
+                        <TextBox 
+                            x:Name="InputField"
+                            FontStretch="ExtraExpanded"
+                            PreviewKeyDown="TextBox_PreviewKeyDown"
+                            LostFocus="InputField_LostFocus"
+                            CharacterCasing="Upper"
+                            AcceptsReturn="True" 
+                            Visibility="Collapsed"
+                            d:Text="HELL&#10;OW R&#10;LDFO&#10;OBAR"
+                            Text="{Binding PuzzleAsText, UpdateSourceTrigger=PropertyChanged}"
+                            FontFamily="Courier New"
+                            Background="Transparent"
+                            BorderThickness="0" />
+                    </Viewbox>
+                    <view:FilterGrid
+                        d:Background="Gray"
+                        x:Name="VisualPuzzleFilter"
+                        DataContext="{Binding NodeFilterGridViewModel}">
+                        <view:FilterGrid.Resources>
+                            <Style TargetType="view:FilterGrid">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=InputField, Path=IsFocused}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ElementName=InputField, Path=IsFocused}" Value="False">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </view:FilterGrid.Resources>
+                    </view:FilterGrid>
+                </Grid>
+            </Border>
+            <Button
+                HorizontalAlignment="Center"
+                Content="Change Puzzle"
+                VerticalContentAlignment="Center"
+                Visibility="{Binding ElementName=VisualPuzzleFilter, Path=Visibility}"
+                Command="{Binding FocusPuzzleInput}"/>
+        </StackPanel>
 
-        <Button
-            Width="100"
-            Height="20"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            Margin="40,200,0,0"
-            Content="Change Puzzle"
-            VerticalContentAlignment="Center"
-            Visibility="{Binding ElementName=VisualPuzzleFilter, Path=Visibility}"
-            Command="{Binding FocusPuzzleInput}"/>
-        <TextBlock
-            Margin="226,-50,0,0"
-            d:Text="Run Time"
-            HorizontalAlignment="Left"
-            Width="132"
-            Height="17"
-            VerticalAlignment="Center"
-            TextAlignment="Center">
-            <TextBlock.Resources>
-                <Style TargetType="TextBlock">
-                    <Setter Property="Text" Value="{Binding SolverRunTime, Converter={StaticResource TimeSpanToTextConverter}}"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding HasSolverBeenRunBefore}" Value="False">
-                            <Setter Property="Text" Value="Welcome!"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBlock.Resources>
-        </TextBlock>
-        <Button x:Name="ToggleSolverButton"
-            d:Content="PlaceHolder"
-            d:Background="#2ecc71"
-            Command="{Binding ToggleSolverOnOff}"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            Margin="226,0,0,0"
-            Width="132"
-            Height="20">
-            <Button.Resources>
-                <Style TargetType="Button">
-                    <Style.Triggers>
-                        <DataTrigger
+        <StackPanel VerticalAlignment="Center" Margin="{StaticResource spacing}">
+            <TextBlock d:Text="Run Time" HorizontalAlignment="Center" Margin="{StaticResource spacing}">
+                <TextBlock.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Text" Value="{Binding SolverRunTime, Converter={StaticResource TimeSpanToTextConverter}}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasSolverBeenRunBefore}" Value="False">
+                                <Setter Property="Text" Value="Welcome!"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Resources>
+            </TextBlock>
+            <Button
+                x:Name="ToggleSolverButton"
+                d:Content="PlaceHolder"
+                Margin="{StaticResource spacing}"
+                Command="{Binding ToggleSolverOnOff}">
+                <Button.Resources>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger
                             Binding="{Binding SolverState, Converter={StaticResource SolverStateToTextConverter}}"
                             Value="SolverStopped">
-                            <Setter Property="Background" Value="#2ecc71"/>
-                            <Setter Property="Content" Value="Explore Puzzle"/>
-                        </DataTrigger>
-                        <DataTrigger
+                                <Setter Property="Background" Value="#2ecc71"/>
+                                <Setter Property="Content" Value="Explore Puzzle"/>
+                            </DataTrigger>
+                            <DataTrigger
                             Binding="{Binding SolverState, Converter={StaticResource SolverStateToTextConverter}}"
                             Value="SolverRunning">
-                            <Setter Property="Background" Value="#e74c3c"/>
-                            <Setter Property="Content" Value="Stop Exploring"/>
-                        </DataTrigger>
-                        <DataTrigger
+                                <Setter Property="Background" Value="#e74c3c"/>
+                                <Setter Property="Content" Value="Stop Exploring"/>
+                            </DataTrigger>
+                            <DataTrigger
                             Binding="{Binding SolverState, Converter={StaticResource SolverStateToTextConverter}}"
                             Value="SolverCompleted">
-                            <Setter Property="Background" Value="#f1c40f"/>
-                            <Setter Property="Content" Value="Puzzle Explored"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Resources>
-        </Button>
-        <TextBlock
-            Margin="226,50,0,0"
-            Text="{Binding NumberOfAnswersFound, Converter={StaticResource NumberOfAnswersFoundToTextConverter}}"
-            HorizontalAlignment="Left"
-            Width="132"
-            Height="17"
-            VerticalAlignment="Center"
-            TextAlignment="Center">
-            <d:TextBlock.Text>Answers Found: 5</d:TextBlock.Text>
-        </TextBlock>
+                                <Setter Property="Background" Value="#f1c40f"/>
+                                <Setter Property="Content" Value="Puzzle Explored"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Resources>
+            </Button>
+            <TextBlock
+                Text="{Binding NumberOfAnswersFound, Converter={StaticResource NumberOfAnswersFoundToTextConverter}}"
+                Margin="{StaticResource spacing}"
+                HorizontalAlignment="Center"
+                d:Text="Answers Found: 5"/>
+        </StackPanel>
 
-        <ListView
-                Margin="396,35,10,10"
+        <DockPanel Margin="{StaticResource spacing}">
+            <DockPanel DockPanel.Dock="Top">
+                <TextBlock
+                    Height="20"
+                    Text="Answer Size"
+                    HorizontalAlignment="Left"/>
+                <Slider
+                    Name="AnswerSizeSlider"
+                    Minimum="50" Maximum="400" Value="150" TickFrequency="50" IsSnapToTickEnabled="True"
+                    Orientation="Horizontal"/>
+            </DockPanel>
+            <ListView
                 Background="White"
                 x:Name="ResultsListView"
                 d:ItemsSource="{d:SampleData ItemCount=5}"
                 ItemsSource="{Binding CharacterGridViewModels}"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ScrollViewer.HorizontalScrollBarVisibility="Hidden">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel
                         Orientation="Horizontal"
                         Width="{Binding ElementName=ResultsListView, Path=DataContext.WrapPanelWidth}"
                         VirtualizingPanel.IsVirtualizing="True"
                         d:Width="384"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <view:CharacterGrid Width="{Binding ElementName=AnswerSizeSlider, Path=Value}"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ListView>
-
-
-    </Grid>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <view:CharacterGrid Width="{Binding ElementName=AnswerSizeSlider, Path=Value}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ListView>
+        </DockPanel>
+    </DockPanel>
 </Window>
