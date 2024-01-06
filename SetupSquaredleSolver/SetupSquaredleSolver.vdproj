@@ -15,13 +15,13 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_40BC426916B94AF5AA0C3C845CC8D4E8"
+        "MsmKey" = "8:_5D6A2DD3A2FC46B893A58B1055E79928"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_5D6A2DD3A2FC46B893A58B1055E79928"
+        "MsmKey" = "8:_A2E295F3786042DE80B2D6EEDB358253"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -43,6 +43,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -59,6 +67,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -118,7 +134,7 @@
         {
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_02BFDCC042974DE8AA2B44482635BBB0"
             {
-            "DefaultLocation" = "8:[ProgramFilesFolder][Manufacturer]\\[ProductName]"
+            "DefaultLocation" = "8:[ProgramFilesFolder]\\[ProductName]"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -287,20 +303,6 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_F15FD4F4435342F897D700ACB5C53A99"
-            {
-            "Name" = "8:SquaredleSolver"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_40BC426916B94AF5AA0C3C845CC8D4E8"
-            "Folder" = "8:_B2477FAD662640B1A77C3241184AA392"
-            "WorkingFolder" = "8:_02BFDCC042974DE8AA2B44482635BBB0"
-            "Icon" = "8:_5D6A2DD3A2FC46B893A58B1055E79928"
-            "Feature" = "8:"
-            }
         }
         "UserInterface"
         {
@@ -700,7 +702,7 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_40BC426916B94AF5AA0C3C845CC8D4E8"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A2E295F3786042DE80B2D6EEDB358253"
             {
             "SourcePath" = "8:..\\SquaredleSolver\\obj\\Release\\net7.0-windows\\apphost.exe"
             "TargetName" = "8:"
@@ -724,7 +726,6 @@
             "OutputGroupCanonicalName" = "8:PublishItems"
             "OutputProjectGuid" = "8:{76C1E790-DA5A-4029-A39D-CA4BD4AE3615}"
             "ShowKeyOutput" = "11:TRUE"
-            "PublishProfilePath" = "8:Properties\\PublishProfiles\\ClickOnceProfile.pubxml"
                 "ExcludeFilters"
                 {
                 }

@@ -20,11 +20,26 @@
             Height="20"
             VerticalAlignment="Top"
             TextAlignment="Left"
-            Text="Answers" Margin="396,10,0,0" HorizontalAlignment="Left" Width="46"/>
+            Text="Answer Size"
+            Margin="396,10,0,0"
+            HorizontalAlignment="Left"
+            Width="66"/>
+
+        <Slider
+            Name="AnswerSizeSlider"
+            Minimum="50"
+            Maximum="400"
+            Value="150"
+            TickFrequency="50"
+            IsSnapToTickEnabled="True"
+            Orientation="Horizontal"
+            VerticalAlignment="Top"
+            Margin="467,10,10,0"
+            Height="20"/>
 
         <TextBlock
-            Width="160"
-            Margin="10,-190,0,0"
+            Width="{Binding ElementName=InputField, Path=Width}"
+            Margin="10,-250,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
             TextAlignment="Center"
@@ -41,7 +56,7 @@
             </TextBlock.Resources>
         </TextBlock>
         <Border
-            Width="160" Height="160" Margin="10,0,0,0"
+            Width="200" Height="200" Margin="10,0,0,0"
             Padding="10"
             BorderBrush="Black"
             Background="White"
@@ -66,7 +81,7 @@
             </Viewbox>
         </Border>
         <Border
-            Width="160" Height="160" Margin="10,0,0,0"
+            Width="200" Height="200" Margin="10,0,0,0"
             Padding="10"
             VerticalAlignment="Center"
             HorizontalAlignment="Left">
@@ -74,19 +89,19 @@
                     d:Background="Gray"
                     x:Name="VisualPuzzleFilter"
                     DataContext="{Binding NodeFilterGridViewModel}">
-                    <view:FilterGrid.Resources>
-                        <Style TargetType="view:FilterGrid">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=InputField, Path=IsFocused}" Value="True">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding ElementName=InputField, Path=IsFocused}" Value="False">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </view:FilterGrid.Resources>
-                </view:FilterGrid>
+                <view:FilterGrid.Resources>
+                    <Style TargetType="view:FilterGrid">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=InputField, Path=IsFocused}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=InputField, Path=IsFocused}" Value="False">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </view:FilterGrid.Resources>
+            </view:FilterGrid>
         </Border>
 
         <Button
@@ -164,7 +179,7 @@
         </TextBlock>
 
         <ListView
-                Margin="396,30,10,10"
+                Margin="396,35,10,10"
                 Background="White"
                 x:Name="ResultsListView"
                 d:ItemsSource="{d:SampleData ItemCount=5}"
@@ -183,19 +198,7 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Border
-                        BorderBrush="Black"
-                        CornerRadius="3"
-                        BorderThickness="1"
-                        Width="100"
-                        d:Height="100">
-                        <StackPanel>
-                            <view:CharacterGrid d:Height="80"/>
-                            <TextBlock
-                                Text="{Binding Answer.Word}"
-                                TextAlignment="Center"/>
-                        </StackPanel>
-                    </Border>
+                    <view:CharacterGrid Width="{Binding ElementName=AnswerSizeSlider, Path=Value}"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ListView>

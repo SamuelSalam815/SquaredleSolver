@@ -8,111 +8,123 @@
              mc:Ignorable="d" 
              d:DesignHeight="100" 
              d:DesignWidth="100">
-    <Grid>
-        <Viewbox x:Name="TileGridViewBox" Panel.ZIndex="0">
-            <Grid x:Name="TileGrid">
-                <!-- The intended data context for each element in this grid is CharacterNodeViewModel -->
-                <Grid.Resources>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="HorizontalAlignment" Value="Center"/>
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                        <Setter Property="Text" Value="{Binding Character}"/>
-                        <Setter Property="FontWeight" Value="Bold"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsExcluded}" Value="True">
-                                <Setter Property="Foreground" Value="#9c9c9c"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                    <Style TargetType="Border">
-                        <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=ActualHeight}"/>
-                        <Setter Property="Grid.Row" Value="{Binding Row}"/>
-                        <Setter Property="Grid.Column" Value="{Binding Column}"/>
-                        <Setter Property="CornerRadius" Value="2"/>
-                        <Setter Property="BorderBrush" Value="#808080"/>
-                        <Setter Property="Background" Value="#e0e0e0"/>
-                        <Setter Property="BorderThickness" Value="0.5"/>
-                        <Setter Property="Margin" Value="1"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsExcluded}" Value="True">
-                                <Setter Property="Background" Value="#f3f3f3"/>
-                                <Setter Property="BorderBrush" Value="Transparent"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding IsOnHighlightedPath}" Value="True">
+
+    <Border
+        BorderBrush="Black"
+        CornerRadius="3"
+        BorderThickness="1"
+        Width="{Binding ElementName=AnswerSizeSlider, Path=Value}"
+        d:Height="{Binding ElementName=AnswerSizeSlider, Path=Value}">
+        <StackPanel>
+            <Grid>
+                <Viewbox x:Name="TileGridViewBox" Panel.ZIndex="0">
+                    <Grid x:Name="TileGrid">
+                        <!-- The intended data context for each element in this grid is CharacterNodeViewModel -->
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Text" Value="{Binding Character}"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsExcluded}" Value="True">
+                                        <Setter Property="Foreground" Value="#9c9c9c"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=ActualHeight}"/>
+                                <Setter Property="Grid.Row" Value="{Binding Row}"/>
+                                <Setter Property="Grid.Column" Value="{Binding Column}"/>
+                                <Setter Property="CornerRadius" Value="2"/>
                                 <Setter Property="BorderBrush" Value="#808080"/>
-                                <Setter Property="Background" Value="White"/>
-                                <d:Setter Property="Effect">
-                                    <Setter.Value>
-                                        <DropShadowEffect
+                                <Setter Property="Background" Value="#e0e0e0"/>
+                                <Setter Property="BorderThickness" Value="0.5"/>
+                                <Setter Property="Margin" Value="1"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsExcluded}" Value="True">
+                                        <Setter Property="Background" Value="#f3f3f3"/>
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsOnHighlightedPath}" Value="True">
+                                        <Setter Property="BorderBrush" Value="#808080"/>
+                                        <Setter Property="Background" Value="White"/>
+                                        <d:Setter Property="Effect">
+                                            <Setter.Value>
+                                                <DropShadowEffect
                                     Color="#dc9797"
                                     BlurRadius="8"
                                     ShadowDepth="3"
                                     Opacity="1"
                                     Direction="225" />
-                                    </Setter.Value>
-                                </d:Setter>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Grid.Resources>
+                                            </Setter.Value>
+                                        </d:Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Resources>
 
-                <d:Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </d:Grid.RowDefinitions>
-                <d:Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </d:Grid.ColumnDefinitions>
-                <d:Border Grid.Row="0" Grid.Column="0">
-                    <d:TextBlock Text="A"/>
-                </d:Border>
-                <d:Border Grid.Row="1" Grid.Column="1">
-                    <d:TextBlock Text="B"/>
-                </d:Border>
-                <d:Border Grid.Row="1" Grid.Column="2">
-                    <d:TextBlock Text="C"/>
-                </d:Border>
-            </Grid>
-        </Viewbox>
-        <Image
+                        <d:Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </d:Grid.RowDefinitions>
+                        <d:Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </d:Grid.ColumnDefinitions>
+                        <d:Border Grid.Row="0" Grid.Column="0">
+                            <d:TextBlock Text="A"/>
+                        </d:Border>
+                        <d:Border Grid.Row="1" Grid.Column="1">
+                            <d:TextBlock Text="B"/>
+                        </d:Border>
+                        <d:Border Grid.Row="1" Grid.Column="2">
+                            <d:TextBlock Text="C"/>
+                        </d:Border>
+                    </Grid>
+                </Viewbox>
+                <Image
             Panel.ZIndex="1"
             Stretch="UniformToFill"
             Width="{Binding ElementName=TileGridViewBox, Path=ActualWidth}"
             Height="{Binding ElementName=TileGridViewBox, Path=ActualHeight}">
-            <Image.Source>
-                <DrawingImage>
-                    <DrawingImage.Drawing>
-                        <DrawingGroup Opacity="0.5">
-                            <GeometryDrawing x:Name="LineSegmentDrawing">
-                                <GeometryDrawing.Pen>
-                                    <Pen Thickness="20" Brush="Red" EndLineCap="Round"/>
-                                </GeometryDrawing.Pen>
-                                <d:GeometryDrawing.Geometry>
-                                    <PathGeometry>
-                                        <PathFigure StartPoint="50,50" IsClosed="False">
-                                            <LineSegment Point="250,50" IsSmoothJoin="True"/>
-                                            <LineSegment Point="50,150" IsSmoothJoin="True"/>
-                                            <LineSegment Point="250,150"/>
-                                        </PathFigure>
-                                    </PathGeometry>
-                                </d:GeometryDrawing.Geometry>
-                            </GeometryDrawing>
-                            <GeometryDrawing x:Name="EllipseDrawing" Brush="Red">
-                                <d:GeometryDrawing.Geometry>
-                                    <EllipseGeometry RadiusX="20" RadiusY="20" Center="50,50"/>
-                                </d:GeometryDrawing.Geometry>
-                            </GeometryDrawing>
-                            <GeometryDrawing x:Name="TransparentPathLayer" Brush="Transparent">
-                                <d:GeometryDrawing.Geometry>
-                                    <RectangleGeometry Rect="0,0,300,200"/>
-                                </d:GeometryDrawing.Geometry>
-                            </GeometryDrawing>
-                        </DrawingGroup>
-                    </DrawingImage.Drawing>
-                </DrawingImage>
-            </Image.Source>
-        </Image>
-    </Grid>
+                    <Image.Source>
+                        <DrawingImage>
+                            <DrawingImage.Drawing>
+                                <DrawingGroup Opacity="0.5">
+                                    <GeometryDrawing x:Name="LineSegmentDrawing">
+                                        <GeometryDrawing.Pen>
+                                            <Pen Thickness="20" Brush="Red" EndLineCap="Round"/>
+                                        </GeometryDrawing.Pen>
+                                        <d:GeometryDrawing.Geometry>
+                                            <PathGeometry>
+                                                <PathFigure StartPoint="50,50" IsClosed="False">
+                                                    <LineSegment Point="250,50" IsSmoothJoin="True"/>
+                                                    <LineSegment Point="50,150" IsSmoothJoin="True"/>
+                                                    <LineSegment Point="250,150"/>
+                                                </PathFigure>
+                                            </PathGeometry>
+                                        </d:GeometryDrawing.Geometry>
+                                    </GeometryDrawing>
+                                    <GeometryDrawing x:Name="EllipseDrawing" Brush="Red">
+                                        <d:GeometryDrawing.Geometry>
+                                            <EllipseGeometry RadiusX="20" RadiusY="20" Center="50,50"/>
+                                        </d:GeometryDrawing.Geometry>
+                                    </GeometryDrawing>
+                                    <GeometryDrawing x:Name="TransparentPathLayer" Brush="Transparent">
+                                        <d:GeometryDrawing.Geometry>
+                                            <RectangleGeometry Rect="0,0,300,200"/>
+                                        </d:GeometryDrawing.Geometry>
+                                    </GeometryDrawing>
+                                </DrawingGroup>
+                            </DrawingImage.Drawing>
+                        </DrawingImage>
+                    </Image.Source>
+                </Image>
+            </Grid>
+            <TextBlock Text="{Binding Answer.Word}" TextAlignment="Center"/>
+        </StackPanel>
+    </Border>
+
 </UserControl>
