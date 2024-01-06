@@ -25,7 +25,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
 
     public ICommand FocusPuzzleInput { get; }
     public ICommand ToggleSolverOnOff { get; }
-    public ObservableCollection<CharacterGridViewModel> CharacterGridViewModels { get; }
+    public ObservableCollection<AnswerTileViewModel> CharacterGridViewModels { get; }
     public FilterGridViewModel NodeFilterGridViewModel { get; }
 
     public MainWindowViewModel(
@@ -40,7 +40,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
 
         FocusPuzzleInput = focusPuzzleInput;
         ToggleSolverOnOff = new ToggleSolverOnOff(solverModel);
-        CharacterGridViewModels = new ObservableCollection<CharacterGridViewModel>();
+        CharacterGridViewModels = new ObservableCollection<AnswerTileViewModel>();
         NodeFilterGridViewModel = new FilterGridViewModel(filterModel, puzzleModel);
 
         puzzleModel.PropertyChanged += OnPuzzleModelChanged;
@@ -146,7 +146,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
 
         foreach (AnswerModel answer in answersToAdd)
         {
-            CharacterGridViewModels.Add(new CharacterGridViewModel(answer, puzzleModel, filterModel));
+            CharacterGridViewModels.Add(new AnswerTileViewModel(answer, puzzleModel, filterModel));
         }
     }
 

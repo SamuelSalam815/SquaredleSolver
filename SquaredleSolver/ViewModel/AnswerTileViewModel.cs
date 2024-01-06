@@ -5,13 +5,13 @@ namespace SquaredleSolver.ViewModel;
 /// <summary>
 ///     Exposes the required properties to render a visual representation of a squaredle answer.
 /// </summary>
-class CharacterGridViewModel
+class AnswerTileViewModel
 {
     public AnswerModel Answer { get; }
     public PuzzleModel Puzzle { get; }
     public FilterModel Filter { get; }
 
-    public CharacterGridViewModel(
+    public AnswerTileViewModel(
         AnswerModel answerModel,
         PuzzleModel puzzleModel,
         FilterModel filterModel)

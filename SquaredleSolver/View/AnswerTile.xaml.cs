@@ -10,10 +10,10 @@ namespace SquaredleSolver.View;
 /// <summary>
 /// Interaction logic for UserControl1.xaml
 /// </summary>
-public partial class CharacterGrid : UserControl
+public partial class AnswerTile : UserControl
 {
 
-    public CharacterGrid()
+    public AnswerTile()
     {
         InitializeComponent();
         DataContextChanged += (sender, args) => DisplayNodes();
@@ -21,7 +21,7 @@ public partial class CharacterGrid : UserControl
 
     private void DisplayNodes()
     {
-        if (DataContext is not CharacterGridViewModel viewModel)
+        if (DataContext is not AnswerTileViewModel viewModel)
         {
             return;
         }
@@ -42,7 +42,7 @@ public partial class CharacterGrid : UserControl
 
         foreach (CharacterNode node in viewModel.Puzzle.PuzzleAsNodes)
         {
-            CharacterNodeViewModel nodeViewModel = new(node, viewModel.Answer, viewModel.Filter);
+            AnswerTileNodeViewModel nodeViewModel = new(node, viewModel.Answer, viewModel.Filter);
             Border textBlockBorder = new()
             {
                 DataContext = nodeViewModel,
@@ -51,14 +51,13 @@ public partial class CharacterGrid : UserControl
             TileGrid.Children.Add(textBlockBorder);
         }
 
-        TileGrid.UpdateLayout();
-
         UpdatePathGeometry();
+        TileGrid.UpdateLayout();
     }
 
     private void UpdatePathGeometry()
     {
-        if (DataContext is not CharacterGridViewModel viewModel)
+        if (DataContext is not AnswerTileViewModel viewModel)
         {
             return;
         }

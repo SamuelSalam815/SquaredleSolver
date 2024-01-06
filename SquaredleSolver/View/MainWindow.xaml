@@ -175,7 +175,7 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <view:CharacterGrid Width="{Binding ElementName=AnswerSizeSlider, Path=Value}"/>
+                        <view:AnswerTile Width="{Binding ElementName=AnswerSizeSlider, Path=Value}"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ListView>
