@@ -1,6 +1,7 @@
 ﻿using SquaredleSolver.Command;
 using SquaredleSolver.ViewModel;
 using SquaredleSolverModel;
+using SquaredleSolverModel.Solver;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;

@@ -11,7 +11,6 @@
         Title="SquaredleSolver" Height="696" Width="879" Background="#ecf0f1"
         MouseLeftButtonUp="Window_MouseLeftButtonUp">
     <Window.Resources>
-        <converters:SolverStateToTextConverter x:Key="SolverStateToTextConverter"/>
         <converters:TimeSpanToTextConverter x:Key="TimeSpanToTextConverter"/>
         <converters:AnswerCounterToTextConverter x:Key="AnswerCounterToTextConverter"/>
     </Window.Resources>
@@ -149,21 +148,15 @@
                 <Button.Resources>
                     <Style TargetType="Button">
                         <Style.Triggers>
-                            <DataTrigger
-                                Binding="{Binding SolverState, Converter={StaticResource SolverStateToTextConverter}}"
-                                Value="SolverStopped">
+                            <DataTrigger Binding="{Binding SolverState}" Value="Stopped">
                                 <Setter Property="Background" Value="#2ecc71"/>
                                 <Setter Property="Content" Value="Explore Puzzle"/>
                             </DataTrigger>
-                            <DataTrigger
-                            Binding="{Binding SolverState, Converter={StaticResource SolverStateToTextConverter}}"
-                            Value="SolverRunning">
+                            <DataTrigger Binding="{Binding SolverState}" Value="Running">
                                 <Setter Property="Background" Value="#e74c3c"/>
                                 <Setter Property="Content" Value="Stop Exploring"/>
                             </DataTrigger>
-                            <DataTrigger
-                            Binding="{Binding SolverState, Converter={StaticResource SolverStateToTextConverter}}"
-                            Value="SolverCompleted">
+                            <DataTrigger Binding="{Binding SolverState}" Value="Completed">
                                 <Setter Property="Background" Value="#f1c40f"/>
                                 <Setter Property="Content" Value="Puzzle Explored"/>
                             </DataTrigger>

@@ -1,6 +1,6 @@
 ﻿using GraphWalking.Graphs;
 using SquaredleSolverModel;
-using SquaredleSolverModel.SolverStates;
+using SquaredleSolverModel.Solver;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -33,8 +33,8 @@ internal class MainWindowViewModel : INotifyPropertyChanged
 
     public record struct AnswerCounterStruct(int NumberFound, int NumberDisplayed);
 
-    public AnswerCounterStruct AnswerCounter => new(solverModel.AnswersFound.Count, AnswerTilesDisplayed.Count);
-    public ISolverState SolverState => solverModel.CurrentState;
+    public AnswerCounterStruct AnswerCounter => new(solverModel.Answers.Count, AnswerTilesDisplayed.Count);
+    public SolverState SolverState => solverModel.State;
 
     public string PuzzleAsText
     {
@@ -87,7 +87,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
 
         puzzleModel.PropertyChanged += OnPuzzleModelChanged;
         solverModel.StateChanged += OnSolverStateChanged;
-        solverModel.AnswersFound.CollectionChanged +=
+        solverModel.Answers.CollectionChanged +=
             (sender, e) => Application.Current.Dispatcher.Invoke(() => OnAnswersFoundChanged(sender, e));
         filterModel.AttemptedWords.CollectionChanged += OnAttemptedWordsChanged;
         filterModel.ExcludedNodes.CollectionChanged += OnExcludedNodesChanged;
@@ -182,7 +182,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
     {
         OnPropertyChanged(nameof(SolverState));
 
-        if (e.CurrentState is SolverRunning)
+        if (e.CurrentState is SolverState.Running)
         {
             if (!HasSolverBeenRunBefore)
             {
@@ -192,7 +192,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
             SolverRunTime = TimeSpan.Zero;
         }
 
-        if (e.PreviousState is SolverRunning)
+        if (e.PreviousState is SolverState.Running)
         {
             SolverRunTime = solverModel.TimeSpentSolving;
         }
@@ -216,7 +216,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
             default:
                 AnswerTilesDisplayed.Clear();
                 answerTileIndex.Clear();
-                answersToAdd = solverModel.AnswersFound;
+                answersToAdd = solverModel.Answers;
                 break;
         }
 

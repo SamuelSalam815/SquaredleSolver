@@ -1,5 +1,4 @@
-﻿using SquaredleSolverModel;
-using SquaredleSolverModel.SolverStates;
+﻿using SquaredleSolverModel.Solver;
 using System;
 using System.Windows.Input;
 
@@ -21,12 +20,12 @@ class ToggleSolverOnOff : ICommand
 
     public bool CanExecute(object? parameter)
     {
-        return solverModel.CurrentState is not SolverCompleted;
+        return solverModel.State is not SolverState.Completed;
     }
 
     public void Execute(object? parameter)
     {
-        if (solverModel.CurrentState is SolverRunning)
+        if (solverModel.State is SolverState.Running)
         {
             solverModel.StopSolvingPuzzle();
         }
