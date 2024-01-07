@@ -28,7 +28,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
     public ObservableCollection<AnswerTileViewModel> AnswerTilesDisplayed { get; }
     public FilterGridViewModel NodeFilterGridViewModel { get; }
     public ObservableCollection<string> AttemptedWords => filterModel.AttemptedWords;
-    public int NumberOfAnswersFound => solverModel.AnswersFound.Count;
+    public int NumberOfAnswersFound => AnswerTilesDisplayed.Count;
     public ISolverState SolverState => solverModel.CurrentState;
 
     public string PuzzleAsText
@@ -85,6 +85,12 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         solverModel.AnswersFound.CollectionChanged +=
             (sender, e) => Application.Current.Dispatcher.Invoke(() => OnAnswersFoundChanged(sender, e));
         filterModel.AttemptedWords.CollectionChanged += OnAttemptedWordsChanged;
+        AnswerTilesDisplayed.CollectionChanged += OnAnswerTilesDisplayedChanged;
+    }
+
+    private void OnAnswerTilesDisplayedChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        OnPropertyChanged(nameof(NumberOfAnswersFound));
     }
 
     private void OnAttemptedWordsChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -98,13 +104,12 @@ internal class MainWindowViewModel : INotifyPropertyChanged
                 }
 
                 List<string> newDisallowedWords = e.NewItems.Cast<string>().ToList();
-                IEnumerable<AnswerTileViewModel> viewModelsToRemove =
-                    AnswerTilesDisplayed
-                    .Where(tile => newDisallowedWords.Contains(tile.Answer.Word))
-                    .ToList();
-                foreach (AnswerTileViewModel tile in viewModelsToRemove)
+                foreach ((string word, AnswerTileViewModel tile) in answerTileIndex)
                 {
-                    AnswerTilesDisplayed.Remove(tile);
+                    if (newDisallowedWords.Contains(word))
+                    {
+                        AnswerTilesDisplayed.Remove(tile);
+                    }
                 }
 
                 break;
@@ -174,8 +179,6 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         {
             AddAnswerIfNotAttempted(answer);
         }
-
-        OnPropertyChanged(nameof(NumberOfAnswersFound));
     }
 
     private void AddAnswerIfNotAttempted(AnswerModel answer)
