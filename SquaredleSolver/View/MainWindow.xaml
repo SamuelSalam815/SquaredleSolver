@@ -8,7 +8,7 @@
         xmlns:view="clr-namespace:SquaredleSolver.View" 
         d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
         mc:Ignorable="d"
-        Title="SquaredleSolver" Height="400" Width="850" Background="#ecf0f1"
+        Title="SquaredleSolver" Height="696" Width="850" Background="#ecf0f1"
         MouseLeftButtonUp="Window_MouseLeftButtonUp">
     <Window.Resources>
         <converters:SolverStateToTextConverter x:Key="SolverStateToTextConverter"/>
@@ -21,24 +21,35 @@
         </DockPanel.Resources>
 
         <StackPanel VerticalAlignment="Center" Margin="{StaticResource spacing}">
-            <TextBlock
-                Width="{Binding ElementName=InputField, Path=Width}"
-                HorizontalAlignment="Center"
-                TextAlignment="Center"
-                d:Text="Place Holder">
-                <TextBlock.Resources>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="Text" Value="Puzzle Definition"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ElementName=VisualPuzzleFilter, Path=Visibility}" Value="Visible">
-                                <Setter Property="Text" Value="Answer Filter"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Resources>
-            </TextBlock>
+            <Grid Margin="{StaticResource spacing}">
+                <Button
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Bottom"
+                    Content="Edit"
+                    VerticalContentAlignment="Center"
+                    Visibility="{Binding ElementName=VisualPuzzleFilter, Path=Visibility}"
+                    Command="{Binding FocusPuzzleInput}"/>
+                <TextBlock
+                    Width="{Binding ElementName=InputField, Path=Width}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    TextAlignment="Center"
+                    d:Text="Place Holder">
+                    <TextBlock.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Text" Value="Puzzle Definition"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=VisualPuzzleFilter, Path=Visibility}" Value="Visible">
+                                    <Setter Property="Text" Value="Tile Filter"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Resources>
+                </TextBlock>
+            </Grid>
             <Border
-                Margin="{StaticResource spacing}"
+                Name="PuzzleBorder"
+                Margin="10,0,10,10"
                 Width="{Binding RelativeSource={RelativeSource Mode=Self},Path=ActualHeight}"
                 Height="250"
                 Padding="10"
@@ -57,7 +68,7 @@
                             AcceptsReturn="True" 
                             Visibility="Collapsed"
                             d:Text="HELL&#10;OW R&#10;LDFO&#10;OBAR"
-                            Text="{Binding PuzzleAsText, UpdateSourceTrigger=PropertyChanged}"
+                            Text="{Binding PuzzleAsText}"
                             FontFamily="Courier New"
                             Background="Transparent"
                             BorderThickness="0" />
@@ -70,7 +81,7 @@
                             <Style TargetType="view:FilterGrid">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding ElementName=InputField, Path=IsFocused}" Value="True">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Setter Property="Visibility" Value="Hidden"/>
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding ElementName=InputField, Path=IsFocused}" Value="False">
                                         <Setter Property="Visibility" Value="Visible"/>
@@ -81,12 +92,39 @@
                     </view:FilterGrid>
                 </Grid>
             </Border>
-            <Button
-                HorizontalAlignment="Center"
-                Content="Change Puzzle"
-                VerticalContentAlignment="Center"
-                Visibility="{Binding ElementName=VisualPuzzleFilter, Path=Visibility}"
-                Command="{Binding FocusPuzzleInput}"/>
+            <TextBlock
+                Margin="{StaticResource spacing}"
+                Text="Excluded Words"
+                TextAlignment="Center"
+                Visibility="{Binding ElementName=VisualPuzzleFilter, Path=Visibility}"/>
+            <ListBox
+                ItemsSource="{Binding AttemptedWords}"
+                d:ItemsSource="{d:SampleData ItemCount=10}"
+                Height="100"
+                Width="{Binding ElementName=PuzzleBorder, Path=Width}"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                Visibility="{Binding ElementName=VisualPuzzleFilter, Path=Visibility}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock
+                            Text="{Binding RelativeSource={RelativeSource Mode=Self}, Path=DataContext}"
+                            MouseUp="AttemptedWord_MouseUp"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ListBox>
+            <Grid Visibility="{Binding ElementName=VisualPuzzleFilter, Path=Visibility}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Margin="{StaticResource spacing}" Grid.Column="0" Content="Clear"/>
+                <Button Margin="{StaticResource spacing}" Grid.Column="1" Content="From Clipboard"/>
+            </Grid>
         </StackPanel>
 
         <StackPanel VerticalAlignment="Center" Margin="{StaticResource spacing}">
@@ -111,8 +149,8 @@
                     <Style TargetType="Button">
                         <Style.Triggers>
                             <DataTrigger
-                            Binding="{Binding SolverState, Converter={StaticResource SolverStateToTextConverter}}"
-                            Value="SolverStopped">
+                                Binding="{Binding SolverState, Converter={StaticResource SolverStateToTextConverter}}"
+                                Value="SolverStopped">
                                 <Setter Property="Background" Value="#2ecc71"/>
                                 <Setter Property="Content" Value="Explore Puzzle"/>
                             </DataTrigger>
@@ -159,7 +197,7 @@
             <ListView
                 Background="White"
                 x:Name="ResultsListView"
-                d:ItemsSource="{d:SampleData ItemCount=5}"
+                d:ItemsSource="{d:SampleData ItemCount=8}"
                 ItemsSource="{Binding AnswerTilesDisplayed}"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"

@@ -1,5 +1,4 @@
-﻿using SquaredleSolver.Command;
-using SquaredleSolverModel;
+﻿using SquaredleSolverModel;
 using SquaredleSolverModel.SolverStates;
 using System;
 using System.Collections.Generic;
@@ -22,62 +21,14 @@ internal class MainWindowViewModel : INotifyPropertyChanged
     private readonly SolverModel solverModel;
     private readonly PuzzleModel puzzleModel;
     private readonly FilterModel filterModel;
+    private readonly Dictionary<string, AnswerTileViewModel> answerTileIndex;
 
     public ICommand FocusPuzzleInput { get; }
     public ICommand ToggleSolverOnOff { get; }
     public ObservableCollection<AnswerTileViewModel> AnswerTilesDisplayed { get; }
     public FilterGridViewModel NodeFilterGridViewModel { get; }
-
-    public MainWindowViewModel(
-        PuzzleModel puzzleModel,
-        FilterModel filterModel,
-        SolverModel solverModel,
-        ICommand focusPuzzleInput)
-    {
-        this.solverModel = solverModel;
-        this.puzzleModel = puzzleModel;
-        this.filterModel = filterModel;
-
-        FocusPuzzleInput = focusPuzzleInput;
-        ToggleSolverOnOff = new ToggleSolverOnOff(solverModel);
-        AnswerTilesDisplayed = new ObservableCollection<AnswerTileViewModel>();
-        NodeFilterGridViewModel = new FilterGridViewModel(filterModel, puzzleModel);
-
-        puzzleModel.PropertyChanged += OnPuzzleModelChanged;
-        solverModel.StateChanged += OnSolverStateChanged;
-        solverModel.AnswersFound.CollectionChanged +=
-            (sender, e) => Application.Current.Dispatcher.Invoke(() => OnAnswersFoundChanged(sender, e));
-        filterModel.AnswersAlreadyAttempted.CollectionChanged += OnAttemptedAnswersChanged;
-    }
-
-    private void OnAttemptedAnswersChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.Action == NotifyCollectionChangedAction.Add)
-        {
-            List<string> newDisallowedWords = e.NewItems.Cast<string>().ToList();
-            IEnumerable<AnswerTileViewModel> viewModelsToRemove =
-                AnswerTilesDisplayed
-                .Where(tile => newDisallowedWords.Contains(tile.Answer.Word))
-                .ToList();
-            foreach (AnswerTileViewModel tile in viewModelsToRemove)
-            {
-                AnswerTilesDisplayed.Remove(tile);
-            }
-        }
-        else
-        {
-            AnswerTilesDisplayed.Clear();
-            foreach (AnswerModel answer in solverModel.AnswersFound)
-            {
-                AddAnswerIfNotAttempted(answer);
-            }
-        }
-    }
-
-    public uint NumberOfRowsInPuzzle => puzzleModel.NumberOfRows;
-
-    public uint NumberOfColumnsInPuzzle => puzzleModel.NumberOfColumns;
-
+    public ObservableCollection<string> AttemptedWords => filterModel.AttemptedWords;
+    public int NumberOfAnswersFound => solverModel.AnswersFound.Count;
     public ISolverState SolverState => solverModel.CurrentState;
 
     public string PuzzleAsText
@@ -87,28 +38,6 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         {
             puzzleModel.PuzzleAsText = value;
             OnPropertyChanged(nameof(PuzzleAsText));
-        }
-    }
-
-    private int _numberOfAnswersFound = 0;
-    public int NumberOfAnswersFound
-    {
-        get => _numberOfAnswersFound;
-        set
-        {
-            _numberOfAnswersFound = value;
-            OnPropertyChanged(nameof(NumberOfAnswersFound));
-        }
-    }
-
-    private double _wrapPanelWidth = 0;
-    public double WrapPanelWidth
-    {
-        get { return _wrapPanelWidth; }
-        set
-        {
-            _wrapPanelWidth = value;
-            OnPropertyChanged(nameof(WrapPanelWidth));
         }
     }
 
@@ -134,6 +63,71 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         }
     }
 
+    public MainWindowViewModel(
+        PuzzleModel puzzleModel,
+        FilterModel filterModel,
+        SolverModel solverModel,
+        ICommand focusPuzzleInput,
+        ICommand toggleSolverOnOff)
+    {
+        this.solverModel = solverModel;
+        this.puzzleModel = puzzleModel;
+        this.filterModel = filterModel;
+        answerTileIndex = new Dictionary<string, AnswerTileViewModel>();
+
+        FocusPuzzleInput = focusPuzzleInput;
+        ToggleSolverOnOff = toggleSolverOnOff;
+        AnswerTilesDisplayed = new ObservableCollection<AnswerTileViewModel>();
+        NodeFilterGridViewModel = new FilterGridViewModel(filterModel, puzzleModel);
+
+        puzzleModel.PropertyChanged += OnPuzzleModelChanged;
+        solverModel.StateChanged += OnSolverStateChanged;
+        solverModel.AnswersFound.CollectionChanged +=
+            (sender, e) => Application.Current.Dispatcher.Invoke(() => OnAnswersFoundChanged(sender, e));
+        filterModel.AttemptedWords.CollectionChanged += OnAttemptedWordsChanged;
+    }
+
+    private void OnAttemptedWordsChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add:
+                if (e.NewItems is null)
+                {
+                    break;
+                }
+
+                List<string> newDisallowedWords = e.NewItems.Cast<string>().ToList();
+                IEnumerable<AnswerTileViewModel> viewModelsToRemove =
+                    AnswerTilesDisplayed
+                    .Where(tile => newDisallowedWords.Contains(tile.Answer.Word))
+                    .ToList();
+                foreach (AnswerTileViewModel tile in viewModelsToRemove)
+                {
+                    AnswerTilesDisplayed.Remove(tile);
+                }
+
+                break;
+            case NotifyCollectionChangedAction.Remove:
+                if (e.OldItems is null)
+                {
+                    break;
+                }
+
+                List<string> newAllowedWords = e.OldItems.Cast<string>().ToList();
+                List<AnswerModel> answersToDisplay = new();
+                foreach (string item in newAllowedWords)
+                {
+                    if (!answerTileIndex.TryGetValue(item, out AnswerTileViewModel? answerTile) || answerTile is null)
+                    {
+                        continue;
+                    }
+                    AnswerTilesDisplayed.Insert(0, answerTile);
+                }
+
+                break;
+        }
+    }
     private void OnSolverStateChanged(object? sender, SolverStateChangedEventArgs e)
     {
         OnPropertyChanged(nameof(SolverState));
@@ -157,14 +151,21 @@ internal class MainWindowViewModel : INotifyPropertyChanged
     private void OnAnswersFoundChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         IEnumerable<AnswerModel> answersToAdd;
-        NumberOfAnswersFound = solverModel.AnswersFound.Count;
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:
-                answersToAdd = e.NewItems.Cast<AnswerModel>();
+                if (e.NewItems is null)
+                {
+                    answersToAdd = Enumerable.Empty<AnswerModel>();
+                }
+                else
+                {
+                    answersToAdd = e.NewItems.Cast<AnswerModel>();
+                }
                 break;
             default:
                 AnswerTilesDisplayed.Clear();
+                answerTileIndex.Clear();
                 answersToAdd = solverModel.AnswersFound;
                 break;
         }
@@ -173,13 +174,17 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         {
             AddAnswerIfNotAttempted(answer);
         }
+
+        OnPropertyChanged(nameof(NumberOfAnswersFound));
     }
 
     private void AddAnswerIfNotAttempted(AnswerModel answer)
     {
-        if (!filterModel.AnswersAlreadyAttempted.Contains(answer.Word))
+        if (!filterModel.AttemptedWords.Contains(answer.Word))
         {
-            AnswerTilesDisplayed.Add(new AnswerTileViewModel(answer, puzzleModel, filterModel));
+            AnswerTileViewModel answerTile = new(answer, puzzleModel, filterModel);
+            AnswerTilesDisplayed.Add(answerTile);
+            answerTileIndex.Add(answer.Word, answerTile);
         }
     }
 
@@ -192,16 +197,6 @@ internal class MainWindowViewModel : INotifyPropertyChanged
 
     private void OnPuzzleModelChanged(object? sender, PropertyChangedEventArgs args)
     {
-        switch (args.PropertyName)
-        {
-            case nameof(puzzleModel.PuzzleAsAdjacencyList):
-                break;
-            case nameof(puzzleModel.NumberOfRows):
-                OnPropertyChanged(nameof(NumberOfRowsInPuzzle));
-                break;
-            case nameof(puzzleModel.NumberOfColumns):
-                OnPropertyChanged(nameof(NumberOfColumnsInPuzzle));
-                break;
-        }
+        AnswerTilesDisplayed.Clear();
     }
 }

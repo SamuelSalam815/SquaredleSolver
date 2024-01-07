@@ -113,6 +113,6 @@ public partial class AnswerTile : UserControl
             return;
         }
 
-        viewModel.Filter.AnswersAlreadyAttempted.Add(viewModel.Answer.Word);
+        viewModel.Filter.AttemptedWords.Add(viewModel.Answer.Word);
     }
 }

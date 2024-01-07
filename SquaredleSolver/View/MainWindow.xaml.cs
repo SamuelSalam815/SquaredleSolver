@@ -2,6 +2,7 @@
 using SquaredleSolver.ViewModel;
 using SquaredleSolverModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace SquaredleSolver.View;
@@ -29,7 +30,8 @@ public partial class MainWindow : Window
             puzzle,
             filter,
             solver,
-            new FocusPuzzleInput(InputField));
+            new FocusPuzzleInput(InputField),
+            new ToggleSolverOnOff(solver));
         DataContext = viewModel;
     }
 
@@ -65,5 +67,20 @@ public partial class MainWindow : Window
     private void InputField_LostFocus(object sender, RoutedEventArgs e)
     {
         InputField.Visibility = Visibility.Collapsed;
+    }
+
+    private void AttemptedWord_MouseUp(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is not TextBlock textBlock)
+        {
+            return;
+        }
+
+        if (DataContext is not MainWindowViewModel viewModel)
+        {
+            return;
+        }
+
+        viewModel.AttemptedWords.Remove(textBlock.Text);
     }
 }

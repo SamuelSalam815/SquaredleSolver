@@ -46,6 +46,4 @@ public class SolverModel
     {
         CurrentState.StopSolution(context);
     }
-
-
 }
