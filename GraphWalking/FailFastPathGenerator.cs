@@ -9,19 +9,16 @@ namespace GraphWalking;
 /// </summary>
 public class FailFastPathGenerator
 {
-    private readonly IEnumerable<CharacterNode> excludedNodes;
     private readonly HashSet<string> validWords;
     private readonly HashSet<string> viablePrefixes = new();
     private readonly int minimumWordLength;
 
     public FailFastPathGenerator(
         HashSet<string> validWords,
-        int minimumWordLength,
-        IEnumerable<CharacterNode>? excludedNodes = null)
+        int minimumWordLength)
     {
         this.validWords = validWords;
         this.minimumWordLength = minimumWordLength;
-        this.excludedNodes = excludedNodes ?? Enumerable.Empty<CharacterNode>();
     }
 
     private void Setup()
@@ -52,11 +49,6 @@ public class FailFastPathGenerator
         CharacterNode startingNode,
         AdjacencyList<CharacterNode> adjacencyList)
     {
-        if (excludedNodes.Contains(startingNode))
-        {
-            yield break;
-        }
-
         if (viablePrefixes.Count == 0)
         {
             Setup();
@@ -96,7 +88,7 @@ public class FailFastPathGenerator
             List<CharacterNode> adjacentNodes = adjacencyList.GetValueOrDefault(currentNode, emptyList);
             foreach (CharacterNode adjacentNode in adjacentNodes)
             {
-                if (!currentPath.Contains(adjacentNode) && !excludedNodes.Contains(adjacentNode))
+                if (!currentPath.Contains(adjacentNode))
                 {
                     stack.Push(new CheckPoint(adjacentNode, currentNode, currentWord));
                 }

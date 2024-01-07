@@ -8,7 +8,7 @@ using System.Diagnostics;
 internal class Program
 {
 
-    private static async Task Main(string[] args)
+    private static void Main()
     {
         Console.WriteLine("Loading puzzle...");
         PuzzleModel puzzleModel = new();
@@ -49,7 +49,7 @@ internal class Program
         Console.WriteLine("Time elapsed: " + stopWatch.Elapsed);
 
         // Cross validation
-        Console.WriteLine("Cross-Validating results...");
+        Console.WriteLine("Validating results...");
         int inconsistencyCount = 0;
         Console.WriteLine("Words missing from fail fast: ");
         foreach (string word in bruteForcedWords)
@@ -69,7 +69,7 @@ internal class Program
                 Console.WriteLine(word);
             }
         }
-        Console.WriteLine("Cross-Validation inconsistencies: " + inconsistencyCount);
+        Console.WriteLine("Validation inconsistencies: " + inconsistencyCount);
     }
 }
 

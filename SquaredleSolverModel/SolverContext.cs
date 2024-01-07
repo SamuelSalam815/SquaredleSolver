@@ -14,7 +14,6 @@ public class SolverContext
     public EventHandler<SolverStateChangedEventArgs>? StateChanged;
 
     public readonly PuzzleModel PuzzleModel;
-    public readonly FilterModel FilterModel;
     public readonly ObservableCollection<AnswerModel> AnswersFound;
     public readonly Stopwatch Stopwatch;
     public CancellationTokenSource CancellationTokenSource;
@@ -39,7 +38,7 @@ public class SolverContext
             {
                 Stopwatch.Restart();
             }
-;
+
             StateChanged?.Invoke(
                 this,
                 new SolverStateChangedEventArgs()
@@ -50,42 +49,24 @@ public class SolverContext
         }
     }
 
-    public SolverContext(PuzzleModel puzzleModel, FilterModel filterModel)
+    public SolverContext(PuzzleModel puzzleModel)
     {
         PuzzleModel = puzzleModel;
-        FilterModel = filterModel;
         AnswersFound = new ObservableCollection<AnswerModel>();
         Stopwatch = new Stopwatch();
         CancellationTokenSource = new CancellationTokenSource();
         SolverTask = Task.CompletedTask;
-        PathGenerator = new FailFastPathGenerator(
-            puzzleModel.ValidWords,
-            PuzzleModel.MinimumWordLength,
-            filterModel.ExcludedNodes);
+        PathGenerator = new FailFastPathGenerator(puzzleModel.ValidWords, PuzzleModel.MinimumWordLength);
         backingFieldCurrentState = SolverStopped.Instance;
 
         PuzzleModel.PropertyChanged += OnPuzzleChanged;
-        FilterModel.PropertyChanged += OnNodeFilterChanged;
-    }
-
-    private void OnNodeFilterChanged(object? sender, EventArgs e)
-    {
-        UpdatePathGenerator();
     }
 
     private void OnPuzzleChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(PuzzleModel.ValidWords))
         {
-            UpdatePathGenerator();
+            PathGenerator = new FailFastPathGenerator(PuzzleModel.ValidWords, PuzzleModel.MinimumWordLength);
         }
-    }
-
-    private void UpdatePathGenerator()
-    {
-        PathGenerator = new FailFastPathGenerator(
-            PuzzleModel.ValidWords,
-            PuzzleModel.MinimumWordLength,
-            FilterModel.ExcludedNodes);
     }
 }

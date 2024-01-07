@@ -13,8 +13,6 @@ public class SolverStopped : ISolverState
 
     public void OnPuzzleChanged(SolverContext context) { }
 
-    public void OnNodeFilterChanged(SolverContext context) { }
-
     public void StartSolution(SolverContext context)
     {
         if (context.PuzzleModel.PuzzleAsText == string.Empty)

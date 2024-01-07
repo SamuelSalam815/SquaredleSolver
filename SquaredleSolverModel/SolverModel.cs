@@ -9,7 +9,7 @@ namespace SquaredleSolverModel;
 /// </summary>
 public class SolverModel
 {
-    private SolverContext context;
+    private readonly SolverContext context;
     public ISolverState CurrentState => context.CurrentState;
     public ObservableCollection<AnswerModel> AnswersFound => context.AnswersFound;
 
@@ -17,18 +17,12 @@ public class SolverModel
 
     public TimeSpan TimeSpentSolving => context.Stopwatch.Elapsed;
 
-    public SolverModel(PuzzleModel puzzleModel, FilterModel filterModel)
+    public SolverModel(PuzzleModel puzzleModel)
     {
-        context = new SolverContext(puzzleModel, filterModel);
+        context = new SolverContext(puzzleModel);
         context.StateChanged += (sender, e) => StateChanged?.Invoke(this, e);
 
         puzzleModel.PropertyChanged += OnPuzzleModelChanged;
-        filterModel.PropertyChanged += OnFilterChanged;
-    }
-
-    private void OnFilterChanged(object? sender, EventArgs e)
-    {
-        CurrentState.OnNodeFilterChanged(context);
     }
 
     private void OnPuzzleModelChanged(object? sender, PropertyChangedEventArgs args)

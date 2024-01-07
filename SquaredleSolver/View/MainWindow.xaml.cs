@@ -25,7 +25,7 @@ public partial class MainWindow : Window
             IIHU
             """;
         FilterModel filter = new(puzzle);
-        SolverModel solver = new(puzzle, filter);
+        SolverModel solver = new(puzzle);
         MainWindowViewModel viewModel = new(
             puzzle,
             filter,

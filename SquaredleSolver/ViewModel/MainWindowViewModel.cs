@@ -1,4 +1,5 @@
-﻿using SquaredleSolverModel;
+﻿using GraphWalking.Graphs;
+using SquaredleSolverModel;
 using SquaredleSolverModel.SolverStates;
 using System;
 using System.Collections.Generic;
@@ -85,7 +86,43 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         solverModel.AnswersFound.CollectionChanged +=
             (sender, e) => Application.Current.Dispatcher.Invoke(() => OnAnswersFoundChanged(sender, e));
         filterModel.AttemptedWords.CollectionChanged += OnAttemptedWordsChanged;
+        filterModel.ExcludedNodes.CollectionChanged += OnExcludedNodesChanged;
         AnswerTilesDisplayed.CollectionChanged += OnAnswerTilesDisplayedChanged;
+    }
+
+    private void OnExcludedNodesChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add:
+                foreach (AnswerTileViewModel? tile in answerTileIndex.Values.Where(tile => tile.IsExcluded))
+                {
+                    AnswerTilesDisplayed.Remove(tile);
+                }
+                break;
+            case NotifyCollectionChangedAction.Remove:
+                if (e.OldItems is null)
+                {
+                    break;
+                }
+
+                CharacterNode[] newlyIncludedNodes = e.OldItems.Cast<CharacterNode>().ToArray();
+                IEnumerable<AnswerTileViewModel> tilesToInclude = answerTileIndex.Values
+                    .Where(tile => tile.IsIncluded)
+                    .Where(tile => tile.Answer.CharacterNodes.Any(newlyIncludedNodes.Contains));
+                foreach (AnswerTileViewModel? tile in tilesToInclude)
+                {
+                    AnswerTilesDisplayed.Add(tile);
+                }
+                break;
+            default:
+                AnswerTilesDisplayed.Clear();
+                foreach (AnswerTileViewModel? tile in answerTileIndex.Values.Where(tile => tile.IsIncluded))
+                {
+                    AnswerTilesDisplayed.Add(tile);
+                }
+                break;
+        }
     }
 
     private void OnAnswerTilesDisplayedChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -103,7 +140,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
                     break;
                 }
 
-                List<string> newDisallowedWords = e.NewItems.Cast<string>().ToList();
+                string[] newDisallowedWords = e.NewItems.Cast<string>().ToArray();
                 foreach ((string word, AnswerTileViewModel tile) in answerTileIndex)
                 {
                     if (newDisallowedWords.Contains(word))
@@ -119,20 +156,24 @@ internal class MainWindowViewModel : INotifyPropertyChanged
                     break;
                 }
 
-                List<string> newAllowedWords = e.OldItems.Cast<string>().ToList();
-                List<AnswerModel> answersToDisplay = new();
+                string[] newAllowedWords = e.OldItems.Cast<string>().ToArray();
                 foreach (string item in newAllowedWords)
                 {
-                    if (!answerTileIndex.TryGetValue(item, out AnswerTileViewModel? answerTile) || answerTile is null)
+                    if (!answerTileIndex.TryGetValue(item, out AnswerTileViewModel? tile) || tile is null)
                     {
                         continue;
                     }
-                    AnswerTilesDisplayed.Insert(0, answerTile);
+
+                    if (tile.IsIncluded)
+                    {
+                        AnswerTilesDisplayed.Add(tile);
+                    }
                 }
 
                 break;
         }
     }
+
     private void OnSolverStateChanged(object? sender, SolverStateChangedEventArgs e)
     {
         OnPropertyChanged(nameof(SolverState));
@@ -177,17 +218,13 @@ internal class MainWindowViewModel : INotifyPropertyChanged
 
         foreach (AnswerModel answer in answersToAdd)
         {
-            AddAnswerIfNotAttempted(answer);
-        }
-    }
+            AnswerTileViewModel tile = new(answer, puzzleModel, filterModel);
+            answerTileIndex.Add(answer.Word, tile);
 
-    private void AddAnswerIfNotAttempted(AnswerModel answer)
-    {
-        if (!filterModel.AttemptedWords.Contains(answer.Word))
-        {
-            AnswerTileViewModel answerTile = new(answer, puzzleModel, filterModel);
-            AnswerTilesDisplayed.Add(answerTile);
-            answerTileIndex.Add(answer.Word, answerTile);
+            if (tile.IsIncluded)
+            {
+                AnswerTilesDisplayed.Add(tile);
+            }
         }
     }
 

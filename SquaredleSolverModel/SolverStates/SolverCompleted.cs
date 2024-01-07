@@ -1,6 +1,4 @@
-﻿using SquaredleSolverModel;
-
-namespace SquaredleSolverModel.SolverStates;
+﻿namespace SquaredleSolverModel.SolverStates;
 
 /// <summary>
 ///     Defines how the puzzle solver behaves when it has solved the current puzzle. - Not used yet
@@ -12,8 +10,6 @@ public class SolverCompleted : ISolverState
     private SolverCompleted() { }
 
     public void OnPuzzleChanged(SolverContext context) => context.CurrentState = SolverStopped.Instance;
-
-    public void OnNodeFilterChanged(SolverContext context) => context.CurrentState = SolverStopped.Instance;
 
     public void OnSolverCompleted(SolverContext context) => throw new InvalidOperationException();
 

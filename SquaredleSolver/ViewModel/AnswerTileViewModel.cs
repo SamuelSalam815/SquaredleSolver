@@ -10,6 +10,9 @@ class AnswerTileViewModel
     public AnswerModel Answer { get; }
     public PuzzleModel Puzzle { get; }
     public FilterModel Filter { get; }
+    public bool IsExcluded => Filter.IsAnswerExcluded(Answer);
+
+    public bool IsIncluded => !IsExcluded;
 
     public AnswerTileViewModel(
         AnswerModel answerModel,

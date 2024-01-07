@@ -72,7 +72,7 @@ public partial class FilterGrid : UserControl
                 Child = new TextBlock()
             };
             MouseGesture leftClick = new(MouseAction.LeftClick, ModifierKeys.None);
-            MouseBinding toggleInclusionBinding = new(nodeViewModel.ToggleNodeInclusion, leftClick);
+            MouseBinding toggleInclusionBinding = new(nodeViewModel.ToggleInclusionCommand, leftClick);
             border.InputBindings.Add(toggleInclusionBinding);
             ButtonGrid.Children.Add(border);
         }
