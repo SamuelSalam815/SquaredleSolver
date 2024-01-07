@@ -8,12 +8,12 @@
         xmlns:view="clr-namespace:SquaredleSolver.View" 
         d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
         mc:Ignorable="d"
-        Title="SquaredleSolver" Height="696" Width="850" Background="#ecf0f1"
+        Title="SquaredleSolver" Height="696" Width="879" Background="#ecf0f1"
         MouseLeftButtonUp="Window_MouseLeftButtonUp">
     <Window.Resources>
         <converters:SolverStateToTextConverter x:Key="SolverStateToTextConverter"/>
         <converters:TimeSpanToTextConverter x:Key="TimeSpanToTextConverter"/>
-        <converters:NumberOfAnswersFoundToTextConverter x:Key="NumberOfAnswersFoundToTextConverter"/>
+        <converters:AnswerCounterToTextConverter x:Key="AnswerCounterToTextConverter"/>
     </Window.Resources>
     <DockPanel>
         <DockPanel.Resources>
@@ -144,7 +144,8 @@
                 x:Name="ToggleSolverButton"
                 d:Content="PlaceHolder"
                 Margin="{StaticResource spacing}"
-                Command="{Binding ToggleSolverOnOff}">
+                Command="{Binding ToggleSolverOnOff}"
+                Width="120">
                 <Button.Resources>
                     <Style TargetType="Button">
                         <Style.Triggers>
@@ -171,10 +172,10 @@
                 </Button.Resources>
             </Button>
             <TextBlock
-                Text="{Binding NumberOfAnswersFound, Converter={StaticResource NumberOfAnswersFoundToTextConverter}}"
+                Text="{Binding AnswerCounter, Converter={StaticResource AnswerCounterToTextConverter}}"
                 Margin="{StaticResource spacing}"
                 HorizontalAlignment="Center"
-                d:Text="Answers Found: 5"/>
+                d:Text="Answers: x/y"/>
         </StackPanel>
 
         <DockPanel Margin="{StaticResource spacing}">

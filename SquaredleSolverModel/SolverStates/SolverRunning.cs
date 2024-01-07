@@ -11,7 +11,7 @@ public class SolverRunning : ISolverState
 
     public void OnPuzzleChanged(SolverContext context) => StopSolution(context);
 
-    public void OnSolverCompleted(SolverContext context) => context.CurrentState = SolverCompleted.Instance;
+    public void OnSolverCompleted(SolverContext context) => context.CurrentState = SolverStopped.Instance;
 
     public void StartSolution(SolverContext context) => throw new InvalidOperationException();
 

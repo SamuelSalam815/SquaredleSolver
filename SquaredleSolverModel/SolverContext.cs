@@ -67,6 +67,7 @@ public class SolverContext
         if (e.PropertyName == nameof(PuzzleModel.ValidWords))
         {
             PathGenerator = new FailFastPathGenerator(PuzzleModel.ValidWords, PuzzleModel.MinimumWordLength);
+            AnswersFound.Clear();
         }
     }
 }

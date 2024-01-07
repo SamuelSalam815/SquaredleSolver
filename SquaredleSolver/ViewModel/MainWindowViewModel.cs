@@ -29,7 +29,11 @@ internal class MainWindowViewModel : INotifyPropertyChanged
     public ObservableCollection<AnswerTileViewModel> AnswerTilesDisplayed { get; }
     public FilterGridViewModel NodeFilterGridViewModel { get; }
     public ObservableCollection<string> AttemptedWords => filterModel.AttemptedWords;
-    public int NumberOfAnswersFound => AnswerTilesDisplayed.Count;
+
+
+    public record struct AnswerCounterStruct(int NumberFound, int NumberDisplayed);
+
+    public AnswerCounterStruct AnswerCounter => new(solverModel.AnswersFound.Count, AnswerTilesDisplayed.Count);
     public ISolverState SolverState => solverModel.CurrentState;
 
     public string PuzzleAsText
@@ -127,7 +131,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
 
     private void OnAnswerTilesDisplayedChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        OnPropertyChanged(nameof(NumberOfAnswersFound));
+        OnPropertyChanged(nameof(AnswerCounter));
     }
 
     private void OnAttemptedWordsChanged(object? sender, NotifyCollectionChangedEventArgs e)

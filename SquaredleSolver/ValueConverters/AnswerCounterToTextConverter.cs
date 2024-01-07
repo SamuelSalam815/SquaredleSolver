@@ -1,20 +1,21 @@
-﻿using System;
+﻿using SquaredleSolver.ViewModel;
+using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
 namespace SquaredleSolver.ValueConverters;
 
-internal class NumberOfAnswersFoundToTextConverter : IValueConverter
+internal class AnswerCounterToTextConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is not int answerCount)
+        if (value is not MainWindowViewModel.AnswerCounterStruct answerCounter)
         {
             return DependencyProperty.UnsetValue;
         }
 
-        return $"Answers found: {answerCount}";
+        return $"Answers: {answerCounter.NumberDisplayed}/{answerCounter.NumberFound}";
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
