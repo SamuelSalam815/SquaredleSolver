@@ -21,17 +21,13 @@ internal class MainWindowViewModel : INotifyPropertyChanged
     private readonly SolverModel solver;
     private readonly PuzzleModel puzzle;
     private readonly FilterViewModel filter;
-    private readonly Dictionary<string, AnswerTileViewModel> answerTileIndex;
 
     public ICommand FocusPuzzleInput { get; }
     public ICommand ToggleSolverOnOff { get; }
     public ObservableCollection<AnswerTileViewModel> AnswerTilesDisplayed { get; }
     public FilterGridViewModel NodeFilterGridViewModel { get; }
     public ObservableCollection<string> AttemptedWords => filter.AttemptedWords;
-
-
     public record struct AnswerCounterStruct(int NumberFound, int NumberDisplayed);
-
     public AnswerCounterStruct AnswerCounter => new(solver.Answers.Count, AnswerTilesDisplayed.Count);
     public SolverState SolverState => solver.State;
 
@@ -77,10 +73,10 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         this.solver = solver;
         this.puzzle = puzzle;
         this.filter = filter;
-        answerTileIndex = new Dictionary<string, AnswerTileViewModel>();
 
         FocusPuzzleInput = focusPuzzleInput;
         ToggleSolverOnOff = toggleSolverOnOff;
+
         AnswerTilesDisplayed = new ObservableCollection<AnswerTileViewModel>();
         NodeFilterGridViewModel = new FilterGridViewModel(filter, puzzle);
 
@@ -156,7 +152,6 @@ internal class MainWindowViewModel : INotifyPropertyChanged
                 break;
             default:
                 AnswerTilesDisplayed.Clear();
-                answerTileIndex.Clear();
                 break;
         }
     }
