@@ -36,10 +36,10 @@
                     d:Text="Place Holder">
                     <TextBlock.Resources>
                         <Style TargetType="TextBlock">
-                            <Setter Property="Text" Value="Puzzle Definition"/>
+                            <Setter Property="Text" Value="Redefining Puzzle..."/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ElementName=VisualPuzzleFilter, Path=Visibility}" Value="Visible">
-                                    <Setter Property="Text" Value="Tile Filter"/>
+                                    <Setter Property="Text" Value="Letter Filters"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>

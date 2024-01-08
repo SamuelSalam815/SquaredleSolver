@@ -1,6 +1,5 @@
 ﻿using GraphWalking.Graphs;
 using SquaredleSolver.Command;
-using SquaredleSolverModel;
 using System.ComponentModel;
 using System.Windows.Input;
 
@@ -13,37 +12,28 @@ internal class FilterNodeViewModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    private readonly FilterModel filter;
-
     public CharacterNode CharacterNode { get; }
     public ICommand ToggleInclusionCommand { get; }
     public char Character => CharacterNode.Character;
     public int Row => CharacterNode.Row;
     public int Column => CharacterNode.Column;
 
-    public bool IsIncluded => !filter.ExcludedNodes.Contains(CharacterNode);
+    private bool _isIncluded = true;
 
-    public FilterNodeViewModel(
-        CharacterNode node,
-        FilterModel filter)
+    public bool IsIncluded
     {
-        CharacterNode = node;
-        this.filter = filter;
-        ToggleInclusionCommand = new ToggleNodeInclusionInFilter(this);
+        get => _isIncluded;
+        set
+        {
+            _isIncluded = value;
+            OnPropertyChanged(nameof(IsIncluded));
+        }
     }
 
-    public void ToggleInclusion()
+    public FilterNodeViewModel(CharacterNode node)
     {
-        if (IsIncluded)
-        {
-            filter.ExcludedNodes.Add(CharacterNode);
-        }
-        else
-        {
-            filter.ExcludedNodes.Remove(CharacterNode);
-        }
-
-        OnPropertyChanged(nameof(IsIncluded));
+        CharacterNode = node;
+        ToggleInclusionCommand = new ToggleNodeInclusionInFilter(this);
     }
 
     private void OnPropertyChanged(string propertyName)

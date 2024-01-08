@@ -1,6 +1,4 @@
-﻿using GraphWalking.Graphs;
-using SquaredleSolverModel;
-using System.Collections.Specialized;
+﻿using SquaredleSolverModel;
 using System.ComponentModel;
 
 namespace SquaredleSolver.ViewModel;
@@ -8,45 +6,28 @@ internal class AnswerTileCharacterNodeViewModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    private readonly CharacterNode characterNode;
-    private readonly FilterModel filter;
+    private readonly FilterNodeViewModel filterNode;
 
     public bool IsOnHighlightedPath { get; }
-    public bool IsExcluded => filter.ExcludedNodes.Contains(characterNode);
-    public int Row => characterNode.Row;
-    public int Column => characterNode.Column;
+    public bool IsExcluded => !filterNode.IsIncluded;
+    public int Row => filterNode.Row;
+    public int Column => filterNode.Column;
 
-    public char Character => characterNode.Character;
+    public char Character => filterNode.Character;
 
-    public AnswerTileCharacterNodeViewModel(CharacterNode node, AnswerModel answer, FilterModel filter)
+    public AnswerTileCharacterNodeViewModel(
+        FilterNodeViewModel filterNode,
+        AnswerModel answer)
     {
-        characterNode = node;
-        this.filter = filter;
-        IsOnHighlightedPath = answer.CharacterNodes.Contains(node);
+        this.filterNode = filterNode;
+        IsOnHighlightedPath = answer.CharacterNodes.Contains(filterNode.CharacterNode);
 
-        filter.ExcludedNodes.CollectionChanged += OnExcludedNodesChanged;
+        filterNode.PropertyChanged += OnFilterNodeChanged;
     }
 
-    private void OnExcludedNodesChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void OnFilterNodeChanged(object? sender, PropertyChangedEventArgs e)
     {
-        switch (e.Action)
-        {
-            case NotifyCollectionChangedAction.Add:
-                if (e.NewItems?.Contains(characterNode) == true)
-                {
-                    OnPropertyChanged(nameof(IsExcluded));
-                }
-                break;
-            case NotifyCollectionChangedAction.Remove:
-                if (e.OldItems?.Contains(characterNode) == true)
-                {
-                    OnPropertyChanged(nameof(IsExcluded));
-                }
-                break;
-            default:
-                OnPropertyChanged(nameof(IsExcluded));
-                break;
-        }
+        OnPropertyChanged(nameof(IsExcluded));
     }
 
     private void OnPropertyChanged(string propertyName)

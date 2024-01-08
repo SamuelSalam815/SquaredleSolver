@@ -6,19 +6,17 @@ internal class FilterGridViewModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public FilterModel NodeFilterModel { get; }
+    public FilterViewModel Filter { get; }
 
-    public PuzzleModel PuzzleModel { get; }
+    public PuzzleModel Puzzle { get; }
 
-    public FilterGridViewModel(
-        FilterModel nodeFilterModel,
-        PuzzleModel puzzleModel)
+    public FilterGridViewModel(FilterViewModel filter, PuzzleModel puzzle)
     {
-        NodeFilterModel = nodeFilterModel;
-        PuzzleModel = puzzleModel;
+        Filter = filter;
+        Puzzle = puzzle;
 
-        NodeFilterModel.PropertyChanged += (sender, e) => OnPropertyChanged(nameof(NodeFilterModel));
-        PuzzleModel.PropertyChanged += (sender, e) => OnPropertyChanged(nameof(PuzzleModel));
+        Filter.PropertyChanged += (sender, e) => OnPropertyChanged(nameof(Filter));
+        Puzzle.PropertyChanged += (sender, e) => OnPropertyChanged(nameof(Puzzle));
     }
 
     private void OnPropertyChanged(string propertyName)

@@ -25,12 +25,12 @@ public partial class MainWindow : Window
             GNGT
             IIHU
             """;
-        FilterModel filter = new(puzzle);
         SolverModel solver = new(puzzle);
+        FilterViewModel filter = new(puzzle, solver);
         MainWindowViewModel viewModel = new(
             puzzle,
-            filter,
             solver,
+            filter,
             new FocusPuzzleInput(InputField),
             new ToggleSolverOnOff(solver));
         DataContext = viewModel;

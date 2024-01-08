@@ -25,11 +25,11 @@ public partial class FilterGrid : UserControl
         {
             if (viewModel is not null)
             {
-                viewModel.PuzzleModel.PropertyChanged -= OnPuzzleChanged;
+                viewModel.Puzzle.PropertyChanged -= OnPuzzleChanged;
             }
 
             viewModel = newViewModel;
-            viewModel.PuzzleModel.PropertyChanged += OnPuzzleChanged;
+            viewModel.Puzzle.PropertyChanged += OnPuzzleChanged;
             RepopulateGrid();
         }
     }
@@ -46,7 +46,7 @@ public partial class FilterGrid : UserControl
             return;
         }
 
-        PuzzleModel puzzle = viewModel.PuzzleModel;
+        PuzzleModel puzzle = viewModel.Puzzle;
 
         ButtonGrid.Children.Clear();
         ButtonGrid.RowDefinitions.Clear();
@@ -65,7 +65,7 @@ public partial class FilterGrid : UserControl
 
         foreach (CharacterNode node in puzzle.PuzzleAsNodes)
         {
-            FilterNodeViewModel nodeViewModel = new(node, viewModel.NodeFilterModel);
+            FilterNodeViewModel nodeViewModel = viewModel.Filter.FilterNodes[node];
             Border border = new()
             {
                 DataContext = nodeViewModel,

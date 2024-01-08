@@ -18,6 +18,6 @@ internal class ToggleNodeInclusionInFilter : ICommand
 
     public void Execute(object? parameter)
     {
-        node.ToggleInclusion();
+        node.IsIncluded = !node.IsIncluded;
     }
 }

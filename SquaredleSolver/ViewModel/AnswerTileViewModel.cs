@@ -9,18 +9,15 @@ class AnswerTileViewModel
 {
     public AnswerModel Answer { get; }
     public PuzzleModel Puzzle { get; }
-    public FilterModel Filter { get; }
-    public bool IsExcluded => Filter.IsAnswerExcluded(Answer);
-
-    public bool IsIncluded => !IsExcluded;
+    public FilterViewModel Filter { get; }
 
     public AnswerTileViewModel(
-        AnswerModel answerModel,
-        PuzzleModel puzzleModel,
-        FilterModel filterModel)
+        AnswerModel answer,
+        PuzzleModel puzzle,
+        FilterViewModel filter)
     {
-        Answer = answerModel;
-        Puzzle = puzzleModel;
-        Filter = filterModel;
+        Answer = answer;
+        Puzzle = puzzle;
+        Filter = filter;
     }
 }

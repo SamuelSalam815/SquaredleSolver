@@ -1,5 +1,4 @@
-﻿using GraphWalking.Graphs;
-using SquaredleSolverModel;
+﻿using SquaredleSolverModel;
 using SquaredleSolverModel.Solver;
 using System;
 using System.Collections.Generic;
@@ -19,29 +18,29 @@ internal class MainWindowViewModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    private readonly SolverModel solverModel;
-    private readonly PuzzleModel puzzleModel;
-    private readonly FilterModel filterModel;
+    private readonly SolverModel solver;
+    private readonly PuzzleModel puzzle;
+    private readonly FilterViewModel filter;
     private readonly Dictionary<string, AnswerTileViewModel> answerTileIndex;
 
     public ICommand FocusPuzzleInput { get; }
     public ICommand ToggleSolverOnOff { get; }
     public ObservableCollection<AnswerTileViewModel> AnswerTilesDisplayed { get; }
     public FilterGridViewModel NodeFilterGridViewModel { get; }
-    public ObservableCollection<string> AttemptedWords => filterModel.AttemptedWords;
+    public ObservableCollection<string> AttemptedWords => filter.AttemptedWords;
 
 
     public record struct AnswerCounterStruct(int NumberFound, int NumberDisplayed);
 
-    public AnswerCounterStruct AnswerCounter => new(solverModel.Answers.Count, AnswerTilesDisplayed.Count);
-    public SolverState SolverState => solverModel.State;
+    public AnswerCounterStruct AnswerCounter => new(solver.Answers.Count, AnswerTilesDisplayed.Count);
+    public SolverState SolverState => solver.State;
 
     public string PuzzleAsText
     {
-        get => puzzleModel.PuzzleAsText;
+        get => puzzle.PuzzleAsText;
         set
         {
-            puzzleModel.PuzzleAsText = value;
+            puzzle.PuzzleAsText = value;
             OnPropertyChanged(nameof(PuzzleAsText));
         }
     }
@@ -69,113 +68,32 @@ internal class MainWindowViewModel : INotifyPropertyChanged
     }
 
     public MainWindowViewModel(
-        PuzzleModel puzzleModel,
-        FilterModel filterModel,
-        SolverModel solverModel,
+        PuzzleModel puzzle,
+        SolverModel solver,
+        FilterViewModel filter,
         ICommand focusPuzzleInput,
         ICommand toggleSolverOnOff)
     {
-        this.solverModel = solverModel;
-        this.puzzleModel = puzzleModel;
-        this.filterModel = filterModel;
+        this.solver = solver;
+        this.puzzle = puzzle;
+        this.filter = filter;
         answerTileIndex = new Dictionary<string, AnswerTileViewModel>();
 
         FocusPuzzleInput = focusPuzzleInput;
         ToggleSolverOnOff = toggleSolverOnOff;
         AnswerTilesDisplayed = new ObservableCollection<AnswerTileViewModel>();
-        NodeFilterGridViewModel = new FilterGridViewModel(filterModel, puzzleModel);
+        NodeFilterGridViewModel = new FilterGridViewModel(filter, puzzle);
 
-        puzzleModel.PropertyChanged += OnPuzzleModelChanged;
-        solverModel.StateChanged += OnSolverStateChanged;
-        solverModel.Answers.CollectionChanged +=
-            (sender, e) => Application.Current.Dispatcher.Invoke(() => OnAnswersFoundChanged(sender, e));
-        filterModel.AttemptedWords.CollectionChanged += OnAttemptedWordsChanged;
-        filterModel.ExcludedNodes.CollectionChanged += OnExcludedNodesChanged;
+        puzzle.PropertyChanged += OnPuzzleModelChanged;
+        solver.StateChanged += OnSolverStateChanged;
+        filter.IncludedAnswers.CollectionChanged +=
+            (sender, e) => Application.Current.Dispatcher.Invoke(() => OnFilteredAnswersChanged(sender, e));
         AnswerTilesDisplayed.CollectionChanged += OnAnswerTilesDisplayedChanged;
-    }
-
-    private void OnExcludedNodesChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        switch (e.Action)
-        {
-            case NotifyCollectionChangedAction.Add:
-                foreach (AnswerTileViewModel? tile in answerTileIndex.Values.Where(tile => tile.IsExcluded))
-                {
-                    AnswerTilesDisplayed.Remove(tile);
-                }
-                break;
-            case NotifyCollectionChangedAction.Remove:
-                if (e.OldItems is null)
-                {
-                    break;
-                }
-
-                CharacterNode[] newlyIncludedNodes = e.OldItems.Cast<CharacterNode>().ToArray();
-                IEnumerable<AnswerTileViewModel> tilesToInclude = answerTileIndex.Values
-                    .Where(tile => tile.IsIncluded)
-                    .Where(tile => tile.Answer.CharacterNodes.Any(newlyIncludedNodes.Contains));
-                foreach (AnswerTileViewModel? tile in tilesToInclude)
-                {
-                    AnswerTilesDisplayed.Add(tile);
-                }
-                break;
-            default:
-                AnswerTilesDisplayed.Clear();
-                foreach (AnswerTileViewModel? tile in answerTileIndex.Values.Where(tile => tile.IsIncluded))
-                {
-                    AnswerTilesDisplayed.Add(tile);
-                }
-                break;
-        }
     }
 
     private void OnAnswerTilesDisplayedChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         OnPropertyChanged(nameof(AnswerCounter));
-    }
-
-    private void OnAttemptedWordsChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        switch (e.Action)
-        {
-            case NotifyCollectionChangedAction.Add:
-                if (e.NewItems is null)
-                {
-                    break;
-                }
-
-                string[] newDisallowedWords = e.NewItems.Cast<string>().ToArray();
-                foreach ((string word, AnswerTileViewModel tile) in answerTileIndex)
-                {
-                    if (newDisallowedWords.Contains(word))
-                    {
-                        AnswerTilesDisplayed.Remove(tile);
-                    }
-                }
-
-                break;
-            case NotifyCollectionChangedAction.Remove:
-                if (e.OldItems is null)
-                {
-                    break;
-                }
-
-                string[] newAllowedWords = e.OldItems.Cast<string>().ToArray();
-                foreach (string item in newAllowedWords)
-                {
-                    if (!answerTileIndex.TryGetValue(item, out AnswerTileViewModel? tile) || tile is null)
-                    {
-                        continue;
-                    }
-
-                    if (tile.IsIncluded)
-                    {
-                        AnswerTilesDisplayed.Add(tile);
-                    }
-                }
-
-                break;
-        }
     }
 
     private void OnSolverStateChanged(object? sender, SolverStateChangedEventArgs e)
@@ -194,41 +112,52 @@ internal class MainWindowViewModel : INotifyPropertyChanged
 
         if (e.PreviousState is SolverState.Running)
         {
-            SolverRunTime = solverModel.TimeSpentSolving;
+            SolverRunTime = solver.TimeSpentSolving;
         }
     }
 
-    private void OnAnswersFoundChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void OnFilteredAnswersChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        IEnumerable<AnswerModel> answersToAdd;
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:
                 if (e.NewItems is null)
                 {
-                    answersToAdd = Enumerable.Empty<AnswerModel>();
+                    break;
                 }
-                else
+
+                foreach (AnswerModel answer in e.NewItems.Cast<AnswerModel>())
                 {
-                    answersToAdd = e.NewItems.Cast<AnswerModel>();
+                    AnswerTileViewModel tile = new(answer, puzzle, filter);
+                    AnswerTilesDisplayed.Add(tile);
+                }
+                break;
+            case NotifyCollectionChangedAction.Remove:
+                if (e.OldItems is null)
+                {
+                    break;
+                }
+
+                foreach (AnswerModel answer in e.OldItems.Cast<AnswerModel>())
+                {
+                    List<AnswerTileViewModel> tilesToRemove = new();
+                    foreach (AnswerTileViewModel tile in AnswerTilesDisplayed)
+                    {
+                        if (tile.Answer == answer)
+                        {
+                            tilesToRemove.Add(tile);
+                        }
+                    }
+                    foreach (AnswerTileViewModel tile in tilesToRemove)
+                    {
+                        AnswerTilesDisplayed.Remove(tile);
+                    }
                 }
                 break;
             default:
                 AnswerTilesDisplayed.Clear();
                 answerTileIndex.Clear();
-                answersToAdd = solverModel.Answers;
                 break;
-        }
-
-        foreach (AnswerModel answer in answersToAdd)
-        {
-            AnswerTileViewModel tile = new(answer, puzzleModel, filterModel);
-            answerTileIndex.Add(answer.Word, tile);
-
-            if (tile.IsIncluded)
-            {
-                AnswerTilesDisplayed.Add(tile);
-            }
         }
     }
 
