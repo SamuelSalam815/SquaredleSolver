@@ -60,12 +60,11 @@ public class SolverModel
     private void OnPuzzleModelChanged(object? sender, PropertyChangedEventArgs args)
     {
         StopSolvingPuzzle();
-        switch (args.PropertyName)
+        if (args.PropertyName == nameof(puzzle.ValidWords))
         {
-            case nameof(puzzle.ValidWords):
-                pathGenerator = new FailFastPathGenerator(puzzle.ValidWords, PuzzleModel.MinimumWordLength);
-                break;
+            pathGenerator = new FailFastPathGenerator(puzzle.ValidWords, PuzzleModel.MinimumWordLength);
         }
+        State = SolverState.Stopped;
     }
 
     public void StartSolvingPuzzle()
@@ -106,7 +105,10 @@ public class SolverModel
         }
 
         IEnumerable<List<CharacterNode>> allPaths =
-            pathGenerator.EnumerateAllPaths(puzzle.PuzzleAsAdjacencyList);
+            BruteForcePathGenerator<CharacterNode>.EnumerateAllPaths(puzzle.PuzzleAsAdjacencyList);
+
+        //IEnumerable<List<CharacterNode>> allPaths =
+        //    pathGenerator.EnumerateAllPaths(puzzle.PuzzleAsAdjacencyList);
         HashSet<string> wordsAlreadyFound = new();
         foreach (List<CharacterNode> path in allPaths)
         {
@@ -116,6 +118,12 @@ public class SolverModel
             }
 
             AnswerModel answer = new(path);
+
+            if (!puzzle.ValidWords.Contains(answer.Word))
+            {
+                continue;
+            }
+
             if (!wordsAlreadyFound.Contains(answer.Word))
             {
                 wordsAlreadyFound.Add(answer.Word);
