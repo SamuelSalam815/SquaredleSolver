@@ -116,14 +116,12 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ListBox>
-            <Grid Visibility="{Binding ElementName=VisualPuzzleFilter, Path=Visibility}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Button Margin="{StaticResource spacing}" Grid.Column="0" Content="Clear"/>
-                <Button Margin="{StaticResource spacing}" Grid.Column="1" Content="From Clipboard"/>
-            </Grid>
+            <Button
+                Margin="{StaticResource spacing}"
+                Grid.Column="0"
+                Content="Clear"
+                Command="{Binding ClearAttemptedWords}"
+                Width="100"/>
         </StackPanel>
 
         <StackPanel VerticalAlignment="Center" Margin="{StaticResource spacing}">

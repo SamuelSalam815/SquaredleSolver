@@ -1,6 +1,7 @@
 ﻿using GraphWalking.Graphs;
 using SquaredleSolverModel;
 using SquaredleSolverModel.Solver;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -89,11 +90,11 @@ internal class FilterViewModel : INotifyPropertyChanged
                 RefilterIncludedAnswers();
                 break;
             case NotifyCollectionChangedAction.Remove:
+            case NotifyCollectionChangedAction.Reset:
                 RefilterExcludedAnswers();
                 break;
             default:
-                RefilterAllAnswers();
-                break;
+                throw new NotImplementedException();
         }
     }
 

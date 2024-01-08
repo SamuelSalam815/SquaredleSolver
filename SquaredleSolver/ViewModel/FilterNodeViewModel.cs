@@ -33,7 +33,7 @@ internal class FilterNodeViewModel : INotifyPropertyChanged
     public FilterNodeViewModel(CharacterNode node)
     {
         CharacterNode = node;
-        ToggleInclusionCommand = new ToggleNodeInclusionInFilter(this);
+        ToggleInclusionCommand = new DelegateCommand(() => IsIncluded = !IsIncluded);
     }
 
     private void OnPropertyChanged(string propertyName)

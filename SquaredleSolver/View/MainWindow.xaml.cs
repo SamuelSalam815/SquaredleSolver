@@ -27,12 +27,12 @@ public partial class MainWindow : Window
             """;
         SolverModel solver = new(puzzle);
         FilterViewModel filter = new(puzzle, solver);
-        MainWindowViewModel viewModel = new(
-            puzzle,
-            solver,
-            filter,
-            new FocusPuzzleInput(InputField),
-            new ToggleSolverOnOff(solver));
+        DelegateCommand focusPuzzleInput = new(() =>
+            {
+                InputField.Visibility = Visibility.Visible;
+                InputField.Focus();
+            });
+        MainWindowViewModel viewModel = new(puzzle, solver, filter, focusPuzzleInput);
         DataContext = viewModel;
     }
 

@@ -1,4 +1,5 @@
-﻿using SquaredleSolverModel;
+﻿using SquaredleSolver.Command;
+using SquaredleSolverModel;
 using SquaredleSolverModel.Solver;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,9 @@ internal class MainWindowViewModel : INotifyPropertyChanged
 
     public ICommand FocusPuzzleInput { get; }
     public ICommand ToggleSolverOnOff { get; }
+
+    public ICommand ClearAttemptedWords { get; }
+
     public ObservableCollection<AnswerTileViewModel> AnswerTilesDisplayed { get; }
     public FilterGridViewModel NodeFilterGridViewModel { get; }
     public ObservableCollection<string> AttemptedWords => filter.AttemptedWords;
@@ -67,16 +71,26 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         PuzzleModel puzzle,
         SolverModel solver,
         FilterViewModel filter,
-        ICommand focusPuzzleInput,
-        ICommand toggleSolverOnOff)
+        ICommand focusPuzzleInput)
     {
         this.solver = solver;
         this.puzzle = puzzle;
         this.filter = filter;
 
         FocusPuzzleInput = focusPuzzleInput;
-        ToggleSolverOnOff = toggleSolverOnOff;
-
+        ToggleSolverOnOff = new DelegateCommand(() =>
+            {
+                if (solver.State is SolverState.Running)
+                {
+                    solver.StopSolvingPuzzle();
+                }
+                else
+                {
+                    solver.StartSolvingPuzzle();
+                }
+            },
+            () => solver.State is not SolverState.Completed);
+        ClearAttemptedWords = new DelegateCommand(ExecuteClearAttemptedWords);
         AnswerTilesDisplayed = new ObservableCollection<AnswerTileViewModel>();
         NodeFilterGridViewModel = new FilterGridViewModel(filter, puzzle);
 
@@ -85,6 +99,11 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         filter.IncludedAnswers.CollectionChanged +=
             (sender, e) => Application.Current.Dispatcher.Invoke(() => OnFilteredAnswersChanged(sender, e));
         AnswerTilesDisplayed.CollectionChanged += OnAnswerTilesDisplayedChanged;
+    }
+
+    private void ExecuteClearAttemptedWords()
+    {
+        AttemptedWords.Clear();
     }
 
     private void OnAnswerTilesDisplayedChanged(object? sender, NotifyCollectionChangedEventArgs e)
