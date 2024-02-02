@@ -1,4 +1,5 @@
 ﻿using SquaredleSolverModel;
+using System.Collections.Generic;
 
 namespace SquaredleSolver.ViewModel;
 
@@ -19,5 +20,15 @@ class AnswerTileViewModel
         Answer = answer;
         Puzzle = puzzle;
         Filter = filter;
+    }
+
+    public static Comparer<AnswerTileViewModel> GetDiscoveryIndexComparer()
+    {
+        return Comparer<AnswerTileViewModel>.Create(CompareDiscoveryIndex);
+    }
+
+    private static int CompareDiscoveryIndex(AnswerTileViewModel a, AnswerTileViewModel b)
+    {
+        return a.Answer.DiscoveredIndex.CompareTo(b.Answer.DiscoveredIndex);
     }
 }

@@ -114,7 +114,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
                 foreach (AnswerModel answer in e.NewItems.Cast<AnswerModel>())
                 {
                     AnswerTileViewModel tile = new(answer, puzzle, filter);
-                    AnswerTilesDisplayed.Add(tile);
+                    AnswerTilesDisplayed.OrderedInsert(tile, AnswerTileViewModel.GetDiscoveryIndexComparer());
                 }
                 break;
             case NotifyCollectionChangedAction.Remove:
