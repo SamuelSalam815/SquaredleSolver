@@ -92,7 +92,7 @@
             </Border>
             <TextBlock
                 Margin="{StaticResource spacing}"
-                Text="Excluded Words"
+                Text="Explicitly Excluded Words"
                 TextAlignment="Center"
                 Visibility="{Binding ElementName=VisualPuzzleFilter, Path=Visibility}"/>
             <ListBox
