@@ -64,6 +64,7 @@ public class SolverModel
         {
             pathGenerator = new FailFastPathGenerator(puzzle.ValidWords, PuzzleModel.MinimumWordLength);
         }
+        Answers.Clear();
         State = SolverState.Stopped;
     }
 
@@ -105,10 +106,7 @@ public class SolverModel
         }
 
         IEnumerable<List<CharacterNode>> allPaths =
-            BruteForcePathGenerator<CharacterNode>.EnumerateAllPaths(puzzle.PuzzleAsAdjacencyList);
-
-        //IEnumerable<List<CharacterNode>> allPaths =
-        //    pathGenerator.EnumerateAllPaths(puzzle.PuzzleAsAdjacencyList);
+            pathGenerator.EnumerateAllPaths(puzzle.PuzzleAsAdjacencyList);
         HashSet<string> wordsAlreadyFound = new();
         foreach (List<CharacterNode> path in allPaths)
         {
