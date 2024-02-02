@@ -101,7 +101,7 @@ public class SolverModel
                 return;
             }
 
-            AnswerModel answer = new(path);
+            AnswerModel answer = new(path, wordsAlreadyFound.Count);
 
             if (!puzzle.ValidWords.Contains(answer.Word))
             {
