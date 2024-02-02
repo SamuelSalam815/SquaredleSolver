@@ -11,7 +11,6 @@
         Title="SquaredleSolver" Height="696" Width="879" Background="#ecf0f1"
         MouseLeftButtonUp="Window_MouseLeftButtonUp">
     <Window.Resources>
-        <converters:TimeSpanToTextConverter x:Key="TimeSpanToTextConverter"/>
         <converters:AnswerCounterToTextConverter x:Key="AnswerCounterToTextConverter"/>
     </Window.Resources>
     <DockPanel>
@@ -125,18 +124,6 @@
         </StackPanel>
 
         <StackPanel VerticalAlignment="Center" Margin="{StaticResource spacing}">
-            <TextBlock d:Text="Run Time" HorizontalAlignment="Center" Margin="{StaticResource spacing}">
-                <TextBlock.Resources>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="Text" Value="{Binding SolverRunTime, Converter={StaticResource TimeSpanToTextConverter}}"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasSolverBeenRunBefore}" Value="False">
-                                <Setter Property="Text" Value="Welcome!"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Resources>
-            </TextBlock>
             <Button
                 x:Name="ToggleSolverButton"
                 d:Content="PlaceHolder"

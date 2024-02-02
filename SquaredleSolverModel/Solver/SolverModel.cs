@@ -2,7 +2,6 @@
 using GraphWalking.Graphs;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 
 namespace SquaredleSolverModel.Solver;
 
@@ -14,11 +13,9 @@ public class SolverModel
     public EventHandler<SolverStateChangedEventArgs>? StateChanged;
 
     private readonly PuzzleModel puzzle;
-    private readonly Stopwatch stopwatch;
     private CancellationTokenSource cancellationTokenSource;
     private Task solverTask;
     private FailFastPathGenerator pathGenerator;
-    public TimeSpan TimeSpentSolving => stopwatch.Elapsed;
     public ObservableCollection<AnswerModel> Answers { get; } = new();
 
     private SolverState _state;
@@ -30,16 +27,6 @@ public class SolverModel
             SolverState previousState = _state;
             _state = value;
 
-            if (previousState is SolverState.Running)
-            {
-                stopwatch.Stop();
-            }
-
-            if (_state is SolverState.Running)
-            {
-                stopwatch.Restart();
-            }
-
             StateChanged?.Invoke(this, new SolverStateChangedEventArgs(previousState, _state));
         }
     }
@@ -49,7 +36,6 @@ public class SolverModel
     {
         _state = SolverState.Stopped;
         this.puzzle = puzzle;
-        stopwatch = new Stopwatch();
         cancellationTokenSource = new CancellationTokenSource();
         solverTask = Task.CompletedTask;
         pathGenerator = new FailFastPathGenerator(puzzle.ValidWords, PuzzleModel.MinimumWordLength);

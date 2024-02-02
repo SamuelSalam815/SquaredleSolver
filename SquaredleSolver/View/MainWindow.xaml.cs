@@ -19,12 +19,6 @@ public partial class MainWindow : Window
 
         PuzzleModel puzzle = new();
         puzzle.LoadValidWords("words_alpha.txt");
-        puzzle.PuzzleAsText = """
-            PNOC
-            RAHE
-            GNGT
-            IIHU
-            """;
         SolverModel solver = new(puzzle);
         FilterViewModel filter = new(puzzle, solver);
         DelegateCommand focusPuzzleInput = new(() =>

@@ -1,7 +1,6 @@
 ﻿using SquaredleSolver.Command;
 using SquaredleSolverModel;
 using SquaredleSolverModel.Solver;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -42,28 +41,6 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         {
             puzzle.PuzzleAsText = value;
             OnPropertyChanged(nameof(PuzzleAsText));
-        }
-    }
-
-    private TimeSpan _solverRunTime = TimeSpan.Zero;
-    public TimeSpan SolverRunTime
-    {
-        get { return _solverRunTime; }
-        set
-        {
-            _solverRunTime = value;
-            OnPropertyChanged(nameof(SolverRunTime));
-        }
-    }
-
-    private bool _hasSolverBeenRunBefore = false;
-    public bool HasSolverBeenRunBefore
-    {
-        get { return _hasSolverBeenRunBefore; }
-        set
-        {
-            _hasSolverBeenRunBefore = value;
-            OnPropertyChanged(nameof(HasSolverBeenRunBefore));
         }
     }
 
@@ -114,23 +91,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
     private void OnSolverStateChanged(object? sender, SolverStateChangedEventArgs e)
     {
         OnPropertyChanged(nameof(SolverState));
-
-        if (e.CurrentState is SolverState.Running)
-        {
-            if (!HasSolverBeenRunBefore)
-            {
-                HasSolverBeenRunBefore = true;
-            }
-
-            SolverRunTime = TimeSpan.Zero;
-        }
-
-        if (e.PreviousState is SolverState.Running)
-        {
-            SolverRunTime = solver.TimeSpentSolving;
-        }
     }
-
     private void OnFilteredAnswersChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         switch (e.Action)
