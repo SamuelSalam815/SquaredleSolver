@@ -116,10 +116,11 @@
                 </ItemsControl.ItemTemplate>
             </ListBox>
             <Button
+                Visibility="{Binding ElementName=VisualPuzzleFilter, Path=Visibility}"
                 Margin="{StaticResource spacing}"
                 Grid.Column="0"
-                Content="Clear"
-                Command="{Binding ClearAttemptedWords}"
+                Content="Clear Filters"
+                Command="{Binding ClearAnswerFilters}"
                 Width="100"/>
         </StackPanel>
 

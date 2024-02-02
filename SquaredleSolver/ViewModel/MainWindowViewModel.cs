@@ -25,7 +25,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
     public ICommand FocusPuzzleInput { get; }
     public ICommand ToggleSolverOnOff { get; }
 
-    public ICommand ClearAttemptedWords { get; }
+    public ICommand ClearAnswerFilters { get; }
 
     public ObservableCollection<AnswerTileViewModel> AnswerTilesDisplayed { get; }
     public FilterGridViewModel NodeFilterGridViewModel { get; }
@@ -67,7 +67,7 @@ internal class MainWindowViewModel : INotifyPropertyChanged
                 }
             },
             () => solver.State is not SolverState.Completed);
-        ClearAttemptedWords = new DelegateCommand(ExecuteClearAttemptedWords);
+        ClearAnswerFilters = new DelegateCommand(ExecuteClearAnswerFilters);
         AnswerTilesDisplayed = new ObservableCollection<AnswerTileViewModel>();
         NodeFilterGridViewModel = new FilterGridViewModel(filter, puzzle);
 
@@ -78,9 +78,18 @@ internal class MainWindowViewModel : INotifyPropertyChanged
         AnswerTilesDisplayed.CollectionChanged += OnAnswerTilesDisplayedChanged;
     }
 
-    private void ExecuteClearAttemptedWords()
+    private void ExecuteClearAnswerFilters()
     {
         AttemptedWords.Clear();
+        foreach (FilterNodeViewModel filterNode in filter.FilterNodes.Values)
+        {
+            if (filterNode.IsIncluded)
+            {
+                continue;
+            }
+
+            filterNode.ToggleInclusionCommand.Execute(null);
+        }
     }
 
     private void OnAnswerTilesDisplayedChanged(object? sender, NotifyCollectionChangedEventArgs e)
