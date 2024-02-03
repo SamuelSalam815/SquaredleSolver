@@ -21,7 +21,7 @@ Since the solver uses an imperfect dictionary (see [words_alpha.txt](https://git
 
 ### Install
 
-You can install the solver on windows using TODO:\[Link to download\]
+Download the installer from the [releases](https://github.com/SamuelSalam815/SquaredleSolver/releases)
 
 ### Using the solver
 
