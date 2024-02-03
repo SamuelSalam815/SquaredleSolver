@@ -49,7 +49,7 @@ You can toggle tiles on and off using the letter filter:
 
 ![filtering by letter](ReadMeAssets/FilterPuzzleByLetterDemo.gif)
 
-Answers that use a tile that is toggled off will be hidden. They can be shown again by toggling the tile back on and this will not affect the words you have attempted under 'Explicitly Excluded Words'
+Words that pass through a 'faded' tile will be hidden. They can be shown again by toggling the tile back on and this will not affect the words you have attempted under 'Explicitly Excluded Words'
 
 Once you find all the words for the puzzle, you might also be interested in going after bonus words. If you toggle all the tiles back on, this can be an easy way to discover bonus words - don't click 'clear all filters' if you want to go after bonus words, as this will also reset the words you have marked as attempted.
 
